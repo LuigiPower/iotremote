@@ -8,13 +8,13 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="240dp"
     card_view:cardCornerRadius="4dp">
 
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView android:id="@+id/node_name"
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
 
         <LinearLayout android:id="@+id/dashboard_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:layout_below="@+id/current_mode"
             android:layout_above="@+id/edit_button"
             android:layout_marginTop="8dp"
@@ -44,7 +44,7 @@
             android:layout_alignStart="@+id/node_name"
             android:layout_alignRight="@+id/node_name"
             android:layout_alignEnd="@+id/node_name"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
         </LinearLayout>
 

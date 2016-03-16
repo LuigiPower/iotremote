@@ -9,20 +9,18 @@ import org.json.JSONObject;
 import it.giuggi.iotremote.R;
 
 /**
- * Created by Federico Giuggioloni on 15/03/16.
+ * Created by Federico Giuggioloni on 16/03/16.
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class EmptyMode extends IOperatingMode
+public class UnknownMode extends IOperatingMode
 {
-    public static final String NAME = "empty_mode";
-
-    public EmptyMode()
+    public UnknownMode()
     {
         super();
     }
 
-    public EmptyMode(JSONObject params)
+    public UnknownMode(JSONObject params)
     {
         super(params);
     }
@@ -30,12 +28,12 @@ public class EmptyMode extends IOperatingMode
     @Override
     public String getName()
     {
-        return NAME;
+        return "unknown";
     }
 
     @Override
     public View loadDashboardLayout(LayoutInflater inflater, ViewGroup container)
     {
-        return inflater.inflate(R.layout.empty_mode, container, false);
+        return inflater.inflate(R.layout.unknown_mode, container, false);
     }
 }

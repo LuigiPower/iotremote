@@ -39,7 +39,7 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
         IOTNode iotNode = iotNodeList.get(i);
 
         customViewHolder.nodeName.setText(iotNode.name);
-        customViewHolder.nodeMode.setText(iotNode.mode.name);
+        customViewHolder.nodeMode.setText(iotNode.mode.getName());
 
         LayoutInflater inflater = LayoutInflater.from(customViewHolder.nodeName.getContext());
 
@@ -48,7 +48,7 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
             customViewHolder.dashboardContainer.removeAllViews();
         }
 
-        customViewHolder.dashboardContainer.addView(inflater.inflate(iotNode.mode.loadDashboardLayout(), customViewHolder.dashboardContainer, false));
+        customViewHolder.dashboardContainer.addView(iotNode.mode.loadDashboardLayout(inflater, customViewHolder.dashboardContainer));
     }
 
     @Override

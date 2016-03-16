@@ -1,5 +1,12 @@
 package it.giuggi.iotremote.iot;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import it.giuggi.iotremote.R;
 
 /**
@@ -9,9 +16,37 @@ import it.giuggi.iotremote.R;
  */
 public class GPIOMode extends IOperatingMode
 {
-    @Override
-    public int loadDashboardLayout()
+    public static final String NAME = "gpio_mode";
+
+    private int gpio = 0;
+
+    public GPIOMode()
     {
-        return R.layout.gpio_mode;
+        super();
+    }
+
+    public GPIOMode(JSONObject params)
+    {
+        super(params);
+
+        try
+        {
+            gpio = params.getInt("gpio");
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getName()
+    {
+        return NAME;
+    }
+
+    @Override
+    public View loadDashboardLayout(LayoutInflater inflater, ViewGroup container)
+    {
+        return inflater.inflate(R.layout.gpio_mode, container, false);
     }
 }
