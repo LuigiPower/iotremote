@@ -9,7 +9,7 @@ package it.giuggi.iotremote.ifttt;
  * TODO GPS + Geofencing (at home, at work, at custom locations...)
  * TODO Wi-Fi signal: allow user to setup "home network", "work network"... to recognize places
  * TODO Movement - Accellerometer: Find out whether you are in a car, walking or standing still
- * TODO Check for other types of sensing
+ * TODO Keep looking for other ways of getting data
  */
 public class IFTTTCurrentSituation
 {

@@ -35,13 +35,10 @@ public class MyGcmListenerService extends GcmListenerService
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
      */
-    // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
         Log.d(TAG, "GCM message received! bundle is: " + data.toString());
         String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
 
         try
         {
@@ -50,12 +47,6 @@ public class MyGcmListenerService extends GcmListenerService
         } catch (JSONException e)
         {
             e.printStackTrace();
-        }
-
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
         }
 
         // [START_EXCLUDE]
@@ -73,7 +64,6 @@ public class MyGcmListenerService extends GcmListenerService
         sendNotification(message);
         // [END_EXCLUDE]
     }
-    // [END receive_message]
 
     /**
      * Create and show a simple notification containing the received GCM message.
@@ -89,7 +79,7 @@ public class MyGcmListenerService extends GcmListenerService
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("GCM Message")
+                .setContentTitle(message)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

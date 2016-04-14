@@ -15,6 +15,12 @@ import it.giuggi.iotremote.iot.IOperatingMode;
  * Generic IFTTTRule
  * Contains a list of filters, contexts and events, and a list of actions to run
  * if all these conditions are met
+ * TODO how do I store IFTTTRules inside permanent storage?
+ * [ solution: Use GSON to save all rules inside SharedPreferences or MySqlLite for querying
+ * (ex.: Filter(id, name, type, mode), Context(id, type), Event(id, type), Action(id, type, action_json), Rule(id),
+ * Association(filter, context, action, rule) ]
+ * So that I can read Action (which is the most problematic) straight from the database
+ * TODO (Is GSON even needed? I need to try and build an actual action before I make that call)
  */
 public class IFTTTRule
 {
