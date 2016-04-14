@@ -1,16 +1,17 @@
-package it.giuggi.iotremote.fragment;
+package it.giuggi.iotremote.adapter;
 
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import it.giuggi.iotremote.INavigationController;
+import it.giuggi.iotremote.fragment.BaseFragment;
 
 /**
- * Created by Federico Giuggioloni on 15/03/16.
+ * Created by Federico Giuggioloni on 16/03/16.
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public abstract class BaseFragment extends Fragment
+public abstract class BaseViewHolder extends RecyclerView.ViewHolder
 {
     protected static INavigationController controller = new INavigationController()
     {
@@ -29,7 +30,7 @@ public abstract class BaseFragment extends Fragment
         @Override
         public void showDialog(View view)
         {
-            //NOOP
+
         }
     };
 
@@ -38,5 +39,8 @@ public abstract class BaseFragment extends Fragment
         controller = nav;
     }
 
-    public abstract String generateTag();
+    public BaseViewHolder(View itemView)
+    {
+        super(itemView);
+    }
 }

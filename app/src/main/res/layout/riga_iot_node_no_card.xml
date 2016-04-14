@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/node_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        style="@style/TitleText"
+        android:text="NODE#1"/>
+
+    <TextView android:id="@+id/current_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/node_name"
+        android:layout_alignLeft="@+id/node_name"
+        android:layout_alignStart="@+id/node_name"
+        style="@style/StandardText"
+        android:text="Current mode"/>
+
+    <LinearLayout android:id="@+id/dashboard_container"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_below="@+id/current_mode"
+        android:layout_above="@+id/edit_button"
+        android:layout_marginTop="8dp"
+        android:layout_alignLeft="@+id/node_name"
+        android:layout_alignStart="@+id/node_name"
+        android:layout_alignRight="@+id/node_name"
+        android:layout_alignEnd="@+id/node_name"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <Button android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        style="?attr/borderlessButtonStyle"
+        android:text="Edit..."/>
+</RelativeLayout>

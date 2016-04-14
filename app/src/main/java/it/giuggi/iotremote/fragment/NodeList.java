@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.adapter.IOTNodeAdapter;
-import it.giuggi.iotremote.iot.GPIOMode;
 import it.giuggi.iotremote.iot.IOTNode;
 import it.giuggi.iotremote.iot.IOperatingMode;
 import it.giuggi.iotremote.net.WebRequestTask;
@@ -32,7 +31,7 @@ public class NodeList extends BaseFragment
 
     public static final String TAG = "NODE_LIST";
 
-    ArrayList<IOTNode> nodeList = new ArrayList<IOTNode>(5);;
+    ArrayList<IOTNode> nodeList = new ArrayList<IOTNode>(5);
     private IOTNodeAdapter adapter;
 
     @Nullable
@@ -67,7 +66,7 @@ public class NodeList extends BaseFragment
 
                                 JSONObject modeParams = mode.getJSONObject("params");
 
-                                IOTNode node = new IOTNode(name, IOperatingMode.stringToMode(modeName, modeParams));
+                                IOTNode node = new IOTNode(ip, name, IOperatingMode.stringToMode(modeName, modeParams));
                                 nodeList.add(node);
                             } catch (JSONException e)
                             {

@@ -12,6 +12,9 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
 
@@ -35,9 +38,19 @@ public class MyGcmListenerService extends GcmListenerService
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        Log.d(TAG, "GCM message received! bundle is: " + data.toString());
         String message = data.getString("message");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
+
+        try
+        {
+            JSONObject jsonData = new JSONObject((String) data.get("data"));
+            //TODO darlo in pasto alle IFTTTRule
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.

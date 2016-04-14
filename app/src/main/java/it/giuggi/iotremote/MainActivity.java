@@ -1,19 +1,23 @@
 package it.giuggi.iotremote;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import it.giuggi.iotremote.fragment.BaseFragment;
+import it.giuggi.iotremote.adapter.BaseViewHolder;
 import it.giuggi.iotremote.fragment.NodeList;
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements INavigationController
 {
 
     private static final String TAG = "IOT_REMOTE_APP";
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BaseFragment.initNavigation(this);
+        BaseViewHolder.initNavigation(this);
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
@@ -83,5 +90,34 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void goBack()
+    {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void go(BaseFragment in)
+    {
+        changeFragment(in);
+    }
+
+    @Override
+    public void showDialog(View view)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setPositiveButton(R.string.close, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 }
