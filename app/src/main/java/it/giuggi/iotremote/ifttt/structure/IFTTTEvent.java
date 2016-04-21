@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt;
+package it.giuggi.iotremote.ifttt.structure;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +25,8 @@ public abstract class IFTTTEvent
         public IFTTTEventType type;
         public String mode_name;
         public String[] parameters;
-        private JSONArray oldvalues;
-        private JSONArray newvalues;
+        private String[] oldvalues;
+        private String[] newvalues;
 
         public String toLogString()
         {
@@ -46,8 +46,18 @@ public abstract class IFTTTEvent
                 this.parameters[i] = params.getString(i);
             }
 
-            this.oldvalues = obj.getJSONArray("oldvalues");
-            this.oldvalues = obj.getJSONArray("newvalues");
+            JSONArray oldvalues = obj.getJSONArray("oldvalues");
+            JSONArray newvalues = obj.getJSONArray("newvalues");
+
+            this.oldvalues = new String[oldvalues.length()];
+            this.newvalues = new String[newvalues.length()];
+
+            //Should be fine, newvalues and oldvalues MUST have the same length
+            for(int i = 0; i < oldvalues.length(); i++)
+            {
+                this.oldvalues[i] = oldvalues.getString(i);
+                this.newvalues[i] = newvalues.getString(i);
+            }
         }
 
         public static IFTTTEventType typeToEvent(String type)
@@ -71,26 +81,18 @@ public abstract class IFTTTEvent
             else return IFTTTEventType.ANY;
         }
 
-        public JSONArray getOldvalues()
+        public String[] getOldValues()
         {
             return this.oldvalues;
         }
 
-        public JSONArray getNewvalues()
+        public String[] getNewValues()
         {
             return this.newvalues;
         }
     }
 
     public enum IFTTTEventType { ANY, VALUE_CHANGED, DISCONNECTED, CONNECTED }
-
-    public IFTTTEventType type;
-
-    public IFTTTEvent ofType(IFTTTEventType type)
-    {
-        this.type = type;
-        return this;
-    }
 
     /**
      * Applies this IFTTTEvent to given event string

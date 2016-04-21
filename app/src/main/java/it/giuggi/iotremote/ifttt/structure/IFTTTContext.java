@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt;
+package it.giuggi.iotremote.ifttt.structure;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
@@ -8,14 +8,6 @@ package it.giuggi.iotremote.ifttt;
 public abstract class IFTTTContext
 {
     public enum IFTTTContextType { ANY, AT_HOME, IN_CAR, WALKING, OUTSIDE, AT_WORK/*?*/ }
-
-    public IFTTTContextType type;
-
-    public IFTTTContext ofType(IFTTTContextType type)
-    {
-        this.type = type;
-        return this;
-    }
 
     /**
      * Applies this IFTTTContext to given Situation.
@@ -28,6 +20,6 @@ public abstract class IFTTTContext
 
     public String toLogString()
     {
-        return toString() + " Type: " + this.type;
+        return toString();
     }
 }

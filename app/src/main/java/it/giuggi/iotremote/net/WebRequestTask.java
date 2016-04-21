@@ -54,7 +54,7 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
     private static final String ERROR = "error";
 
     public enum Tipo{ JSON, STRING, ESITO, JSON_ARRAY, LONG }
-    public enum Azione{ SEND_GCM_ID, LOGOUT_GCM, GET_NODE_LIST }
+    public enum Azione{ SEND_GCM_ID, LOGOUT_GCM, GET_NODE_LIST, SEND_COMMAND }
 
     private String scripts[] = new String[]
             {
@@ -337,6 +337,10 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
                     response_string = request(valori, scripts[azione.ordinal()], GET);
                     tipo = Tipo.JSON_ARRAY;
                     break;
+                case SEND_COMMAND:
+                    response_string = request(valori, scripts[azione.ordinal()], GET);
+                    tipo = Tipo.ESITO;
+                    break;
                 default:
                     break;
             }
@@ -399,6 +403,10 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
                 nameValuePairs.put("registration_id", params[0]);
                 break;
             case GET_NODE_LIST:
+                break;
+            case SEND_COMMAND:
+                nameValuePairs.put("action", params[0]);
+                nameValuePairs.put("node", params[1]);
                 break;
             default:
                 break;

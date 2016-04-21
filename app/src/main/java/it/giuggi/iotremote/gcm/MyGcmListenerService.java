@@ -17,12 +17,12 @@ import org.json.JSONObject;
 
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.ifttt.IFTTTAction;
-import it.giuggi.iotremote.ifttt.IFTTTContext;
-import it.giuggi.iotremote.ifttt.IFTTTCurrentSituation;
-import it.giuggi.iotremote.ifttt.IFTTTEvent;
-import it.giuggi.iotremote.ifttt.IFTTTFilter;
-import it.giuggi.iotremote.ifttt.IFTTTRule;
+import it.giuggi.iotremote.ifttt.structure.IFTTTAction;
+import it.giuggi.iotremote.ifttt.structure.IFTTTContext;
+import it.giuggi.iotremote.ifttt.structure.IFTTTCurrentSituation;
+import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
+import it.giuggi.iotremote.ifttt.structure.IFTTTFilter;
+import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 import it.giuggi.iotremote.iot.IOTNode;
 
 /**

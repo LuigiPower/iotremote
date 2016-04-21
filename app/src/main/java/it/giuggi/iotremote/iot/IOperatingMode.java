@@ -45,6 +45,11 @@ public abstract class IOperatingMode
         return this.parameters.get(parameter);
     }
 
+    public boolean has(String modename)
+    {
+        return getName().equalsIgnoreCase(modename);
+    }
+
     public abstract String getName();
 
     public abstract View loadDashboardLayout(LayoutInflater inflater, ViewGroup container);

@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt;
+package it.giuggi.iotremote.ifttt.database;
 
 import android.content.Context;
 import android.database.DatabaseErrorHandler;

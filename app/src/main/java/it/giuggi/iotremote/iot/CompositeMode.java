@@ -57,6 +57,19 @@ public class CompositeMode extends IOperatingMode
     }
 
     @Override
+    public boolean has(String modename)
+    {
+        for(IOperatingMode mode : modeList)
+        {
+            if(mode.has(modename))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public String getName()
     {
         return NAME;

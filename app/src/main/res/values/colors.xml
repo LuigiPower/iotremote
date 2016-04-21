@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffeb3b</color>
+    <!--<color name="colorPrimary">#ffeb3b</color>-->
+    <color name="colorPrimary">#fbc02d</color>
     <color name="colorPrimaryDark">#fbc02d</color>
     <color name="colorAccent">#6200ea</color>
     <color name="black">#000000</color>
+
+
+    <color name="colorFilter">#FFC107</color>
+    <color name="colorEvent">#8BC34A</color>
+    <color name="colorContext">#FFEB3B</color>
+    <color name="colorAction">#2196F3</color>
 </resources>

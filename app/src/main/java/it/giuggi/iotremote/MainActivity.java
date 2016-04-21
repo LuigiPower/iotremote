@@ -22,6 +22,7 @@ import it.giuggi.iotremote.fragment.BaseFragment;
 import it.giuggi.iotremote.adapter.BaseViewHolder;
 import it.giuggi.iotremote.fragment.NodeList;
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
+import it.giuggi.iotremote.ifttt.ui.IFTTTListFragment;
 
 public class MainActivity extends AppCompatActivity implements INavigationController
 {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             return;
         }
 
-        changeFragment(new NodeList());
+        changeFragment(new IFTTTListFragment());
     }
 
     @Override

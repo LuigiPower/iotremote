@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt;
+package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -25,10 +25,10 @@ import it.giuggi.iotremote.iot.IOperatingMode;
  */
 public class IFTTTRule
 {
-    LinkedList<IFTTTFilter> iftttFilters;
-    LinkedList<IFTTTContext> iftttContexts;
-    LinkedList<IFTTTEvent> iftttEvents;
-    LinkedList<IFTTTAction> iftttActions;
+    protected LinkedList<IFTTTFilter> iftttFilters;
+    protected LinkedList<IFTTTContext> iftttContexts;
+    protected LinkedList<IFTTTEvent> iftttEvents;
+    protected LinkedList<IFTTTAction> iftttActions;
 
     /**
      * Creates a new IFTTTRule
@@ -97,6 +97,26 @@ public class IFTTTRule
     public void addAction(IFTTTAction action)
     {
         this.iftttActions.add(action);
+    }
+
+    public IFTTTFilter getFilterAt(int i)
+    {
+        return iftttFilters.get(i);
+    }
+
+    public IFTTTEvent getEventAt(int i)
+    {
+        return iftttEvents.get(i);
+    }
+
+    public IFTTTContext getContextAt(int i)
+    {
+        return iftttContexts.get(i);
+    }
+
+    public IFTTTAction getActionAt(int i)
+    {
+        return iftttActions.get(i);
     }
 
     /**

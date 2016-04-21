@@ -1,11 +1,14 @@
 package it.giuggi.iotremote.iot;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
  * Created by Federico Giuggioloni on 10/03/16.
@@ -50,5 +53,31 @@ public class IOTNode
     public void setMode(IOperatingMode newMode)
     {
         this.mode = newMode;
+    }
+
+    public boolean hasMode(String modename)
+    {
+        return mode.has(modename);
+    }
+
+    public void sendCommand(String action)
+    {
+        Bundle data = new Bundle();
+        data.putStringArray(WebRequestTask.DATA, new String[]{
+                action,
+                name
+        });
+
+        WebRequestTask.perform(WebRequestTask.Azione.SEND_COMMAND)
+                .with(data)
+                .listen(new WebRequestTask.OnResponseListener()
+                {
+                    @Override
+                    public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
+                    {
+                        Log.i("IOTNode", "Sent action to node");
+                    }
+                })
+                .send();
     }
 }

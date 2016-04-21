@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt;
+package it.giuggi.iotremote.ifttt.structure;
 
 import it.giuggi.iotremote.iot.IOTNode;
 
@@ -9,7 +9,6 @@ import it.giuggi.iotremote.iot.IOTNode;
  */
 public abstract class IFTTTAction
 {
-    public IOTNode targetNode;
 
     /**
      * Action is one supported by the targetNode
@@ -25,8 +24,10 @@ public abstract class IFTTTAction
      * Solution: Subclasses should only use action and targetNode to do things, which means I can
      * save those two things into the database and (maybe) the action_type (which is the subclass
      * name itself). This means I can reinstantiate that class when needed, while keeping flexibility
+     * Should be useless: subclasses create them if needed and override doaction
      */
-    public String action;
+    //public IOTNode targetNode;
+    //public String action;
 
     /**
      * Override to create a custom action
