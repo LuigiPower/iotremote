@@ -1,5 +1,6 @@
 package it.giuggi.iotremote.ifttt;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import org.json.JSONException;
@@ -78,6 +79,26 @@ public class IFTTTRule
         }
     }
 
+    public void addFilter(IFTTTFilter filter)
+    {
+        this.iftttFilters.add(filter);
+    }
+
+    public void addContext(IFTTTContext context)
+    {
+        this.iftttContexts.add(context);
+    }
+
+    public void addEvent(IFTTTEvent event)
+    {
+        this.iftttEvents.add(event);
+    }
+
+    public void addAction(IFTTTAction action)
+    {
+        this.iftttActions.add(action);
+    }
+
     /**
      * Applies this rule to given data (a gcm message)
      * data format:
@@ -93,7 +114,7 @@ public class IFTTTRule
      *      }
      * @return true if it is applicable, false otherwise
      */
-    public boolean apply(JSONObject gcmMessage) throws JSONException
+    public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, JSONObject gcmMessage) throws JSONException
     {
         /**
          * Initialize IoTNode from node part of the GCM message
@@ -121,8 +142,6 @@ public class IFTTTRule
             result = iftttEvent.apply(event);
             if(!result) return false;
         }
-
-        IFTTTCurrentSituation currentSituation = IFTTTCurrentSituation.acquireSnapshot();
 
         for(IFTTTContext iftttContext : iftttContexts)
         {

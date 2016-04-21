@@ -1,8 +1,14 @@
 package it.giuggi.iotremote;
 
+import android.*;
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
     private static final String TAG = "IOT_REMOTE_APP";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final int PERMISSIONS_CHECKED_REQUEST = 9001;
 
     private int fragmentContainer = R.id.fragment_container;
 
@@ -56,6 +63,23 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             Log.i("it.giuggi.iotremote", "play services checked, starting registration intent service");
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 4);
+            }
+            return;
         }
 
         changeFragment(new NodeList());
@@ -119,5 +143,32 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
                 })
                 .create();
         dialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if(requestCode == PERMISSIONS_CHECKED_REQUEST)
+        {
+            for(int code : grantResults)
+            {
+                if (code != RESULT_OK)
+                {
+                    //OK permissions, keep going
+                } else
+                {
+                    //Close application, we need permissions TODO maybe start anyway and disable IFTTT rules that use these permissions
+                    finish();
+                }
+            }
+            changeFragment(new NodeList());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

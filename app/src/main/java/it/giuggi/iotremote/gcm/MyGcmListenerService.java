@@ -17,6 +17,13 @@ import org.json.JSONObject;
 
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.IFTTTAction;
+import it.giuggi.iotremote.ifttt.IFTTTContext;
+import it.giuggi.iotremote.ifttt.IFTTTCurrentSituation;
+import it.giuggi.iotremote.ifttt.IFTTTEvent;
+import it.giuggi.iotremote.ifttt.IFTTTFilter;
+import it.giuggi.iotremote.ifttt.IFTTTRule;
+import it.giuggi.iotremote.iot.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/03/16.
@@ -37,17 +44,83 @@ public class MyGcmListenerService extends GcmListenerService
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        Log.d(TAG, "GCM message received! bundle is: " + data.toString());
         String message = data.getString("message");
 
+        JSONObject jsonData = null;
         try
         {
-            JSONObject jsonData = new JSONObject((String) data.get("data"));
+            jsonData = new JSONObject((String) data.get("data"));
             //TODO darlo in pasto alle IFTTTRule
+            Log.d(TAG, "Data from GCM is " + jsonData.toString(4));
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
+
+        final JSONObject finalJsonData = jsonData;
+        IFTTTCurrentSituation.acquireSnapshot(getBaseContext(), new IFTTTCurrentSituation.OnSnapshotReadyListener()
+        {
+            @Override
+            public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
+            {
+                //TODO dare in pasto le IFTTTRule gia create
+                //TODO togliere questo test
+
+                Log.e(TAG, "onSnapshotReady");
+                IFTTTRule rule = new IFTTTRule(null, null, null, null);
+
+                rule.addFilter(new IFTTTFilter()
+                {
+                    @Override
+                    public boolean apply(IOTNode node)
+                    {
+                        Log.e(TAG, "TESTING Filter " + this);
+                        return node.name.equalsIgnoreCase("esp0");
+                    }
+                });
+
+                rule.addEvent(new IFTTTEvent()
+                {
+                    @Override
+                    public boolean apply(Event event)
+                    {
+                        Log.e(TAG, "TESTING Event ");
+                        return event.type == IFTTTEventType.VALUE_CHANGED;
+                    }
+                });
+
+                rule.addContext(new IFTTTContext()
+                {
+                    @Override
+                    public boolean apply(IFTTTCurrentSituation.CurrentSituation context)
+                    {
+                        Log.e(TAG, "TESTING Context " + context.toLogString());
+                        //TODO use Geofencing
+                        //return context.isLocationIn(0.0, 0.0, 0.0);
+                        return true;
+                    }
+                });
+
+                rule.addAction(new IFTTTAction()
+                {
+                    @Override
+                    public void doAction()
+                    {
+                        Log.e(TAG, "PASSED RULE");
+                    }
+                });
+
+                try
+                {
+                    Log.e(TAG, "TESTING RULE");
+                    boolean result = rule.apply(situation, finalJsonData);
+                    Log.e(TAG, "Rule result: " + result);
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // [START_EXCLUDE]
         /**

@@ -22,15 +22,21 @@ public abstract class IFTTTEvent
      */
     public static class Event
     {
-        public String type;
+        public IFTTTEventType type;
         public String mode_name;
         public String[] parameters;
         private JSONArray oldvalues;
         private JSONArray newvalues;
 
+        public String toLogString()
+        {
+            return toString() + " Type: " + this.type + " mode: " + this.mode_name + " parameters: " + this.parameters + " oldvalues: " + this.oldvalues + " newvalues: " + this.newvalues;
+        }
+
         public Event(JSONObject obj) throws JSONException
         {
-            this.type = obj.getString("type");
+            String type = obj.getString("type");
+            this.type = typeToEvent(type);
             this.mode_name = obj.getString("mode_name");
 
             JSONArray params = obj.getJSONArray("params");
@@ -44,6 +50,27 @@ public abstract class IFTTTEvent
             this.oldvalues = obj.getJSONArray("newvalues");
         }
 
+        public static IFTTTEventType typeToEvent(String type)
+        {
+            if(type.equalsIgnoreCase("ANY"))
+            {
+                return IFTTTEventType.ANY;
+            }
+            else if(type.equalsIgnoreCase("VALUE_CHANGED"))
+            {
+                return IFTTTEventType.VALUE_CHANGED;
+            }
+            else if(type.equalsIgnoreCase("DISCONNECTED"))
+            {
+                return IFTTTEventType.DISCONNECTED;
+            }
+            else if(type.equalsIgnoreCase("CONNECTED"))
+            {
+                return IFTTTEventType.CONNECTED;
+            }
+            else return IFTTTEventType.ANY;
+        }
+
         public JSONArray getOldvalues()
         {
             return this.oldvalues;
@@ -55,7 +82,7 @@ public abstract class IFTTTEvent
         }
     }
 
-    public enum IFTTTEventType { ANY, VALUE_UPDATE, DISCONNECTED, CONNECTED }
+    public enum IFTTTEventType { ANY, VALUE_CHANGED, DISCONNECTED, CONNECTED }
 
     public IFTTTEventType type;
 

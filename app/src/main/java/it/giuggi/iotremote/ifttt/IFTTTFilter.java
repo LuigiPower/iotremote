@@ -39,4 +39,9 @@ public abstract class IFTTTFilter
      * @return true if node passes this filter, false otherwise
      */
     public abstract boolean apply(IOTNode node);
+
+    public String toLogString()
+    {
+        return toString() + " Name: " + this.name+ " Type: " + this.type + " Mode: " + this.mode;
+    }
 }

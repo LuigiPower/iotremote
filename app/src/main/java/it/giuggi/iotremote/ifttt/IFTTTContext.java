@@ -24,5 +24,10 @@ public abstract class IFTTTContext
      * @param context IFTTTCurrentSituation containing relevant sensor data
      * @return true if we are in said context, false otherwise
      */
-    public abstract boolean apply(IFTTTCurrentSituation context);
+    public abstract boolean apply(IFTTTCurrentSituation.CurrentSituation context);
+
+    public String toLogString()
+    {
+        return toString() + " Type: " + this.type;
+    }
 }
