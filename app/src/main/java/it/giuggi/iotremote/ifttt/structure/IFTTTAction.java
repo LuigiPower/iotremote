@@ -1,5 +1,11 @@
 package it.giuggi.iotremote.ifttt.structure;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+
+import it.giuggi.iotremote.ifttt.database.Databasable;
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.iot.IOTNode;
 
 /**
@@ -7,8 +13,15 @@ import it.giuggi.iotremote.iot.IOTNode;
  * IFTTTAction
  * An action to be done if the IFTTTRule matches Filter, Event and Context
  */
-public abstract class IFTTTAction
+public abstract class IFTTTAction extends IFTTTComponent
 {
+    public static final String TYPE = "ACTION";
+
+    @Override
+    protected String getType()
+    {
+        return TYPE;
+    }
 
     /**
      * Action is one supported by the targetNode
@@ -33,4 +46,5 @@ public abstract class IFTTTAction
      * Override to create a custom action
      */
     public abstract void doAction();
+
 }

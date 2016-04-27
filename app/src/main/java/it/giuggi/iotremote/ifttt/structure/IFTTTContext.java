@@ -5,8 +5,16 @@ package it.giuggi.iotremote.ifttt.structure;
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public abstract class IFTTTContext
+public abstract class IFTTTContext extends IFTTTComponent
 {
+    public static final String TYPE = "CONTEXT";
+
+    @Override
+    protected String getType()
+    {
+        return TYPE;
+    }
+
     public enum IFTTTContextType { ANY, AT_HOME, IN_CAR, WALKING, OUTSIDE, AT_WORK/*?*/ }
 
     /**

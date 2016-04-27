@@ -21,9 +21,10 @@ public class NotificationAction extends IFTTTAction
     private static final int max_notifications = 5;
     private static int notification_id = base_notification_id;
 
+    private transient Context context;
+    private transient NotificationManager manager;
+
     private int notificationId;
-    private Context context;
-    private NotificationManager manager;
     private String message;
 
     public NotificationAction(Context context, String message)

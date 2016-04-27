@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import it.giuggi.iotremote.fragment.BaseFragment;
 import it.giuggi.iotremote.adapter.BaseViewHolder;
 import it.giuggi.iotremote.fragment.NodeList;
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.ui.IFTTTListFragment;
 
 public class MainActivity extends AppCompatActivity implements INavigationController
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         if(requestCode == PERMISSIONS_CHECKED_REQUEST)
         {

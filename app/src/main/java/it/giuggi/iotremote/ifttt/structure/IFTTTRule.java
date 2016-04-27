@@ -7,7 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import it.giuggi.iotremote.ifttt.database.Databasable;
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.iot.IOTNode;
 import it.giuggi.iotremote.iot.IOperatingMode;
 
@@ -23,25 +26,51 @@ import it.giuggi.iotremote.iot.IOperatingMode;
  * So that I can read Action (which is the most problematic) straight from the database
  * TODO (Is GSON even needed? I need to try and build an actual action before I make that call)
  */
-public class IFTTTRule
+public class IFTTTRule extends Databasable
 {
-    protected LinkedList<IFTTTFilter> iftttFilters;
-    protected LinkedList<IFTTTContext> iftttContexts;
-    protected LinkedList<IFTTTEvent> iftttEvents;
-    protected LinkedList<IFTTTAction> iftttActions;
+    protected long ruleid;
+    protected String name;
+    protected List<IFTTTFilter> iftttFilters;
+    protected List<IFTTTContext> iftttContexts;
+    protected List<IFTTTEvent> iftttEvents;
+    protected List<IFTTTAction> iftttActions;
 
     /**
-     * Creates a new IFTTTRule
+     * Creates a new IFTTTRule with specified id
+     * @param id id of Rule (inside the database)
+     * @param name Name of the rule
      * @param iftttFilters An optional list of filters. if null, an empty list is created
      * @param iftttContexts An optional list of contexts. if null, an empty list is created
      * @param iftttEvents An optional list of events. if null, an empty list is created
      * @param iftttActions An optional list of actions. if null, an empty list is created
      */
-    public IFTTTRule(@Nullable LinkedList<IFTTTFilter> iftttFilters,
-                     @Nullable LinkedList<IFTTTContext> iftttContexts,
-                     @Nullable LinkedList<IFTTTEvent> iftttEvents,
-                     @Nullable LinkedList<IFTTTAction> iftttActions)
+    public IFTTTRule(long id,
+            String name,
+            @Nullable LinkedList<IFTTTFilter> iftttFilters,
+            @Nullable LinkedList<IFTTTContext> iftttContexts,
+            @Nullable LinkedList<IFTTTEvent> iftttEvents,
+            @Nullable LinkedList<IFTTTAction> iftttActions)
     {
+        this(name, iftttFilters, iftttContexts, iftttEvents, iftttActions);
+        this.ruleid = id;
+    }
+
+    /**
+     * Creates a new IFTTTRule
+     * @param name Name of the rule
+     * @param iftttFilters An optional list of filters. if null, an empty list is created
+     * @param iftttContexts An optional list of contexts. if null, an empty list is created
+     * @param iftttEvents An optional list of events. if null, an empty list is created
+     * @param iftttActions An optional list of actions. if null, an empty list is created
+     */
+    public IFTTTRule(String name,
+            @Nullable LinkedList<IFTTTFilter> iftttFilters,
+            @Nullable LinkedList<IFTTTContext> iftttContexts,
+            @Nullable LinkedList<IFTTTEvent> iftttEvents,
+            @Nullable LinkedList<IFTTTAction> iftttActions)
+    {
+        this.name = name;
+
         if(iftttFilters == null)
         {
             this.iftttFilters = new LinkedList<>();
@@ -175,5 +204,104 @@ public class IFTTTRule
             action.doAction();
         }
         return true;
+    }
+
+    @Override
+    protected long doSave(Context context, IFTTTDatabase database)
+    {
+        long ruleid = database.addRule(this.name);
+        this.ruleid = ruleid;
+
+        for(IFTTTComponent databasable : iftttFilters)
+        {
+            long componentid = databasable.save(context);
+            database.addLink(ruleid, componentid);
+        }
+
+        for(IFTTTComponent databasable : iftttEvents)
+        {
+            long componentid = databasable.save(context);
+            database.addLink(ruleid, componentid);
+        }
+
+        for(IFTTTComponent databasable : iftttContexts)
+        {
+            long componentid = databasable.save(context);
+            database.addLink(ruleid, componentid);
+        }
+
+        for(IFTTTComponent databasable : iftttActions)
+        {
+            long componentid = databasable.save(context);
+            database.addLink(ruleid, componentid);
+        }
+
+        return ruleid;
+    }
+
+    @Override
+    protected int doUpdate(Context context, IFTTTDatabase database)
+    {
+        if(this.ruleid == -1) return -1;    //Return -1 in case rule was never saved
+        int updated_count = 0;
+
+        database.updateRule(this.ruleid, this.name);
+
+        for(IFTTTComponent databasable : iftttFilters)
+        {
+            updated_count += databasable.update(context);
+        }
+
+        for(IFTTTComponent databasable : iftttEvents)
+        {
+            updated_count += databasable.update(context);
+        }
+
+        for(IFTTTComponent databasable : iftttContexts)
+        {
+            updated_count += databasable.update(context);
+        }
+
+        for(IFTTTComponent databasable : iftttActions)
+        {
+            updated_count += databasable.update(context);
+        }
+
+        return updated_count;
+    }
+
+    @Override
+    protected int doDelete(Context context, IFTTTDatabase database)
+    {
+        if(this.ruleid == -1) return -1;    //Return -1 in case rule was never saved
+        int deleted_count = 0;
+
+        database.deleteRule(this.ruleid);
+
+        for(IFTTTComponent databasable : iftttFilters)
+        {
+            deleted_count += databasable.delete(context);
+            database.deleteLink(this.ruleid, databasable.getComponentId());
+        }
+
+        for(IFTTTComponent databasable : iftttEvents)
+        {
+            deleted_count += databasable.delete(context);
+            database.deleteLink(this.ruleid, databasable.getComponentId());
+        }
+
+        for(IFTTTComponent databasable : iftttContexts)
+        {
+            deleted_count += databasable.delete(context);
+            database.deleteLink(this.ruleid, databasable.getComponentId());
+        }
+
+        for(IFTTTComponent databasable : iftttActions)
+        {
+            deleted_count += databasable.delete(context);
+            database.deleteLink(this.ruleid, databasable.getComponentId());
+        }
+
+        return deleted_count;
     }
 }

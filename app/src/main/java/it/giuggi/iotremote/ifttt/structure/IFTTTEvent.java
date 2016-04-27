@@ -1,16 +1,31 @@
 package it.giuggi.iotremote.ifttt.structure;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import it.giuggi.iotremote.ifttt.database.Databasable;
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public abstract class IFTTTEvent
+public abstract class IFTTTEvent extends IFTTTComponent
 {
+    public static final String TYPE = "EVENT";
+
+    @Override
+    protected String getType()
+    {
+        return TYPE;
+    }
+
     /**
      *          "event": {
      *              "type": "VALUE_CHANGED",            //One of the event types
@@ -100,4 +115,5 @@ public abstract class IFTTTEvent
      * @return true if the event matches, false otherwise
      */
     public abstract boolean apply(Event event);
+
 }

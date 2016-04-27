@@ -67,7 +67,7 @@ public class MyGcmListenerService extends GcmListenerService
                 //TODO togliere questo test
 
                 Log.e(TAG, "onSnapshotReady");
-                IFTTTRule rule = new IFTTTRule(null, null, null, null);
+                IFTTTRule rule = new IFTTTRule("rule42", null, null, null, null);
 
                 rule.addFilter(new IFTTTFilter()
                 {
