@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">IoTRemote</string>
+
     <string name="sender_id">224490332382</string>
+    
     <string name="empty_mode_text">Node not setup yet.</string>
     <string name="close">Close</string>
+    <string name="add_component">Add component</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="mode_filter">By mode</string>
+    <string name="name_filter">By name</string>
+
+    <string name="wifi_name_context">Wifi name</string>
+
+    <string name="connected_event">When Node is first connected</string>
+    <string name="disconnected_event">When Node is disconnected</string>
+    <string name="type_event">When a certain event occurs</string>
+    <string name="value_changed_event">When a specific parameter changes</string>
+    <string name="value_changed_from_event">When a specific parameter changes from a value</string>
+    <string name="value_changed_from_to_event">When a specific parameter changes from a value to a value</string>
+    <string name="value_changed_to_event">When a specific parameter changes to a value</string>
+
+    <string name="notification_action">Show notification</string>
+    <string name="play_notification_sound_action">Play notification sound</string>
+    <string name="send_command_action">Send command to node</string>
+
 </resources>

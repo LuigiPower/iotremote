@@ -45,6 +45,6 @@ public abstract class IFTTTAction extends IFTTTComponent
     /**
      * Override to create a custom action
      */
-    public abstract void doAction();
+    public abstract void doAction(Context context);
 
 }

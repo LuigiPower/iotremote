@@ -1,5 +1,10 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 
 /**
@@ -19,5 +24,39 @@ public class TypeEvent extends IFTTTEvent
     public boolean apply(Event event)
     {
         return event.type == this.type;
+    }
+
+    @Override
+    public int getLayoutResourceId()
+    {
+        return R.layout.detail_type;
+    }
+
+    @Override
+    public int getEditLayoutResourceId()
+    {
+        return R.layout.edit_detail_type;
+    }
+
+    @Override
+    protected int getComponentNameResourceId()
+    {
+        return R.string.type_event;
+    }
+
+    @Override
+    protected void populateView(View view)
+    {
+        //TODO better layout
+        TextView type = (TextView) view.findViewById(R.id.event_type);
+        type.setText(this.type.toString());
+    }
+
+    @Override
+    protected void populateEditView(View view)
+    {
+        //TODO better layout
+        EditText type = (EditText) view.findViewById(R.id.event_type);
+        type.setText(this.type.toString());
     }
 }

@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.ifttt.ui;
+package it.giuggi.iotremote.ifttt.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.fragment.BaseFragment;
+import it.giuggi.iotremote.ifttt.ui.adapter.RuleAdapter;
+import it.giuggi.iotremote.ui.fragment.BaseFragment;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 
@@ -20,7 +21,7 @@ import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class IFTTTListFragment extends BaseFragment
+public class IFTTTListFragment extends BaseFragment implements View.OnClickListener
 {
     public static final String TAG = "IFTTTLISTFRAGMENT";
 
@@ -74,10 +75,8 @@ public class IFTTTListFragment extends BaseFragment
         rule4.addAction(new NotificationAction(getContext(), "I'm a notification 2!"));
 
         IFTTTRule rule5 = new IFTTTRule("rule5", null, null, null, null);
-        rule5.addFilter(new NameFilter("esp4"));
-        rule5.addEvent(new ValueChangedFromToEvent("LOW", "HIGH"));
-        rule5.addContext(new WifiNameContext("Gdf van #3"));
-        rule5.addAction(new NotificationAction(getContext(), "I'm a notification 2!"));
+        rule5.addAction(new NotificationAction("I'm a notification of an all encompassing Rule!"));
+        rule5.save(getContext());
         */
 
         try
@@ -88,11 +87,22 @@ public class IFTTTListFragment extends BaseFragment
             e.printStackTrace();
         }
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.rule_list);
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.element_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RuleAdapter(ruleList, recyclerView);
         recyclerView.setAdapter(adapter);
 
+        View fab = v.findViewById(R.id.add_button);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(this);
+
         return v;
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        //TODO rule name?
+        controller.go(IFTTTRuleDetail.newInstance(new IFTTTRule("New Rule", null, null, null, null)));
     }
 }

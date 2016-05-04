@@ -1,8 +1,6 @@
 package it.giuggi.iotremote;
 
-import android.*;
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,12 +17,11 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import it.giuggi.iotremote.fragment.BaseFragment;
-import it.giuggi.iotremote.adapter.BaseViewHolder;
-import it.giuggi.iotremote.fragment.NodeList;
+import it.giuggi.iotremote.ui.fragment.BaseFragment;
+import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
+import it.giuggi.iotremote.ui.fragment.NodeList;
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
-import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
-import it.giuggi.iotremote.ifttt.ui.IFTTTListFragment;
+import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
 
 public class MainActivity extends AppCompatActivity implements INavigationController
 {

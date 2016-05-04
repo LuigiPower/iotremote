@@ -1,7 +1,8 @@
-package it.giuggi.iotremote.ifttt.ui;
+package it.giuggi.iotremote.ifttt.ui.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.adapter.BaseViewHolder;
+import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTRuleDetail;
+import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 
 /**
@@ -41,19 +43,49 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IFTTTRule rule = ruleList.get(i);
 
-        customViewHolder.card.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //TODO things about this rule (dialog to edit it or something (I want another fragment to edit it, to allow master-detail flow))
-            }
-        });
+        customViewHolder.card.setTag(rule);
+        customViewHolder.card.setOnClickListener(customViewHolder);
 
-        String filterName = rule.getFilterAt(0).getClass().getName();
-        String eventName = rule.getEventAt(0).getClass().getName();
-        String contextName = rule.getContextAt(0).getClass().getName();
-        String actionName = rule.getActionAt(0).getClass().getName();
+        String filterName = "";
+        String eventName = "";
+        String contextName = "";
+        String actionName = "";
+
+        try
+        {
+            filterName = rule.getFilterAt(0).getClass().getName();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            eventName = rule.getEventAt(0).getClass().getName();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            contextName = rule.getContextAt(0).getClass().getName();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            actionName = rule.getActionAt(0).getClass().getName();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
 
         //TODO change this, icons would be nice looking
         customViewHolder.filter.setText(filterName.substring(filterName.lastIndexOf('.') + 1));
@@ -67,7 +99,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         return (null != ruleList ? ruleList.size() : 0);
     }
 
-    public class CustomViewHolder extends BaseViewHolder
+    public class CustomViewHolder extends BaseViewHolder implements View.OnClickListener
     {
         protected CardView card;
         protected TextView filter;
@@ -83,6 +115,14 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
             this.event = (TextView) view.findViewById(R.id.event);
             this.context = (TextView) view.findViewById(R.id.context);
             this.action = (TextView) view.findViewById(R.id.action);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            Log.i("RULEADAPTER", "RULEADAPTER ONCLICK");
+            IFTTTRule rule = (IFTTTRule) v.getTag();
+            controller.go(IFTTTRuleDetail.newInstance(rule));
         }
     }
 }

@@ -15,15 +15,13 @@ import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.ifttt.structure.IFTTTAction;
-import it.giuggi.iotremote.ifttt.structure.IFTTTContext;
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.structure.IFTTTCurrentSituation;
-import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
-import it.giuggi.iotremote.ifttt.structure.IFTTTFilter;
 import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
-import it.giuggi.iotremote.iot.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/03/16.
@@ -57,67 +55,39 @@ public class MyGcmListenerService extends GcmListenerService
             e.printStackTrace();
         }
 
+
+        IFTTTDatabase database = IFTTTDatabase.getHelper(getBaseContext());
+        ArrayList<IFTTTRule> rules = null;
+
+        try
+        {
+            rules = (ArrayList<IFTTTRule>) database.getRuleList();
+        } catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        final ArrayList<IFTTTRule> finalRules = rules;
         final JSONObject finalJsonData = jsonData;
+
         IFTTTCurrentSituation.acquireSnapshot(getBaseContext(), new IFTTTCurrentSituation.OnSnapshotReadyListener()
         {
             @Override
             public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
             {
-                //TODO dare in pasto le IFTTTRule gia create
-                //TODO togliere questo test
+                Log.i(TAG, "Starting rule check with " + situation);
 
-                Log.e(TAG, "onSnapshotReady");
-                IFTTTRule rule = new IFTTTRule("rule42", null, null, null, null);
-
-                rule.addFilter(new IFTTTFilter()
+                for(IFTTTRule rule : finalRules)
                 {
-                    @Override
-                    public boolean apply(IOTNode node)
+                    Log.i(TAG, "checking rule " + rule);
+
+                    try
                     {
-                        Log.e(TAG, "TESTING Filter " + this);
-                        return node.name.equalsIgnoreCase("esp0");
-                    }
-                });
-
-                rule.addEvent(new IFTTTEvent()
-                {
-                    @Override
-                    public boolean apply(Event event)
+                        rule.apply(situation, finalJsonData, MyGcmListenerService.this);
+                    } catch (JSONException e)
                     {
-                        Log.e(TAG, "TESTING Event ");
-                        return event.type == IFTTTEventType.VALUE_CHANGED;
+                        e.printStackTrace();
                     }
-                });
-
-                rule.addContext(new IFTTTContext()
-                {
-                    @Override
-                    public boolean apply(IFTTTCurrentSituation.CurrentSituation context)
-                    {
-                        Log.e(TAG, "TESTING Context " + context.toLogString());
-                        //TODO use Geofencing
-                        //return context.isLocationIn(0.0, 0.0, 0.0);
-                        return true;
-                    }
-                });
-
-                rule.addAction(new IFTTTAction()
-                {
-                    @Override
-                    public void doAction()
-                    {
-                        Log.e(TAG, "PASSED RULE");
-                    }
-                });
-
-                try
-                {
-                    Log.e(TAG, "TESTING RULE");
-                    boolean result = rule.apply(situation, finalJsonData);
-                    Log.e(TAG, "Rule result: " + result);
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
                 }
             }
         });
@@ -134,7 +104,7 @@ public class MyGcmListenerService extends GcmListenerService
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        //sendNotification(message);
         // [END_EXCLUDE]
     }
 

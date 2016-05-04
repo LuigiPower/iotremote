@@ -3,6 +3,7 @@ package it.giuggi.iotremote.ifttt.implementations.event;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 
 /**
@@ -33,5 +34,11 @@ public class ValueChangedFromEvent extends ValueChangedEvent
         }
 
         return super.apply(event) && ok;
+    }
+
+    @Override
+    protected int getComponentNameResourceId()
+    {
+        return R.string.value_changed_event;
     }
 }

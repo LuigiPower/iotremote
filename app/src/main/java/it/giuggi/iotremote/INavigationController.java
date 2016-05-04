@@ -2,12 +2,12 @@ package it.giuggi.iotremote;
 
 import android.view.View;
 
-import it.giuggi.iotremote.fragment.BaseFragment;
+import it.giuggi.iotremote.ui.fragment.BaseFragment;
 
 /**
  * Created by Federico Giuggioloni on 16/03/16.
- * Se aggiungo questa riga magari
- * AndroidStudio smette di lamentarsi...
+ * INavigationController
+ * If implemented, exposes simple navigation methods
  */
 public interface INavigationController
 {

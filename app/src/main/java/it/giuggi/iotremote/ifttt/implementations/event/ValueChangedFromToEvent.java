@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import it.giuggi.iotremote.R;
+
 /**
  * Created by Federico Giuggioloni on 21/04/16.
  * First checks if all new values are equal to the one passed in at construction time
@@ -29,5 +31,11 @@ public class ValueChangedFromToEvent extends ValueChangedFromEvent
         }
 
         return super.apply(event) && ok;
+    }
+
+    @Override
+    protected int getComponentNameResourceId()
+    {
+        return R.string.value_changed_from_to_event;
     }
 }

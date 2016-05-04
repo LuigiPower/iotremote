@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.fragment;
+package it.giuggi.iotremote.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

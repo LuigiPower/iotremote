@@ -1,10 +1,10 @@
-package it.giuggi.iotremote.adapter;
+package it.giuggi.iotremote.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import it.giuggi.iotremote.INavigationController;
-import it.giuggi.iotremote.fragment.BaseFragment;
+import it.giuggi.iotremote.ui.fragment.BaseFragment;
 
 /**
  * Created by Federico Giuggioloni on 16/03/16.

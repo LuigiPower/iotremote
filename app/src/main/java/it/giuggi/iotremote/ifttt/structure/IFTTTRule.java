@@ -2,10 +2,12 @@ package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -108,6 +110,32 @@ public class IFTTTRule extends Databasable
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public LinkedList<IFTTTComponent> getComponentsOfType(String type)
+    {
+        LinkedList<? extends IFTTTComponent> list;
+
+        if(type.equalsIgnoreCase(IFTTTFilter.TYPE))
+        {
+            list = (LinkedList<? extends IFTTTComponent>) iftttFilters;
+        }
+        else if(type.equalsIgnoreCase(IFTTTEvent.TYPE))
+        {
+            list = (LinkedList<? extends IFTTTComponent>) iftttEvents;
+        }
+        else if(type.equalsIgnoreCase(IFTTTContext.TYPE))
+        {
+            list = (LinkedList<? extends IFTTTComponent>) iftttContexts;
+        }
+        else if(type.equalsIgnoreCase(IFTTTAction.TYPE))
+        {
+            list = (LinkedList<? extends IFTTTComponent>) iftttActions;
+        }
+        else return null;
+
+        return (LinkedList<IFTTTComponent>) list;
+    }
+
     public void addFilter(IFTTTFilter filter)
     {
         this.iftttFilters.add(filter);
@@ -126,6 +154,28 @@ public class IFTTTRule extends Databasable
     public void addAction(IFTTTAction action)
     {
         this.iftttActions.add(action);
+    }
+
+    public void addComponent(IFTTTComponent component)
+    {
+        String type = component.getType();
+
+        if(type.equalsIgnoreCase(IFTTTFilter.TYPE))
+        {
+            addFilter((IFTTTFilter) component);
+        }
+        else if(type.equalsIgnoreCase(IFTTTEvent.TYPE))
+        {
+            addAction((IFTTTAction) component);
+        }
+        else if(type.equalsIgnoreCase(IFTTTContext.TYPE))
+        {
+            addContext((IFTTTContext) component);
+        }
+        else if(type.equalsIgnoreCase(IFTTTAction.TYPE))
+        {
+            addAction((IFTTTAction) component);
+        }
     }
 
     public IFTTTFilter getFilterAt(int i)
@@ -163,8 +213,10 @@ public class IFTTTRule extends Databasable
      *      }
      * @return true if it is applicable, false otherwise
      */
-    public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, JSONObject gcmMessage) throws JSONException
+    public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, JSONObject gcmMessage, Context context) throws JSONException
     {
+        Log.i("IFTTTRule", "Applying rule " + name);
+
         /**
          * Initialize IoTNode from node part of the GCM message
          */
@@ -201,7 +253,7 @@ public class IFTTTRule extends Databasable
         //All done, run the actions and return true
         for(IFTTTAction action : iftttActions)
         {
-            action.doAction();
+            action.doAction(context);
         }
         return true;
     }

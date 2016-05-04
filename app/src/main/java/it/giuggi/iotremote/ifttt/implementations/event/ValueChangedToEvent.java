@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import it.giuggi.iotremote.R;
+
 /**
  * Created by Federico Giuggioloni on 21/04/16.
  * Checks if all newvalues changed to specified value
@@ -27,5 +29,11 @@ public class ValueChangedToEvent extends ValueChangedEvent
         }
 
         return super.apply(event) && ok;
+    }
+
+    @Override
+    protected int getComponentNameResourceId()
+    {
+        return R.string.value_changed_to_event;
     }
 }

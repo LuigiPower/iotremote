@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.fragment;
+package it.giuggi.iotremote.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.adapter.IOTNodeAdapter;
+import it.giuggi.iotremote.ui.adapter.IOTNodeAdapter;
 import it.giuggi.iotremote.iot.IOTNode;
 import it.giuggi.iotremote.iot.IOperatingMode;
 import it.giuggi.iotremote.net.WebRequestTask;

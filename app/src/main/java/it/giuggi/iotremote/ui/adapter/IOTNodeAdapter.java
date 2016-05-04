@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.adapter;
+package it.giuggi.iotremote.ui.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.fragment.NodeDetails;
+import it.giuggi.iotremote.ui.fragment.NodeDetails;
 import it.giuggi.iotremote.iot.IOTNode;
 
 /**

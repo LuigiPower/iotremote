@@ -1,6 +1,9 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 
@@ -24,6 +27,19 @@ public abstract class IFTTTComponent extends Databasable
     public void setComponentId(long componentId)
     {
         this.componentid = componentId;
+    }
+
+    public abstract int getLayoutResourceId();
+
+    public abstract int getEditLayoutResourceId();
+
+    protected abstract int getComponentNameResourceId();
+
+    public String getComponentName(Context context)
+    {
+        int resourceid = getComponentNameResourceId();
+        String name = context.getString(resourceid);
+        return name;
     }
 
     protected abstract String getType();
@@ -52,5 +68,47 @@ public abstract class IFTTTComponent extends Databasable
 
         Gson gson = new Gson();
         return database.deleteComponent(this.componentid);
+    }
+
+    protected abstract void populateView(View view);
+
+    protected abstract void populateEditView(View view);
+
+    private View doLoad(Context context, int resourceid, ViewGroup parent)
+    {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(resourceid, parent);
+
+        return view;
+    }
+
+    public View loadView(ViewGroup parent)
+    {
+        int resourceid = getLayoutResourceId();
+
+        if(resourceid == -1)
+        {
+            return new View(parent.getContext());
+        }
+
+        View view = doLoad(parent.getContext(), resourceid, parent);
+        populateView(view);
+
+        return view;
+    }
+
+    public View loadEditView(ViewGroup parent)
+    {
+        int resourceid = getEditLayoutResourceId();
+
+        if(resourceid == -1)
+        {
+            return new View(parent.getContext());
+        }
+
+        View view = doLoad(parent.getContext(), resourceid, parent);
+        populateEditView(view);
+
+        return view;
     }
 }

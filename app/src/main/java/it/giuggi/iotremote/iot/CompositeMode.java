@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.adapter.IOperatingModeAdapter;
+import it.giuggi.iotremote.ui.adapter.IOperatingModeAdapter;
 
 /**
  * Created by Federico Giuggioloni on 16/03/16.

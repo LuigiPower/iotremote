@@ -87,8 +87,8 @@ public class IFTTTCurrentSituation implements LocationListener
                 listener.onSnapshotReady(this);
                 return true;
             }
-            //else
-            //    listener.onSnapshotReady(this);//TODO remove this
+            else
+                listener.onSnapshotReady(this);//TODO remove this
             return false;
         }
 
@@ -104,7 +104,7 @@ public class IFTTTCurrentSituation implements LocationListener
          */
         public boolean isConnectedTo(String ssid)
         {
-            return wifiStatus != null && wifiStatus.getBSSID().equalsIgnoreCase(ssid);
+            return wifiStatus != null && wifiStatus.getSSID() != null && wifiStatus.getSSID().equalsIgnoreCase(ssid);
         }
 
         /**

@@ -6,6 +6,10 @@ import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTAction;
@@ -21,13 +25,10 @@ public class NotificationAction extends IFTTTAction
     private static final int max_notifications = 5;
     private static int notification_id = base_notification_id;
 
-    private transient Context context;
-    private transient NotificationManager manager;
-
     private int notificationId;
     private String message;
 
-    public NotificationAction(Context context, String message)
+    public NotificationAction(String message)
     {
         this.notificationId = notification_id;
         notification_id = notification_id + 1;
@@ -36,14 +37,14 @@ public class NotificationAction extends IFTTTAction
             notification_id = base_notification_id;
         }
 
-        this.context = context;
-        this.manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         this.message = message;
     }
 
     @Override
-    public void doAction()
+    public void doAction(Context context)
     {
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         Notification n = new NotificationCompat.Builder(context)
@@ -52,6 +53,39 @@ public class NotificationAction extends IFTTTAction
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setSound(notification)
                 .build();
-        this.manager.notify(this.notificationId, n);
+        Log.i("NotificationAction", "Notifying " + message);
+        manager.notify(this.notificationId, n);
+    }
+
+    @Override
+    public int getLayoutResourceId()
+    {
+        return R.layout.detail_notification;
+    }
+
+    @Override
+    public int getEditLayoutResourceId()
+    {
+        return R.layout.edit_detail_notification;
+    }
+
+    @Override
+    protected int getComponentNameResourceId()
+    {
+        return R.string.notification_action;
+    }
+
+    @Override
+    protected void populateView(View view)
+    {
+        TextView tx = (TextView) view.findViewById(R.id.notification_message);
+        tx.setText(message);
+    }
+
+    @Override
+    protected void populateEditView(View view)
+    {
+        EditText tx = (EditText) view.findViewById(R.id.notification_message);
+        tx.setText(message);
     }
 }

@@ -2,18 +2,11 @@ package it.giuggi.iotremote.net;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.ResultReceiver;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Config;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,9 +15,6 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -327,7 +316,7 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
             {
                 case SEND_GCM_ID:
                     response_string = request(valori, scripts[azione.ordinal()], POST);
-                    tipo = Tipo.STRING;
+                    tipo = Tipo.ESITO;
                     break;
                 case LOGOUT_GCM:
                     response_string = request(valori, scripts[azione.ordinal()], POST);
