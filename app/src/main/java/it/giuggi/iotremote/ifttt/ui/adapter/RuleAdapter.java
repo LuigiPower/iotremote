@@ -56,39 +56,26 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         {
             filterImage = rule.getFilterAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException e)
-        {
-            e.printStackTrace();
-        }
+        catch(IndexOutOfBoundsException ignored) {}
 
         try
         {
             eventImage = rule.getEventAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException e)
-        {
-            e.printStackTrace();
-        }
+        catch(IndexOutOfBoundsException ignored) {}
 
         try
         {
             contextImage = rule.getContextAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException e)
-        {
-            e.printStackTrace();
-        }
+        catch(IndexOutOfBoundsException ignored) {}
 
         try
         {
             actionImage = rule.getActionAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException e)
-        {
-            e.printStackTrace();
-        }
+        catch(IndexOutOfBoundsException ignored) {}
 
-        //TODO change this, icons would be nice looking
         customViewHolder.filter.setImageResource(filterImage);
         customViewHolder.event.setImageResource(eventImage);
         customViewHolder.context.setImageResource(contextImage);

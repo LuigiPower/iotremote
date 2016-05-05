@@ -12,30 +12,6 @@
                                     card_view:cardCornerRadius="4dp"
                                     android:foreground="?android:attr/selectableItemBackground" >
 
-    <!--
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView android:id="@+id/component_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/StandardText"/>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/component_name">
-            <LinearLayout android:id="@+id/component_details"
-                          android:orientation="horizontal"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:gravity="center_vertical">
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
-    -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

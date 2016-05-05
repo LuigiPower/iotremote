@@ -24,7 +24,7 @@ import it.giuggi.iotremote.ui.fragment.BaseFragment;
  */
 public class IFTTTComponentList extends BaseFragment
 {
-    public static final String TAG = "IFTTTCOMPONENTLISTFRAGMENT";
+    public static final String TAG = "IFTTTCOMPONENTLIST";
 
     private IFTTTRule rule;
     private LinkedList<IFTTTComponent> originalRef = new LinkedList<>();
@@ -51,6 +51,18 @@ public class IFTTTComponentList extends BaseFragment
     }
 
     @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
+
+    @Override
     public String generateTag()
     {
         return TAG;
@@ -64,7 +76,7 @@ public class IFTTTComponentList extends BaseFragment
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.element_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ComponentAdapter(originalRef, componentList, recyclerView);
+        adapter = new ComponentAdapter(rule, originalRef, componentList, recyclerView);
         recyclerView.setAdapter(adapter);
 
         return v;

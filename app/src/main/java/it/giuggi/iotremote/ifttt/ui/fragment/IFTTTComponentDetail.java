@@ -2,14 +2,17 @@ package it.giuggi.iotremote.ifttt.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.List;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.implementations.dummy.DummyComponent;
 import it.giuggi.iotremote.ifttt.structure.IFTTTComponent;
+import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
 
 /**
@@ -17,15 +20,19 @@ import it.giuggi.iotremote.ui.fragment.BaseFragment;
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class IFTTTComponentDetail extends BaseFragment
+public class IFTTTComponentDetail extends BaseFragment implements View.OnClickListener
 {
     public static final String TAG = "IFTTTCOMPONENTDETAIL";
 
+    private List<IFTTTComponent> listWithDummy;
+    private IFTTTRule owner;
     private IFTTTComponent component;
 
-    public static IFTTTComponentDetail newInstance(IFTTTComponent component)
+    public static IFTTTComponentDetail newInstance(List<IFTTTComponent> listWithDummy, IFTTTRule owner, IFTTTComponent component)
     {
         IFTTTComponentDetail fragment = new IFTTTComponentDetail();
+        fragment.listWithDummy = listWithDummy;
+        fragment.owner = owner;
         fragment.component = component;
         return fragment;
     }
@@ -40,22 +47,39 @@ public class IFTTTComponentDetail extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.detail_component, container, false);
+        View v = inflater.inflate(R.layout.component_detail_fragment, container, false);
 
-        TextView componentName = (TextView) v.findViewById(R.id.component_name);
-        componentName.setText(component.getComponentName(getContext()));
+        Toolbar componentName = (Toolbar) v.findViewById(R.id.component_toolbar);
+        componentName.setTitle(component.getComponentName(getContext()));
 
-        //if(this.component instanceof DummyComponent)
-        //{
-            //TODO if dummy component, create a Spinner with all available <component_type> types and dynamically load that specific component's edit layout (Just do it inside DummyComponent?)
-        //}
-        //else
-        //{
         ViewGroup details = (ViewGroup) v.findViewById(R.id.component_details);
-        this.component.loadEditView(details);
-        //}
+        component.loadEditView(details);
+
+        View complete = v.findViewById(R.id.complete_component);
+        complete.setOnClickListener(this);
 
         return v;
     }
 
+    @Override
+    public void onClick(View v)
+    {
+        IFTTTComponent tosave = component;
+
+        if(component instanceof DummyComponent)
+        {
+            tosave = ((DummyComponent) component).getWorkInProgress();
+        }
+
+        //If component already esists, update it
+        //Else save it
+        if(tosave.update(getContext()) <= 0)
+        {
+            tosave.save(getContext());
+            owner.linkComponent(getContext(), tosave);
+            listWithDummy.add(0, tosave);
+        }
+
+        controller.goBack();
+    }
 }

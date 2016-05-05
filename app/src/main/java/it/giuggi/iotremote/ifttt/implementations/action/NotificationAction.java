@@ -6,6 +6,8 @@ import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -92,6 +94,27 @@ public class NotificationAction extends IFTTTAction
     {
         EditText tx = (EditText) view.findViewById(R.id.notification_message);
         tx.setText(message);
+
+        tx.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                message = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+
+            }
+        });
     }
 
     @Override

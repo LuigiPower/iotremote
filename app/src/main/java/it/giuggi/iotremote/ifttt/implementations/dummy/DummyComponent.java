@@ -29,6 +29,36 @@ public class DummyComponent extends IFTTTComponent
         this.type = type;
     }
 
+    public IFTTTComponent getWorkInProgress()
+    {
+        return workInProgress;
+    }
+
+    @Override
+    public int getColorId()
+    {
+        int resource = R.color.colorPrimary;
+
+        if(type.equalsIgnoreCase(IFTTTFilter.TYPE))
+        {
+            resource = R.color.colorFilter;
+        }
+        else if(type.equalsIgnoreCase(IFTTTEvent.TYPE))
+        {
+            resource = R.color.colorEvent;
+        }
+        else if(type.equalsIgnoreCase(IFTTTContext.TYPE))
+        {
+            resource = R.color.colorContext;
+        }
+        else if(type.equalsIgnoreCase(IFTTTAction.TYPE))
+        {
+            resource = R.color.colorAction;
+        }
+
+        return resource;
+    }
+
     @Override
     public int getLayoutResourceId()
     {
@@ -122,7 +152,6 @@ public class DummyComponent extends IFTTTComponent
                     Class<?> clazz = Class.forName(fullpackage);
                     workInProgress = (IFTTTComponent) clazz.newInstance();
 
-                    detail_container.removeAllViews();
                     workInProgress.loadEditView(detail_container);
                 } catch (ClassNotFoundException e)
                 {

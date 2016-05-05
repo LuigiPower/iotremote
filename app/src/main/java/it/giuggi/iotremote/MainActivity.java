@@ -17,6 +17,7 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ui.fragment.NodeList;
@@ -93,6 +94,13 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        new IFTTTDatabase(this).close();
     }
 
     /**

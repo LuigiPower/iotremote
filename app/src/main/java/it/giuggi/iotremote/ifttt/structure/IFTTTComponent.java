@@ -31,6 +31,8 @@ public abstract class IFTTTComponent extends Databasable
         this.componentid = componentId;
     }
 
+    public abstract int getColorId();
+
     public abstract int getLayoutResourceId();
 
     public abstract int getEditLayoutResourceId();
@@ -83,7 +85,10 @@ public abstract class IFTTTComponent extends Databasable
     private View doLoad(Context context, int resourceid, ViewGroup parent)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(resourceid, parent);
+
+        View view = inflater.inflate(resourceid, parent, false);
+        parent.removeAllViews();
+        parent.addView(view);
 
         return view;
     }

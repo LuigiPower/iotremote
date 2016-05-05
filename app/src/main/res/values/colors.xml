@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#ffeb3b</color>-->
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796b</color>
-    <color name="colorAccent">#00c853</color>
     <color name="black">#000000</color>
     <color name="red">#FF373D</color>
     <color name="white">#FFFFFF</color>
+    <color name="material_red">#f44336</color>
+    <color name="blue">#2196F3</color>
+    <color name="teal">#009688</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="orange">#FF9800</color>
 
-    <color name="colorFilter">#FFC107</color>
-    <color name="colorEvent">#8BC34A</color>
-    <color name="colorContext">#FFEB3B</color>
-    <color name="colorAction">#2196F3</color>
+    <color name="light_red">#d50000</color>
+    <color name="light_blue">#0091EA</color>
+    <color name="light_teal">#00BFA5</color>
+    <color name="light_green">#00C853</color>
+    <color name="light_yellow">#FFD600</color>
+    <color name="light_orange">#FFD180</color>
+
+    <color name="dark_red">#ffcdd2</color>
+    <color name="dark_blue">#BBDEFB</color>
+    <color name="dark_teal">#00796b</color>
+    <color name="dark_green">#388E3C</color>
+    <color name="dark_yellow">#FFF9C4</color>
+    <color name="dark_orange">#FFF3E0</color>
+
+    <color name="colorFilter">@color/light_green</color>
+    <color name="colorEvent">@color/light_teal</color>
+    <color name="colorContext">@color/light_blue</color>
+    <color name="colorAction">@color/light_yellow</color>
+
+    <color name="colorPrimary">@color/teal</color>
+    <color name="colorPrimaryDark">@color/dark_teal</color>
+    <color name="colorAccent">@color/light_green</color>
 </resources>

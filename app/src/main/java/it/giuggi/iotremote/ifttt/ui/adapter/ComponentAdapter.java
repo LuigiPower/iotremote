@@ -2,18 +2,20 @@ package it.giuggi.iotremote.ifttt.ui.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.implementations.dummy.DummyComponent;
 import it.giuggi.iotremote.ifttt.structure.IFTTTComponent;
+import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTComponentDetail;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 
@@ -24,11 +26,13 @@ import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
  */
 public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.CustomViewHolder>
 {
+    private IFTTTRule owner;
     private List<IFTTTComponent> originalRef;
     private List<IFTTTComponent> componentList;
     private ViewGroup container;
 
-    public ComponentAdapter(List<IFTTTComponent> originalRef, List<IFTTTComponent> componentList, ViewGroup container) {
+    public ComponentAdapter(IFTTTRule owner, List<IFTTTComponent> originalRef, List<IFTTTComponent> componentList, ViewGroup container) {
+        this.owner = owner;
         this.componentList = componentList;
         this.originalRef = originalRef;
         this.container = container;
@@ -63,7 +67,8 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
             }
         });
 
-        customViewHolder.componentName.setText(component.getComponentName(customViewHolder.componentName.getContext()));
+        customViewHolder.componentToolbar.setTitle(component.getComponentName(customViewHolder.componentToolbar.getContext()));
+        customViewHolder.componentToolbar.setBackgroundResource(component.getColorId());
 
         if(component instanceof DummyComponent)
         {
@@ -78,7 +83,6 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
             customViewHolder.editButton.setText(R.string.edit);
         }
 
-        customViewHolder.componentDetails.removeAllViews();
         component.loadView(customViewHolder.componentDetails);
     }
 
@@ -93,7 +97,8 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
         protected ScrollView scroll;
         protected Button editButton;
         protected Button deleteButton;
-        protected TextView componentName;
+        //protected TextView componentName;
+        protected Toolbar componentToolbar;
         protected ViewGroup componentDetails;
 
         public CustomViewHolder(View view) {
@@ -103,7 +108,7 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
             this.scroll = (ScrollView) view.findViewById(R.id.component_scroll);
             this.editButton = (Button) view.findViewById(R.id.edit_button);
             this.deleteButton = (Button) view.findViewById(R.id.delete_button);
-            this.componentName = (TextView) view.findViewById(R.id.component_name);
+            this.componentToolbar = (Toolbar) view.findViewById(R.id.component_toolbar);
             this.componentDetails = (ViewGroup) view.findViewById(R.id.component_details);
         }
 
@@ -113,7 +118,7 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
             //TODO Maybe just a dialog?
             IFTTTComponent component = (IFTTTComponent) v.getTag();
 
-            controller.go(IFTTTComponentDetail.newInstance(component));
+            controller.go(IFTTTComponentDetail.newInstance(componentList, owner, component));
         }
     }
 }

@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.Databasable;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 
@@ -23,6 +24,12 @@ public abstract class IFTTTEvent extends IFTTTComponent
     public IFTTTEvent()
     {
 
+    }
+
+    @Override
+    public int getColorId()
+    {
+        return R.color.colorEvent;
     }
 
     @Override

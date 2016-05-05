@@ -71,6 +71,7 @@ public class IFTTTRule extends Databasable
             @Nullable LinkedList<IFTTTEvent> iftttEvents,
             @Nullable LinkedList<IFTTTAction> iftttActions)
     {
+        this.ruleid = -1;
         this.name = name;
 
         if(iftttFilters == null)
@@ -166,7 +167,7 @@ public class IFTTTRule extends Databasable
         }
         else if(type.equalsIgnoreCase(IFTTTEvent.TYPE))
         {
-            addAction((IFTTTAction) component);
+            addEvent((IFTTTEvent) component);
         }
         else if(type.equalsIgnoreCase(IFTTTContext.TYPE))
         {
@@ -261,6 +262,27 @@ public class IFTTTRule extends Databasable
             action.doAction(context);
         }
         return true;
+    }
+
+    /**
+     * Adds the component to this rule and links it inside the database
+     * @param context current context
+     * @param component component to add and link
+     */
+    public  void linkComponent(Context context, IFTTTComponent component)
+    {
+        addComponent(component);
+
+        if(ruleid < 0)
+        {
+            //Don't add the link; Will be added automatically when rule is first saved
+            return;
+        }
+
+        long componentid = component.getComponentId();
+
+        IFTTTDatabase database = new IFTTTDatabase(context);
+        database.addLink(ruleid, componentid);
     }
 
     @Override

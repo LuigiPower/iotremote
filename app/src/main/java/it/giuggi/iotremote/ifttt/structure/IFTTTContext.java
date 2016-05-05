@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.ifttt.structure;
 
+import it.giuggi.iotremote.R;
+
 /**
  * Created by Federico Giuggioloni on 14/04/16.
  * Se aggiungo questa riga magari
@@ -12,6 +14,12 @@ public abstract class IFTTTContext extends IFTTTComponent
     public IFTTTContext()
     {
 
+    }
+
+    @Override
+    public int getColorId()
+    {
+        return R.color.colorContext;
     }
 
     @Override

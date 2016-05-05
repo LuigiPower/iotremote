@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.util.LinkedList;
 
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.Databasable;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.iot.IOTNode;
@@ -22,6 +23,12 @@ public abstract class IFTTTFilter extends IFTTTComponent
     public IFTTTFilter()
     {
 
+    }
+
+    @Override
+    public int getColorId()
+    {
+        return R.color.colorFilter;
     }
 
     @Override
