@@ -19,4 +19,10 @@ public class ConnectedEvent extends TypeEvent
     {
         return R.string.connected_event;
     }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_visibility_24dp;
+    }
 }

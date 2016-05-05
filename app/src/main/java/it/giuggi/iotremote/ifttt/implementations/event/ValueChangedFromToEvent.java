@@ -11,6 +11,11 @@ public class ValueChangedFromToEvent extends ValueChangedFromEvent
 {
     private String valueTo;
 
+    public ValueChangedFromToEvent()
+    {
+        this("LOW", "HIGH");
+    }
+
     public ValueChangedFromToEvent(String valueFrom, String valueTo)
     {
         super(valueFrom);

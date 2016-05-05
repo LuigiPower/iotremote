@@ -27,6 +27,7 @@ public class IFTTTComponentList extends BaseFragment
     public static final String TAG = "IFTTTCOMPONENTLISTFRAGMENT";
 
     private IFTTTRule rule;
+    private LinkedList<IFTTTComponent> originalRef = new LinkedList<>();
     private LinkedList<IFTTTComponent> componentList = new LinkedList<>();
 
     private ComponentAdapter adapter;
@@ -42,7 +43,8 @@ public class IFTTTComponentList extends BaseFragment
         DummyComponent dummy = new DummyComponent(componentType);
 
         IFTTTComponentList fragment = new IFTTTComponentList();
-        fragment.componentList.addAll(rule.getComponentsOfType(componentType));
+        fragment.originalRef = rule.getComponentsOfType(componentType);
+        fragment.componentList.addAll(fragment.originalRef);
         fragment.componentList.add(dummy);
         fragment.rule = rule;
         return fragment;
@@ -62,7 +64,7 @@ public class IFTTTComponentList extends BaseFragment
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.element_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ComponentAdapter(componentList, recyclerView);
+        adapter = new ComponentAdapter(originalRef, componentList, recyclerView);
         recyclerView.setAdapter(adapter);
 
         return v;

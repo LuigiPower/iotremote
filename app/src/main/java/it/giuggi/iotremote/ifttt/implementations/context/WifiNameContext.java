@@ -16,6 +16,11 @@ public class WifiNameContext extends IFTTTContext
 {
     private String ssid;
 
+    public WifiNameContext()
+    {
+        this("");
+    }
+
     public WifiNameContext(String ssid)
     {
         this.ssid = ssid;
@@ -57,5 +62,11 @@ public class WifiNameContext extends IFTTTContext
     {
         EditText wifiname = (EditText) view.findViewById(R.id.wifi_name);
         wifiname.setText(this.ssid);
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_signal_wifi_4_bar_24dp;
     }
 }

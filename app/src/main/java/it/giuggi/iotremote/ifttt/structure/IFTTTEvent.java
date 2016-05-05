@@ -20,6 +20,11 @@ public abstract class IFTTTEvent extends IFTTTComponent
 {
     public static final String TYPE = "EVENT";
 
+    public IFTTTEvent()
+    {
+
+    }
+
     @Override
     protected String getType()
     {

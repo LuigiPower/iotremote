@@ -18,43 +18,64 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical">
 
-        <TextView android:id="@+id/filter"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="center"
-                  android:background="@color/colorFilter"
-                  android:text="Filter"/>
-
-        <TextView android:id="@+id/event"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="center"
-                  android:background="@color/colorEvent"
-                  android:text="Event"/>
-
-        <TextView android:id="@+id/context"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="center"
-                  android:background="@color/colorContext"
-                  android:text="Context"/>
-
-        <ImageView android:id="@+id/arrow"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_play_arrow_24dp"/>
+            android:gravity="center"
+            android:background="@color/colorFilter">
+            <ImageView android:id="@+id/filter"
+                      android:layout_width="@dimen/icon_component_size"
+                      android:layout_height="@dimen/icon_component_size"
+                      android:gravity="center"/>
+        </LinearLayout>
 
-        <TextView android:id="@+id/action"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="center"
-                  android:background="@color/colorAction"
-                  android:text="Action"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/colorEvent">
+            <ImageView android:id="@+id/event"
+                      android:layout_width="@dimen/icon_component_size"
+                      android:layout_height="@dimen/icon_component_size"
+                      android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/colorContext">
+            <ImageView android:id="@+id/context"
+                      android:layout_width="@dimen/icon_component_size"
+                      android:layout_height="@dimen/icon_component_size"
+                      android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+            <ImageView android:id="@+id/arrow"
+                android:layout_width="@dimen/icon_component_size"
+                android:layout_height="@dimen/icon_component_size"
+                android:src="@drawable/ic_play_arrow_24dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/colorAction">
+            <ImageView android:id="@+id/action"
+                      android:layout_width="@dimen/icon_component_size"
+                      android:layout_height="@dimen/icon_component_size"
+                      android:gravity="center"/>
+        </LinearLayout>
 
     </LinearLayout>
 

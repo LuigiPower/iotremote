@@ -17,6 +17,11 @@ public abstract class IFTTTAction extends IFTTTComponent
 {
     public static final String TYPE = "ACTION";
 
+    public IFTTTAction()
+    {
+
+    }
+
     @Override
     protected String getType()
     {

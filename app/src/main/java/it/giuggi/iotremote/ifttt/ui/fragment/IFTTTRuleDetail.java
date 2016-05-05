@@ -59,9 +59,17 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
         //Simply saves this rule to permanent storage
         //if id was already set, overwrites the already existing one
         //else it saves a new rule
-        if(this.rule.update(getContext()) < 0)
+        if(rule.isValid())
         {
-            this.rule.save(getContext());
+            if (rule.update(getContext()) < 0)
+            {
+                rule.save(getContext());
+            }
+            controller.goBack();
+        }
+        else
+        {
+            //TODO toast or something to show error (Add at least one Action!)
         }
     }
 }

@@ -10,6 +10,11 @@ public class ValueChangedToEvent extends ValueChangedEvent
 {
     private String valueTo;
 
+    public ValueChangedToEvent()
+    {
+        this("HIGH");
+    }
+
     public ValueChangedToEvent(String valueTo)
     {
         this.valueTo = valueTo;

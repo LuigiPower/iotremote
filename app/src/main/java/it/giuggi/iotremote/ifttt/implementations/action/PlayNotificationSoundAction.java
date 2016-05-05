@@ -59,4 +59,10 @@ public class PlayNotificationSoundAction extends IFTTTAction
     {
 
     }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_volume_up_24dp;
+    }
 }

@@ -9,6 +9,11 @@ public abstract class IFTTTContext extends IFTTTComponent
 {
     public static final String TYPE = "CONTEXT";
 
+    public IFTTTContext()
+    {
+
+    }
+
     @Override
     protected String getType()
     {

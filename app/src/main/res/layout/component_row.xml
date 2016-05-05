@@ -8,7 +8,7 @@
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
                                     android:layout_width="match_parent"
-                                    android:layout_height="300dp"
+                                    android:layout_height="wrap_content"
                                     card_view:cardCornerRadius="4dp"
                                     android:foreground="?android:attr/selectableItemBackground" >
 
@@ -41,6 +41,7 @@
         android:layout_height="match_parent">
 
         <include layout="@layout/detail_component"
+            android:id="@+id/layout_detail_component"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -51,9 +52,10 @@
                 android:text="@string/edit"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/layout_detail_component"
                 android:layout_marginRight="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
@@ -61,9 +63,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/layout_detail_component"
                 android:layout_marginRight="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toLeftOf="@+id/edit_button"
                 android:layout_toStartOf="@+id/edit_button"

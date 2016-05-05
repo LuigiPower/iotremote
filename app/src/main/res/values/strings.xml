@@ -2,17 +2,20 @@
     <string name="app_name">IoTRemote</string>
 
     <string name="sender_id">224490332382</string>
-    
+
     <string name="empty_mode_text">Node not setup yet.</string>
     <string name="close">Close</string>
     <string name="add_component">Add component</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
 
+    <string name="filter_package">it.giuggi.iotremote.ifttt.implementations.filter.</string>
+    <string name="event_package">it.giuggi.iotremote.ifttt.implementations.event.</string>
+    <string name="context_package">it.giuggi.iotremote.ifttt.implementations.context.</string>
+    <string name="action_package">it.giuggi.iotremote.ifttt.implementations.action.</string>
+
     <string name="mode_filter">By mode</string>
     <string name="name_filter">By name</string>
-
-    <string name="wifi_name_context">Wifi name</string>
 
     <string name="connected_event">When Node is first connected</string>
     <string name="disconnected_event">When Node is disconnected</string>
@@ -22,8 +25,62 @@
     <string name="value_changed_from_to_event">When a specific parameter changes from a value to a value</string>
     <string name="value_changed_to_event">When a specific parameter changes to a value</string>
 
+    <string name="wifi_name_context">Wifi name</string>
+
     <string name="notification_action">Show notification</string>
     <string name="play_notification_sound_action">Play notification sound</string>
     <string name="send_command_action">Send command to node</string>
+
+    <string name="dummy">New</string>
+
+    <string-array name="filters">
+        <item>@string/mode_filter</item>
+        <item>@string/name_filter</item>
+    </string-array>
+
+    <string-array name="filter_classes">
+        <item>ModeFilter</item>
+        <item>NameFilter</item>
+    </string-array>
+
+    <string-array name="events">
+        <item>@string/connected_event</item>
+        <item>@string/disconnected_event</item>
+        <item>@string/type_event</item>
+        <item>@string/value_changed_event</item>
+        <item>@string/value_changed_from_event</item>
+        <item>@string/value_changed_from_to_event</item>
+        <item>@string/value_changed_to_event</item>
+    </string-array>
+
+    <string-array name="event_classes">
+        <item>ConnectedEvent</item>
+        <item>DisconnectedEvent</item>
+        <item>TypeEvent</item>
+        <item>ValueChangedEvent</item>
+        <item>ValueChangedFromEvent</item>
+        <item>ValueChangedFromToEvent</item>
+        <item>ValueChangedToEvent</item>
+    </string-array>
+
+    <string-array name="contexts">
+        <item>@string/wifi_name_context</item>
+    </string-array>
+
+    <string-array name="context_classes">
+        <item>WifiNameContext</item>
+    </string-array>
+
+    <string-array name="actions">
+        <item>@string/notification_action</item>
+        <item>@string/play_notification_sound_action</item>
+        <item>@string/send_command_action</item>
+    </string-array>
+
+    <string-array name="action_classes">
+        <item>NotificationAction</item>
+        <item>PlayNotificationSoundAction</item>
+        <item>SendCommandAction</item>
+    </string-array>
 
 </resources>

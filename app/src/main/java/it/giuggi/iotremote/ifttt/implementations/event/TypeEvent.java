@@ -15,6 +15,11 @@ public class TypeEvent extends IFTTTEvent
 {
     private IFTTTEventType type;
 
+    public TypeEvent()
+    {
+        this(IFTTTEventType.CONNECTED);
+    }
+
     public TypeEvent(IFTTTEventType type)
     {
         this.type = type;
@@ -58,5 +63,11 @@ public class TypeEvent extends IFTTTEvent
         //TODO better layout
         EditText type = (EditText) view.findViewById(R.id.event_type);
         type.setText(this.type.toString());
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_info_24dp;
     }
 }

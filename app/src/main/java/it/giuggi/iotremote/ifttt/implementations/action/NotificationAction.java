@@ -28,6 +28,11 @@ public class NotificationAction extends IFTTTAction
     private int notificationId;
     private String message;
 
+    public NotificationAction()
+    {
+        this("");
+    }
+
     public NotificationAction(String message)
     {
         this.notificationId = notification_id;
@@ -87,5 +92,11 @@ public class NotificationAction extends IFTTTAction
     {
         EditText tx = (EditText) view.findViewById(R.id.notification_message);
         tx.setText(message);
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_notifications_24dp;
     }
 }

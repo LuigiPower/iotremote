@@ -198,6 +198,11 @@ public class IFTTTRule extends Databasable
         return iftttActions.get(i);
     }
 
+    public boolean isValid()
+    {
+        return iftttActions.size() > 0;
+    }
+
     /**
      * Applies this rule to given data (a gcm message)
      * data format:

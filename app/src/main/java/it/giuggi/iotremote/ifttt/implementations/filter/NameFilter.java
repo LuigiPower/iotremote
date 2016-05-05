@@ -16,6 +16,11 @@ public class NameFilter extends IFTTTFilter
 {
     public String name;
 
+    public NameFilter()
+    {
+        this("esp0");
+    }
+
     public NameFilter(String name)
     {
         this.name = name;
@@ -57,5 +62,11 @@ public class NameFilter extends IFTTTFilter
     protected int getComponentNameResourceId()
     {
         return R.string.name_filter;
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_assignment_24dp;
     }
 }

@@ -19,6 +19,11 @@ public class SendCommandAction extends IFTTTAction
     private IOTNode target;
     private String action;
 
+    public SendCommandAction()
+    {
+        this(new IOTNode("", ""), "");
+    }
+
     public SendCommandAction(IOTNode target, String action)
     {
         this.target = target;
@@ -63,5 +68,11 @@ public class SendCommandAction extends IFTTTAction
         //TODO better layout
         EditText tx = (EditText) view.findViewById(R.id.command_name);
         tx.setText(this.action);
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_backup_24dp;
     }
 }

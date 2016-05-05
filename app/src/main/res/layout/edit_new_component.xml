@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Spinner android:id="@+id/new_component_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"/>
+
+    <!-- This is a bad idea: It nests ScrollViews
+    <include layout="@layout/detail_component"
+        android:id="@+id/new_component_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    -->
+
+    <LinearLayout android:id="@+id/new_component_details"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical">
+        <!-- This container is for each component's specific layout (xml files for each component type) -->
+    </LinearLayout>
+</merge>

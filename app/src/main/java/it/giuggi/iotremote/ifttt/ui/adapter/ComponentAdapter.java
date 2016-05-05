@@ -5,6 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -21,11 +24,13 @@ import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
  */
 public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.CustomViewHolder>
 {
+    private List<IFTTTComponent> originalRef;
     private List<IFTTTComponent> componentList;
     private ViewGroup container;
 
-    public ComponentAdapter(List<IFTTTComponent> ruleList, ViewGroup container) {
-        this.componentList = ruleList;
+    public ComponentAdapter(List<IFTTTComponent> originalRef, List<IFTTTComponent> componentList, ViewGroup container) {
+        this.componentList = componentList;
+        this.originalRef = originalRef;
         this.container = container;
     }
 
@@ -33,20 +38,48 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_row, container, false);
 
-        CustomViewHolder viewHolder = new CustomViewHolder(view);
-
-        return viewHolder;
+        return new CustomViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IFTTTComponent component = componentList.get(i);
 
-        customViewHolder.card.setTag(component);
-        customViewHolder.card.setOnClickListener(customViewHolder);
+        customViewHolder.editButton.setTag(component);
+        customViewHolder.editButton.setOnClickListener(customViewHolder);
 
-        View view = component.loadView(customViewHolder.componentDetails);
-        //customViewHolder.componentDetails.addView(view);
+        customViewHolder.deleteButton.setTag(component);
+        customViewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                IFTTTComponent component = (IFTTTComponent) v.getTag();
+                componentList.remove(component);
+                originalRef.remove(component);
+                component.delete(v.getContext());
+
+                notifyDataSetChanged();
+            }
+        });
+
+        customViewHolder.componentName.setText(component.getComponentName(customViewHolder.componentName.getContext()));
+
+        if(component instanceof DummyComponent)
+        {
+            customViewHolder.deleteButton.setVisibility(View.GONE);
+            customViewHolder.scroll.setVisibility(View.GONE);
+            customViewHolder.editButton.setText(R.string.add_component);
+        }
+        else
+        {
+            customViewHolder.deleteButton.setVisibility(View.VISIBLE);
+            customViewHolder.scroll.setVisibility(View.VISIBLE);
+            customViewHolder.editButton.setText(R.string.edit);
+        }
+
+        customViewHolder.componentDetails.removeAllViews();
+        component.loadView(customViewHolder.componentDetails);
     }
 
     @Override
@@ -57,12 +90,20 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
     public class CustomViewHolder extends BaseViewHolder implements View.OnClickListener
     {
         protected CardView card;
+        protected ScrollView scroll;
+        protected Button editButton;
+        protected Button deleteButton;
+        protected TextView componentName;
         protected ViewGroup componentDetails;
 
         public CustomViewHolder(View view) {
             super(view);
 
             this.card = (CardView) view.findViewById(R.id.card_view);
+            this.scroll = (ScrollView) view.findViewById(R.id.component_scroll);
+            this.editButton = (Button) view.findViewById(R.id.edit_button);
+            this.deleteButton = (Button) view.findViewById(R.id.delete_button);
+            this.componentName = (TextView) view.findViewById(R.id.component_name);
             this.componentDetails = (ViewGroup) view.findViewById(R.id.component_details);
         }
 

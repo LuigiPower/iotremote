@@ -5,11 +5,12 @@
     <TextView android:id="@+id/component_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:textSize="24sp"
               style="@style/StandardText"/>
 
-    <ScrollView
+    <ScrollView android:id="@+id/component_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="180dp"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/component_name">
         <LinearLayout android:id="@+id/component_details"

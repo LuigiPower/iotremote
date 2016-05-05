@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -46,14 +46,15 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         customViewHolder.card.setTag(rule);
         customViewHolder.card.setOnClickListener(customViewHolder);
 
-        String filterName = "";
-        String eventName = "";
-        String contextName = "";
-        String actionName = "";
+        //TODO set default (not-set) icon
+        int filterImage = R.drawable.ic_done_black_24dp;
+        int eventImage = filterImage;
+        int contextImage = filterImage;
+        int actionImage = filterImage;
 
         try
         {
-            filterName = rule.getFilterAt(0).getClass().getName();
+            filterImage = rule.getFilterAt(0).getIcon();
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -62,7 +63,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
 
         try
         {
-            eventName = rule.getEventAt(0).getClass().getName();
+            eventImage = rule.getEventAt(0).getIcon();
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -71,7 +72,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
 
         try
         {
-            contextName = rule.getContextAt(0).getClass().getName();
+            contextImage = rule.getContextAt(0).getIcon();
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -80,7 +81,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
 
         try
         {
-            actionName = rule.getActionAt(0).getClass().getName();
+            actionImage = rule.getActionAt(0).getIcon();
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -88,10 +89,10 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         }
 
         //TODO change this, icons would be nice looking
-        customViewHolder.filter.setText(filterName.substring(filterName.lastIndexOf('.') + 1));
-        customViewHolder.event.setText(eventName.substring(eventName.lastIndexOf('.') + 1));
-        customViewHolder.context.setText(contextName.substring(contextName.lastIndexOf('.') + 1));
-        customViewHolder.action.setText(actionName.substring(actionName.lastIndexOf('.') + 1));
+        customViewHolder.filter.setImageResource(filterImage);
+        customViewHolder.event.setImageResource(eventImage);
+        customViewHolder.context.setImageResource(contextImage);
+        customViewHolder.action.setImageResource(actionImage);
     }
 
     @Override
@@ -102,19 +103,19 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
     public class CustomViewHolder extends BaseViewHolder implements View.OnClickListener
     {
         protected CardView card;
-        protected TextView filter;
-        protected TextView event;
-        protected TextView context;
-        protected TextView action;
+        protected ImageView filter;
+        protected ImageView event;
+        protected ImageView context;
+        protected ImageView action;
 
         public CustomViewHolder(View view) {
             super(view);
 
             this.card = (CardView) view.findViewById(R.id.card_view);
-            this.filter = (TextView) view.findViewById(R.id.filter);
-            this.event = (TextView) view.findViewById(R.id.event);
-            this.context = (TextView) view.findViewById(R.id.context);
-            this.action = (TextView) view.findViewById(R.id.action);
+            this.filter = (ImageView) view.findViewById(R.id.filter);
+            this.event = (ImageView) view.findViewById(R.id.event);
+            this.context = (ImageView) view.findViewById(R.id.context);
+            this.action = (ImageView) view.findViewById(R.id.action);
         }
 
         @Override

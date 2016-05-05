@@ -19,4 +19,10 @@ public class DisconnectedEvent extends TypeEvent
     {
         return R.string.disconnected_event;
     }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_visibility_off_24dp;
+    }
 }

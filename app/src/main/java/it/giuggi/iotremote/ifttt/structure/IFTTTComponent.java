@@ -1,12 +1,14 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.Databasable;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 
@@ -42,6 +44,11 @@ public abstract class IFTTTComponent extends Databasable
         return name;
     }
 
+    public int getIcon()
+    {
+        return R.drawable.ic_pages_24dp;
+    }
+
     protected abstract String getType();
 
     @Override
@@ -66,7 +73,6 @@ public abstract class IFTTTComponent extends Databasable
     {
         if(this.componentid == -1) return -1;   //Return if component was never saved
 
-        Gson gson = new Gson();
         return database.deleteComponent(this.componentid);
     }
 

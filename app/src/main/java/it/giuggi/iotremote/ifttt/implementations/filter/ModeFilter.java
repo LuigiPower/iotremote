@@ -17,6 +17,11 @@ public class ModeFilter extends IFTTTFilter
 {
     private String name;
 
+    public ModeFilter()
+    {
+        this("empty_mode");
+    }
+
     public ModeFilter(String name)
     {
         this.name = name;
@@ -60,5 +65,11 @@ public class ModeFilter extends IFTTTFilter
     protected int getComponentNameResourceId()
     {
         return R.string.mode_filter;
+    }
+
+    @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_extension_24dp;
     }
 }

@@ -19,6 +19,11 @@ public abstract class IFTTTFilter extends IFTTTComponent
 {
     public static final String TYPE = "FILTER";
 
+    public IFTTTFilter()
+    {
+
+    }
+
     @Override
     protected String getType()
     {
