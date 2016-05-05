@@ -32,6 +32,7 @@
     <string name="send_command_action">Send command to node</string>
 
     <string name="dummy">New</string>
+    <string name="drawer_title">Main menu</string>
 
     <string-array name="filters">
         <item>@string/mode_filter</item>
@@ -81,6 +82,12 @@
         <item>NotificationAction</item>
         <item>PlayNotificationSoundAction</item>
         <item>SendCommandAction</item>
+    </string-array>
+
+    <string-array name="drawer_items">
+        <item>Home network</item>
+        <item>Rules</item>
+        <item>Settings</item>
     </string-array>
 
 </resources>

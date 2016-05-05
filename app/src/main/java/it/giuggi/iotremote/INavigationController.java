@@ -13,5 +13,11 @@ public interface INavigationController
 {
     public void goBack();
     public void go(BaseFragment in);
+    public void go(BaseFragment in, boolean backstack);
     public void showDialog(View view);
+
+    public void clearStack();
+
+    public void closeDrawer();
+    public void openDrawer();
 }

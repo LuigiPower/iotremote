@@ -34,6 +34,11 @@ public class NodeList extends BaseFragment
     ArrayList<IOTNode> nodeList = new ArrayList<IOTNode>(5);
     private IOTNodeAdapter adapter;
 
+    public static NodeList newInstance()
+    {
+        return new NodeList();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

@@ -27,6 +27,11 @@
         <item name="android:layout_marginTop">8dp</item>
     </style>
 
+    <style name="StandardText.Drawer" parent="StandardText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+
     <style name="UnsafeButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/red</item>
     </style>
