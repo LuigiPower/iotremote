@@ -57,7 +57,7 @@ public class MyGcmListenerService extends GcmListenerService
 
 
         IFTTTDatabase database = IFTTTDatabase.getHelper(getBaseContext());
-        ArrayList<IFTTTRule> rules = null;
+        ArrayList<IFTTTRule> rules;
 
         try
         {
@@ -65,6 +65,7 @@ public class MyGcmListenerService extends GcmListenerService
         } catch (ClassNotFoundException e)
         {
             e.printStackTrace();
+            return; //Return, we got bigger problems than an app crashing if it doesn't find the required class...
         }
 
         final ArrayList<IFTTTRule> finalRules = rules;
@@ -75,12 +76,10 @@ public class MyGcmListenerService extends GcmListenerService
             @Override
             public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
             {
-                Log.i(TAG, "Starting rule check with " + situation);
+                Log.i(TAG, "Starting rule check with " + situation.toString());
 
                 for(IFTTTRule rule : finalRules)
                 {
-                    Log.i(TAG, "checking rule " + rule);
-
                     try
                     {
                         rule.apply(situation, finalJsonData, MyGcmListenerService.this);

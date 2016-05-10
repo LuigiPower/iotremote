@@ -221,7 +221,7 @@ public class IFTTTRule extends Databasable
      */
     public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, JSONObject gcmMessage, Context context) throws JSONException
     {
-        Log.i("IFTTTRule", "Applying rule " + name);
+        Log.d("IFTTTRule", "Applying rule " + name);
 
         /**
          * Initialize IoTNode from node part of the GCM message
@@ -240,18 +240,21 @@ public class IFTTTRule extends Databasable
         boolean result = false;
         for(IFTTTFilter iftttFilter : iftttFilters)
         {
+            Log.d("IFTTTRule", "Applying filter " + iftttFilter.getClass().getName());
             result = iftttFilter.apply(node);
             if(!result) return false;
         }
 
         for(IFTTTEvent iftttEvent : iftttEvents)
         {
+            Log.d("IFTTTRule", "Applying filter " + iftttEvent.getClass().getName());
             result = iftttEvent.apply(event);
             if(!result) return false;
         }
 
         for(IFTTTContext iftttContext : iftttContexts)
         {
+            Log.d("IFTTTRule", "Applying filter " + iftttContext.getClass().getName());
             result = iftttContext.apply(currentSituation);
             if(!result) return false;
         }
@@ -259,6 +262,7 @@ public class IFTTTRule extends Databasable
         //All done, run the actions and return true
         for(IFTTTAction action : iftttActions)
         {
+            Log.d("IFTTTRule", "Applying filter " + action.getClass().getName());
             action.doAction(context);
         }
         return true;

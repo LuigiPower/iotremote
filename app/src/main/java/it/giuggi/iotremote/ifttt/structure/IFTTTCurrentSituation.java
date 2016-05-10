@@ -3,6 +3,10 @@ package it.giuggi.iotremote.ifttt.structure;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +22,7 @@ import android.util.Log;
 
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
@@ -31,7 +36,7 @@ import java.util.LinkedList;
  * TODO Movement - Accellerometer: Find out whether you are in a car, walking or standing still (This one should update outside "acquireSnapshot", and provide the data when "acquireSnapshot" is called)
  * TODO Keep looking for other ways of getting data
  */
-public class IFTTTCurrentSituation implements LocationListener
+public class IFTTTCurrentSituation implements LocationListener, SensorEventListener
 {
     public interface OnSnapshotReadyListener
     {
@@ -61,6 +66,20 @@ public class IFTTTCurrentSituation implements LocationListener
         private LinkedList<NetworkInfo> bluetooth;
         private LinkedList<NetworkInfo> mobile;
 
+        private int totalSensors = -1;
+        private int initializedSensors = 0;
+        private float[] accelerometer = null;
+        private float[] temperature = null;
+        private float[] gravity = null;
+        private float[] magneticField = null;
+        private float[] gyroscope = null;
+        private float[] heartRate = null;
+        private float[] light = null;
+        private float[] linearAcceleration = null;
+        private float[] pressure = null;
+        private float[] proximity = null;
+        private float[] humidity = null;
+
         public CurrentSituation(OnSnapshotReadyListener listener)
         {
             this.wifi = new LinkedList<>();
@@ -71,24 +90,71 @@ public class IFTTTCurrentSituation implements LocationListener
             this.location = null;
         }
 
+        private String floatArrayToString(float[] array)
+        {
+            String s = "";
+            if(array == null)
+            {
+                return "null\n";
+            }
+
+            for(float val : array)
+            {
+                s += val + ", ";
+            }
+            s += ";\n";
+            return s;
+        }
+
+        @Override
+        public String toString()
+        {
+            String s = "\n++++++++++++++++++++++++++++\n" +
+                       "+    CURRENT SITUATION     +\n" +
+                       "+--------------------------+\n" +
+                       "+ location: " + location + "\n" +
+                       "+ wifi status: " + wifiStatus + "\n" +
+                       "+ active network: " + activeNetwork + "\n" +
+                       "+ wifi list: " + wifi + "\n" +
+                       "+ bluetooth list: " + bluetooth + "\n" +
+                       "+ mobile list: " + mobile + "\n" +
+                       "+--------------------------+\n" +
+                       "+           SENSORS        +\n" +
+                       "+--------------------------+\n" +
+                       "+ accelerometer: " + floatArrayToString(accelerometer) +
+                       "+ temperature: " + floatArrayToString(temperature) +
+                       "+ gravity: " + floatArrayToString(gravity) +
+                       "+ magneticField: " + floatArrayToString(magneticField) +
+                       "+ gyroscope: " + floatArrayToString(gyroscope) +
+                       "+ heartRate: " + floatArrayToString(heartRate) +
+                       "+ light: " + floatArrayToString(light) +
+                       "+ linearAcceleration: " + floatArrayToString(linearAcceleration) +
+                       "+ pressure: " + floatArrayToString(pressure) +
+                       "+ proximity: " + floatArrayToString(proximity) +
+                       "+ humidity: " + floatArrayToString(humidity);
+
+            s += "+++++++++++++++++++++++++++\n";
+            return s;
+        }
+
         public boolean isLocationIn(double latitude, double longitude, double radius)
         {
-            //TODO use geofencing
+            //TODO use geofencing... ?
             return true;
         }
 
         public boolean checkReady()
         {
-            Log.d("IFTTTCurrentSituation", "Checking ready");
-            boolean ready = this.location != null;
+            boolean ready = this.location != null && totalSensors == initializedSensors;
+            Log.d("IFTTTCurrentSituation", "Checking ready, which is " + ready);
 
             if(ready)
             {
                 listener.onSnapshotReady(this);
                 return true;
             }
-            else
-                listener.onSnapshotReady(this);//TODO remove this
+            //else
+            //    listener.onSnapshotReady(this);//TODO remove this
             return false;
         }
 
@@ -119,6 +185,7 @@ public class IFTTTCurrentSituation implements LocationListener
 
     private final CurrentSituation situation;
     private final LocationManager manager;
+    private final SensorManager mSensorManager;
 
     /**
      * Creates a new IFTTTCurrentSituation.
@@ -129,6 +196,37 @@ public class IFTTTCurrentSituation implements LocationListener
         Log.d("IFTTTCurrentSituation", "Building IFTTTCurrentSituation");
         situation = new CurrentSituation(listener);
 
+        /** SENSOR SETUP *************************************************************************/
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        int totalSensors = 0;
+        List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        for(Sensor sensor : sensorList)
+        {
+            //To avoid starting up unnecessary sensors
+            if(sensor.getType() == Sensor.TYPE_ACCELEROMETER
+                    || sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE
+                    || sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD
+                    || sensor.getType() == Sensor.TYPE_GRAVITY
+                    || sensor.getType() == Sensor.TYPE_GYROSCOPE
+                    || sensor.getType() == Sensor.TYPE_HEART_RATE
+                    || sensor.getType() == Sensor.TYPE_LIGHT
+                    //|| sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION
+                    || sensor.getType() == Sensor.TYPE_PRESSURE
+                    || sensor.getType() == Sensor.TYPE_PROXIMITY
+                    || sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY)
+            {
+                //TODO is this sensor the default sensor for that type?
+                totalSensors++;
+                Log.d("IFTTTCurrent", "Listening on sensor " + sensor);
+                mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        }
+        situation.totalSensors = totalSensors;
+        /** END SENSOR SETUP  ********************************************************************/
+        /*****************************************************************************************/
+
+        /** LOCATION SETUP ***********************************************************************/
         manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         //TODO do this on first activity startup
@@ -144,15 +242,23 @@ public class IFTTTCurrentSituation implements LocationListener
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-    
-        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000)   //TODO set time differently
+
+        List<String> providers = manager.getProviders(true);
+        for(String provider : providers)
         {
-            situation.location = location;
-            situation.checkReady();
+            Location location = manager.getLastKnownLocation(provider);
+            if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000)   //TODO set time differently
+            {
+                Log.d("IFTTTCurrent", "last known location is (" + location + ")");
+                situation.location = location;
+                situation.checkReady();
+            }
         }
-        else
+
+        if(situation.location == null)
         {
+            //TODO maybe don't use only the GPS_PROVIDER
+            //TODO ask all providers for location updates, and stop all others on the first location update
             //TODO this doesn't work outside UI Thread
             Handler handler = new Handler(context.getMainLooper());
             handler.post(new Runnable()
@@ -160,12 +266,19 @@ public class IFTTTCurrentSituation implements LocationListener
                 @Override
                 public void run()
                 {
-                    //noinspection ResourceType
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, IFTTTCurrentSituation.this);
+                    List<String> providers = manager.getProviders(true);
+                    for (String provider : providers)
+                    {
+                        //noinspection ResourceType
+                        manager.requestLocationUpdates(provider, 0, 0, IFTTTCurrentSituation.this);
+                    }
                 }
             });
         }
+        /** END LOCATION SETUP  ******************************************************************/
+        /*****************************************************************************************/
 
+        /** CONNECTIVITY SETUP *******************************************************************/
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
         {
@@ -204,6 +317,8 @@ public class IFTTTCurrentSituation implements LocationListener
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         situation.wifiStatus = wifiInfo;
+        /** END CONNECTIVITY SETUP  **************************************************************/
+        /*****************************************************************************************/
 
         situation.checkReady();
     }
@@ -217,6 +332,7 @@ public class IFTTTCurrentSituation implements LocationListener
     @Override
     public void onLocationChanged(Location location)
     {
+        Log.d("IFTTTCurrent", "onLocationChanged(" + location + ")");
         manager.removeUpdates(this);
         situation.location = location;
         situation.checkReady();
@@ -236,6 +352,61 @@ public class IFTTTCurrentSituation implements LocationListener
 
     @Override
     public void onProviderDisabled(String provider)
+    {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event)
+    {
+        int type = event.sensor.getType();
+        switch(type)
+        {
+            case Sensor.TYPE_ACCELEROMETER:
+                situation.accelerometer = event.values;
+                break;
+            case Sensor.TYPE_AMBIENT_TEMPERATURE:
+                situation.temperature = event.values;
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                situation.magneticField = event.values;
+                break;
+            case Sensor.TYPE_GRAVITY:
+                situation.gravity = event.values;
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                situation.gyroscope = event.values;
+                break;
+            case Sensor.TYPE_HEART_RATE:
+                situation.heartRate = event.values;
+                break;
+            case Sensor.TYPE_LIGHT:
+                situation.light = event.values;
+                break;
+            case Sensor.TYPE_LINEAR_ACCELERATION:
+                situation.linearAcceleration = event.values;
+                break;
+            case Sensor.TYPE_PRESSURE:
+                situation.pressure = event.values;
+                break;
+            case Sensor.TYPE_PROXIMITY:
+                situation.proximity = event.values;
+                break;
+            case Sensor.TYPE_RELATIVE_HUMIDITY:
+                situation.humidity = event.values;
+                break;
+            default: //I don't use data from this sensor
+                break;
+        }
+        Log.d("IFTTTCurrent", "Initialized sensor " + event.sensor + " with values " + event);
+        Log.d("IFTTTCurrent", "Counters: total | current /  " + situation.totalSensors + " | " + situation.initializedSensors);
+        situation.initializedSensors++;
+        mSensorManager.unregisterListener(this, event.sensor);
+        situation.checkReady();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy)
     {
 
     }
