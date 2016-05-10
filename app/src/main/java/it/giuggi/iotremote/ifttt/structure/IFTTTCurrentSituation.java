@@ -144,7 +144,7 @@ public class IFTTTCurrentSituation implements LocationListener
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
+    
         Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000)   //TODO set time differently
         {
