@@ -26,6 +26,7 @@
     <string name="value_changed_to_event">When a specific parameter changes to a value</string>
 
     <string name="wifi_name_context">Wifi name</string>
+    <string name="location_context">When you are in this place</string>
 
     <string name="notification_action">Show notification</string>
     <string name="play_notification_sound_action">Play notification sound</string>
@@ -33,6 +34,7 @@
 
     <string name="dummy">New</string>
     <string name="drawer_title">Main menu</string>
+    <string name="choose_place">Choose place</string>
 
     <string-array name="filters">
         <item>@string/mode_filter</item>
@@ -66,10 +68,12 @@
 
     <string-array name="contexts">
         <item>@string/wifi_name_context</item>
+        <item>@string/location_context</item>
     </string-array>
 
     <string-array name="context_classes">
         <item>WifiNameContext</item>
+        <item>LocationContext</item>
     </string-array>
 
     <string-array name="actions">

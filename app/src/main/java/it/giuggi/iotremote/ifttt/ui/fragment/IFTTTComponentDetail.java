@@ -51,6 +51,7 @@ public class IFTTTComponentDetail extends BaseFragment implements View.OnClickLi
 
         Toolbar componentName = (Toolbar) v.findViewById(R.id.component_toolbar);
         componentName.setTitle(component.getComponentName(getContext()));
+        componentName.setBackgroundResource(component.getColorId());
 
         ViewGroup details = (ViewGroup) v.findViewById(R.id.component_details);
         component.loadEditView(details);

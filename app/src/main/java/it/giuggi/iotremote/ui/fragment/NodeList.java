@@ -2,6 +2,7 @@ package it.giuggi.iotremote.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,13 +27,14 @@ import it.giuggi.iotremote.net.WebRequestTask;
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class NodeList extends BaseFragment
+public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
 {
 
     public static final String TAG = "NODE_LIST";
 
     ArrayList<IOTNode> nodeList = new ArrayList<IOTNode>(5);
     private IOTNodeAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static NodeList newInstance()
     {
@@ -45,6 +47,25 @@ public class NodeList extends BaseFragment
     {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.iot_list, container, false);
 
+        loadData();
+
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.light_blue,
+                R.color.light_green,
+                R.color.light_orange,
+                R.color.light_red);
+
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.iot_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new IOTNodeAdapter(nodeList, recyclerView);
+        recyclerView.setAdapter(adapter);
+
+        return v;
+    }
+
+    public void loadData()
+    {
         WebRequestTask.perform(WebRequestTask.Azione.GET_NODE_LIST)
                 .listen(new WebRequestTask.OnResponseListener()
                 {
@@ -53,7 +74,11 @@ public class NodeList extends BaseFragment
                     {
                         Log.i("Received data", "Received node list: " + ris);
 
-                        if(ris == null) return;
+                        if(ris == null)
+                        {
+                            swipeRefreshLayout.setRefreshing(false);
+                            return;
+                        }
 
                         nodeList.clear();
 
@@ -79,22 +104,22 @@ public class NodeList extends BaseFragment
                             }
                         }
 
+                        swipeRefreshLayout.setRefreshing(false);
                         adapter.notifyDataSetChanged();
                     }
                 })
                 .send();
-
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.iot_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new IOTNodeAdapter(nodeList, recyclerView);
-        recyclerView.setAdapter(adapter);
-
-        return v;
     }
 
     @Override
     public String generateTag()
     {
         return TAG;
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        loadData();
     }
 }

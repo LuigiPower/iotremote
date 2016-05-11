@@ -1,7 +1,11 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,12 +21,23 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionApi;
+import com.google.android.gms.location.DetectedActivity;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+
+import it.giuggi.iotremote.ifttt.activityrecognition.ActivityDetectionIntentService;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
@@ -32,12 +47,15 @@ import java.util.List;
  *
  * TODO GPS (TEST + INTERFACE TO SET)
  * TODO Geofencing (at home, at work, at custom locations...)
- * TODO Wi-Fi signal: allow user to setup "home network", "work network"... to recognize places (TEST + INTERFACE TO SET)
- * TODO Movement - Accellerometer: Find out whether you are in a car, walking or standing still (This one should update outside "acquireSnapshot", and provide the data when "acquireSnapshot" is called)
+ * Wi-Fi signal: allow user to setup "home network", "work network"... to recognize places (TODO TEST + INTERFACE TO SET)
+ * Movement - Accellerometer: Find out whether you are in a car, walking or standing still
  * TODO Keep looking for other ways of getting data
  */
-public class IFTTTCurrentSituation implements LocationListener, SensorEventListener
+public class IFTTTCurrentSituation extends BroadcastReceiver implements LocationListener, SensorEventListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
+
+    private final GoogleApiClient activityRecognitionApi;
+
     public interface OnSnapshotReadyListener
     {
         void onSnapshotReady(CurrentSituation situation);
@@ -79,6 +97,8 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
         private float[] pressure = null;
         private float[] proximity = null;
         private float[] humidity = null;
+
+        private ArrayList<DetectedActivity> currentActivities = null;
 
         public CurrentSituation(OnSnapshotReadyListener listener)
         {
@@ -131,21 +151,35 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
                        "+ linearAcceleration: " + floatArrayToString(linearAcceleration) +
                        "+ pressure: " + floatArrayToString(pressure) +
                        "+ proximity: " + floatArrayToString(proximity) +
-                       "+ humidity: " + floatArrayToString(humidity);
+                       "+ humidity: " + floatArrayToString(humidity) +
+                       "+--------------------------+\n" +
+                       "+    ACTIVITY DETECTION    +\n" +
+                       "+--------------------------+\n";
+
+            for(DetectedActivity activity : currentActivities)
+            {
+                s += "+ Detected activity: " + activity.toString() + "\n";
+            }
 
             s += "+++++++++++++++++++++++++++\n";
             return s;
         }
 
-        public boolean isLocationIn(double latitude, double longitude, double radius)
+        public boolean isLocationIn(double latitude, double longitude, float radius)
         {
-            //TODO use geofencing... ?
-            return true;
+            Location target = new Location("");
+            target.setLatitude(latitude);
+            target.setLongitude(longitude);
+
+            float distance = location.distanceTo(target);
+            return distance < radius;
         }
 
         public boolean checkReady()
         {
-            boolean ready = this.location != null && totalSensors == initializedSensors;
+            boolean ready = this.location != null           //Wait for the current location
+                    && totalSensors == initializedSensors   //Wait until all sensors have been initialized
+                    && currentActivities != null;          //Wait for activity detection
             Log.d("IFTTTCurrentSituation", "Checking ready, which is " + ready);
 
             if(ready)
@@ -195,6 +229,17 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
     {
         Log.d("IFTTTCurrentSituation", "Building IFTTTCurrentSituation");
         situation = new CurrentSituation(listener);
+
+        /** ACTIVITY RECOGNITION SETUP ***********************************************************/
+        activityRecognitionApi = new GoogleApiClient.Builder(context)
+                .addApi(ActivityRecognition.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        LocalBroadcastManager.getInstance(context).registerReceiver(this, new IntentFilter(ActivityDetectionIntentService.BROADCAST_ACTION));
+        activityRecognitionApi.connect();
+        /** END ACTIVITY RECOGNITIION SETUP  *****************************************************/
+        /*****************************************************************************************/
 
         /** SENSOR SETUP *************************************************************************/
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -247,6 +292,7 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
         for(String provider : providers)
         {
             Location location = manager.getLastKnownLocation(provider);
+            //TODO get the most recent known location6
             if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000)   //TODO set time differently
             {
                 Log.d("IFTTTCurrent", "last known location is (" + location + ")");
@@ -257,9 +303,6 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
 
         if(situation.location == null)
         {
-            //TODO maybe don't use only the GPS_PROVIDER
-            //TODO ask all providers for location updates, and stop all others on the first location update
-            //TODO this doesn't work outside UI Thread
             Handler handler = new Handler(context.getMainLooper());
             handler.post(new Runnable()
             {
@@ -399,8 +442,8 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
                 break;
         }
         Log.d("IFTTTCurrent", "Initialized sensor " + event.sensor + " with values " + event);
-        Log.d("IFTTTCurrent", "Counters: total | current /  " + situation.totalSensors + " | " + situation.initializedSensors);
         situation.initializedSensors++;
+        Log.d("IFTTTCurrent", "Counters: total | current /  " + situation.totalSensors + " | " + situation.initializedSensors);
         mSensorManager.unregisterListener(this, event.sensor);
         situation.checkReady();
     }
@@ -408,6 +451,53 @@ public class IFTTTCurrentSituation implements LocationListener, SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy)
     {
-
+        Log.i("IFTTTCurrent", "onAccuracyChanged");
     }
+
+    /** ACTIVITY DETECTION API *******************************************************************/
+    protected PendingIntent getRecognitionIntent()
+    {
+        Intent intent = new Intent(activityRecognitionApi.getContext(), ActivityDetectionIntentService.class);
+
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
+        // requestActivityUpdates() and removeActivityUpdates().
+        return PendingIntent.getService(activityRecognitionApi.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+        Log.i("IFTTTCurrent", "onReceive");
+        ArrayList<DetectedActivity> updatedActivities = intent.getParcelableArrayListExtra(ActivityDetectionIntentService.ACTIVITY_EXTRA);
+        LocalBroadcastManager.getInstance(activityRecognitionApi.getContext()).unregisterReceiver(this);
+        ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(activityRecognitionApi, getRecognitionIntent());
+
+        situation.currentActivities = updatedActivities;
+        situation.checkReady();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle)
+    {
+        Log.i("IFTTTCurrent", "onConnected");
+        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(activityRecognitionApi, 0, getRecognitionIntent());
+    }
+
+    @Override
+    public void onConnectionSuspended(int i)
+    {
+        Log.i("IFTTTCurrent", "Connection suspended");
+        activityRecognitionApi.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
+    {
+        Log.i("IFTTTCurrent", "Connection failed");
+        LocalBroadcastManager.getInstance(activityRecognitionApi.getContext()).unregisterReceiver(this);
+        situation.currentActivities = new ArrayList<>();
+        situation.checkReady();
+    }
+    /** END ACTIVITY DETECTION API ***************************************************************/
+    /*********************************************************************************************/
 }
