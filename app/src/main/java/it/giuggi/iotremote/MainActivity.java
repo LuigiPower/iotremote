@@ -25,11 +25,13 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.MapView;
 
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
+import it.giuggi.iotremote.ifttt.implementations.context.LocationContext;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ui.adapter.DrawerItem;
 import it.giuggi.iotremote.ui.adapter.DrawerItemAdapter;
@@ -77,6 +79,21 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
         BaseFragment.initNavigation(this);
         BaseViewHolder.initNavigation(this);
+
+        // Fixing Later Map loading Delay
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MapView mv = new MapView(getApplicationContext());
+                    mv.onCreate(null);
+                    mv.onPause();
+                    mv.onDestroy();
+                }catch (Exception ignored){
+
+                }
+            }
+        }).start();
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
@@ -277,5 +294,13 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.i(TAG, "ONACTIVITYRESULT requestcode: " + requestCode);
+        if(requestCode == LocationContext.PLACE_PICKER_REQUEST)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                LocationContext.placeRequester.doneSelectingPlace(this, data);
+            }
+        }
     }
 }

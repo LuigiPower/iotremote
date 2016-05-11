@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <EditText android:id="@+id/location_name"
-              android:layout_width="wrap_content"
+              android:layout_width="300dp"
               android:layout_height="wrap_content"
+              android:inputType="textCapSentences"
+              android:layout_alignParentTop="true"
               style="@style/StandardText"/>
 
     <TextView android:id="@+id/current_place"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_below="@+id/location_name"
               style="@style/StandardText"/>
 
     <Button android:id="@+id/pick_place"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/current_place"
             android:text="@string/choose_place"/>
 
-</LinearLayout>
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/detail_location_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/pick_place"
+        android:layout_alignParentBottom="true"
+        map:cameraZoom="13"
+        map:mapType="normal"
+        map:liteMode="true"/>
+
+</RelativeLayout>

@@ -46,6 +46,15 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
     }
 
     @Override
+    public void onViewRecycled(CustomViewHolder holder)
+    {
+        super.onViewRecycled(holder);
+
+        IFTTTComponent component = componentList.get(holder.getAdapterPosition());
+        component.doCleanup(holder.componentDetails);
+    }
+
+    @Override
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IFTTTComponent component = componentList.get(i);
 

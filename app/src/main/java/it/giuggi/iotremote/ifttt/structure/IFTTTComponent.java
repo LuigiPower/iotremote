@@ -82,6 +82,11 @@ public abstract class IFTTTComponent extends Databasable
 
     protected abstract void populateEditView(View view);
 
+    protected void cleanupView(View view)
+    {
+        //NOOP so that only components that require cleanup can implement this method
+    }
+
     private View doLoad(Context context, int resourceid, ViewGroup parent)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -121,5 +126,10 @@ public abstract class IFTTTComponent extends Databasable
         populateEditView(view);
 
         return view;
+    }
+
+    public void doCleanup(View view)
+    {
+        cleanupView(view);
     }
 }

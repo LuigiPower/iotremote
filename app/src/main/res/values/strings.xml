@@ -35,6 +35,7 @@
     <string name="dummy">New</string>
     <string name="drawer_title">Main menu</string>
     <string name="choose_place">Choose place</string>
+    <string name="choose_place_dots">Choose place...</string>
 
     <string-array name="filters">
         <item>@string/mode_filter</item>
