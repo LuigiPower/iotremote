@@ -1,6 +1,7 @@
 package it.giuggi.iotremote;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,12 +55,18 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     //GCM sender
     //224490332382
 
+    @SuppressWarnings("ResourceType")
+    @SuppressLint("CommitTransaction")
     private void changeFragment(BaseFragment in, boolean backstack)
     {
         Log.i("it.giuggi.iotremote", "CHANGING FRAGMENT TO " + in.generateTag());
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction()
+                .setCustomAnimations(R.anim.fragment_right_in,
+                        R.anim.fragment_right_out,
+                        R.anim.fragment_left_in,
+                        R.anim.fragment_left_out)
                 .replace(fragmentContainer, in, in.generateTag());
 
         if(backstack)

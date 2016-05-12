@@ -43,7 +43,8 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IFTTTRule rule = ruleList.get(i);
 
-        customViewHolder.card.setTag(rule);
+        customViewHolder.card.setTag(R.id.complete_rule, rule);
+        customViewHolder.card.setTag(R.id.location_name, 0);
         customViewHolder.card.setOnClickListener(customViewHolder);
 
         //TODO set default (not-set) icon
@@ -80,6 +81,21 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         customViewHolder.event.setImageResource(eventImage);
         customViewHolder.context.setImageResource(contextImage);
         customViewHolder.action.setImageResource(actionImage);
+
+        customViewHolder.filter.setOnClickListener(customViewHolder);
+        customViewHolder.event.setOnClickListener(customViewHolder);
+        customViewHolder.context.setOnClickListener(customViewHolder);
+        customViewHolder.action.setOnClickListener(customViewHolder);
+
+        customViewHolder.filter.setTag(R.id.complete_rule, rule);
+        customViewHolder.event.setTag(R.id.complete_rule, rule);
+        customViewHolder.context.setTag(R.id.complete_rule, rule);
+        customViewHolder.action.setTag(R.id.complete_rule, rule);
+
+        customViewHolder.filter.setTag(R.id.location_name, 0);
+        customViewHolder.event.setTag(R.id.location_name, 1);
+        customViewHolder.context.setTag(R.id.location_name, 2);
+        customViewHolder.action.setTag(R.id.location_name, 3);
     }
 
     @Override
@@ -109,8 +125,9 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         public void onClick(View v)
         {
             Log.i("RULEADAPTER", "RULEADAPTER ONCLICK");
-            IFTTTRule rule = (IFTTTRule) v.getTag();
-            controller.go(IFTTTRuleDetail.newInstance(rule));
+            IFTTTRule rule = (IFTTTRule) v.getTag(R.id.complete_rule);
+            int position = (int) v.getTag(R.id.location_name);
+            controller.go(IFTTTRuleDetail.newInstance(rule, position));
         }
     }
 }

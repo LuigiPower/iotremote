@@ -71,6 +71,6 @@ public class IFTTTListFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v)
     {
         //TODO rule name?
-        controller.go(IFTTTRuleDetail.newInstance(new IFTTTRule("New Rule", null, null, null, null)));
+        controller.go(IFTTTRuleDetail.newInstance(new IFTTTRule("New Rule", null, null, null, null), 0));
     }
 }

@@ -25,11 +25,13 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
 
     private IFTTTRule rule;
     private ViewPager pager;
+    private int start_page;
 
-    public static IFTTTRuleDetail newInstance(IFTTTRule rule)
+    public static IFTTTRuleDetail newInstance(IFTTTRule rule, int start_page)
     {
         IFTTTRuleDetail fragment = new IFTTTRuleDetail();
         fragment.rule = rule;
+        fragment.start_page = start_page;
         return fragment;
     }
 
@@ -47,6 +49,7 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
 
         pager = (ViewPager) v.findViewById(R.id.component_pager);
         pager.setAdapter(new ComponentPagerAdapter(getChildFragmentManager(), rule));
+        pager.setCurrentItem(start_page, true);
 
         View completeRule = v.findViewById(R.id.complete_rule);
         completeRule.setOnClickListener(this);
