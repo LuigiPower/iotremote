@@ -50,8 +50,13 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
     {
         super.onViewRecycled(holder);
 
-        IFTTTComponent component = componentList.get(holder.getAdapterPosition());
-        component.doCleanup(holder.componentDetails);
+        int adapterPosition = holder.getAdapterPosition();
+        // This check is required in case a component is deleted (index would be out of range)
+        if(adapterPosition > 0 && adapterPosition < componentList.size())
+        {
+            IFTTTComponent component = componentList.get(adapterPosition);
+            component.doCleanup(holder.componentDetails);
+        }
     }
 
     @Override

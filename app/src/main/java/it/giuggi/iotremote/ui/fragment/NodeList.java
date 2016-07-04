@@ -36,9 +36,21 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     private IOTNodeAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    public NodeList()
+    {
+        putLeft();
+    }
+
     public static NodeList newInstance()
     {
-        return new NodeList();
+        NodeList nodeList = new NodeList();
+        return nodeList;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable

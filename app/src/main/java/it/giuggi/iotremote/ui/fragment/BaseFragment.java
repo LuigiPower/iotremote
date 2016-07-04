@@ -1,6 +1,8 @@
 package it.giuggi.iotremote.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.View;
 
 import it.giuggi.iotremote.INavigationController;
@@ -13,6 +15,36 @@ import it.giuggi.iotremote.INavigationController;
  */
 public abstract class BaseFragment extends Fragment
 {
+    /**
+     * Where to show the fragment on bigger devices
+     * @see android.view.Gravity
+     * Gravity.LEFT is the left part of the Master-Detail Flow (Lists and content selection)
+     * Gravity.RIGHT is the right part of the Master-Detail Flow (Content)
+     */
+    protected int gravity;
+
+    @SuppressLint("RtlHardcoded")
+    protected void putLeft()
+    {
+        gravity = Gravity.LEFT;
+    }
+
+    @SuppressLint("RtlHardcoded")
+    protected void putRight()
+    {
+        gravity = Gravity.RIGHT;
+    }
+
+    public int getGravity()
+    {
+        return gravity;
+    }
+
+    public BaseFragment createFillin()
+    {
+        return null;
+    }
+
     protected static INavigationController controller = new INavigationController()
     {
         @Override

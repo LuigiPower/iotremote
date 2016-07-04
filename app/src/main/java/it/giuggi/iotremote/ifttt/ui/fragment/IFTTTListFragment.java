@@ -26,17 +26,28 @@ public class IFTTTListFragment extends BaseFragment implements View.OnClickListe
     public static final String TAG = "IFTTTLISTFRAGMENT";
 
     ArrayList<IFTTTRule> ruleList = new ArrayList<>(5);
-    private RuleAdapter adapter;
+
+    public IFTTTListFragment()
+    {
+        putLeft();
+    }
 
     public static IFTTTListFragment newInstance()
     {
-        return new IFTTTListFragment();
+        IFTTTListFragment list = new IFTTTListFragment();
+        return list;
     }
 
     @Override
     public String generateTag()
     {
         return TAG;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -57,7 +68,7 @@ public class IFTTTListFragment extends BaseFragment implements View.OnClickListe
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.element_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RuleAdapter(ruleList, recyclerView);
+        RuleAdapter adapter = new RuleAdapter(ruleList, recyclerView);
         recyclerView.setAdapter(adapter);
 
         View fab = v.findViewById(R.id.add_button);

@@ -14,8 +14,12 @@ import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 
 /**
  * Created by Federico Giuggioloni on 27/04/16.
- * Se aggiungo questa riga magari
- * AndroidStudio smette di lamentarsi...
+ * Base class for any IFTTTComponent
+ * Subclasses:
+ *  {@link IFTTTFilter}
+ *  {@link IFTTTEvent}
+ *  {@link IFTTTContext}
+ *  {@link IFTTTAction}
  */
 public abstract class IFTTTComponent extends Databasable
 {
@@ -42,8 +46,7 @@ public abstract class IFTTTComponent extends Databasable
     public String getComponentName(Context context)
     {
         int resourceid = getComponentNameResourceId();
-        String name = context.getString(resourceid);
-        return name;
+        return context.getString(resourceid);
     }
 
     public int getIcon()

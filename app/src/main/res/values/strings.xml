@@ -37,6 +37,17 @@
     <string name="choose_place">Choose place</string>
     <string name="choose_place_dots">Choose place...</string>
 
+    <string name="no_conditions">any</string>
+
+    <string name="connective_or">or</string>
+    <string name="connective_and">and</string>
+
+    <string name="clause_if">if</string>
+    <string name="clause_when">when</string>
+    <string name="clause_then">then</string>
+
+    <string name="rule_description_start">Node is</string>
+
     <string-array name="filters">
         <item>@string/mode_filter</item>
         <item>@string/name_filter</item>

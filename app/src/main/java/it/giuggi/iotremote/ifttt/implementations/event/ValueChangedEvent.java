@@ -5,7 +5,7 @@ import it.giuggi.iotremote.R;
 /**
  * Created by Federico Giuggioloni on 21/04/16.
  * Only accepts VALUE_CHANGED events
- * @see it.giuggi.iotremote.ifttt.structure.IFTTTEvent.IFTTTEventType
+ * {@link it.giuggi.iotremote.ifttt.structure.IFTTTEvent.IFTTTEventType}
  */
 public class ValueChangedEvent extends TypeEvent
 {

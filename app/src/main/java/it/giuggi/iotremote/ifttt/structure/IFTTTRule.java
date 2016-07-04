@@ -1,7 +1,14 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -11,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.Databasable;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.iot.IOTNode;
@@ -289,6 +297,51 @@ public class IFTTTRule extends Databasable
         database.addLink(ruleid, componentid);
     }
 
+    private Spannable listToDescription(Context context, List<? extends IFTTTComponent> list)
+    {
+        if(list.size() == 0)
+        {
+            return new SpannableString(context.getString(R.string.no_conditions));
+        }
+
+        String description = "";
+        for(int i = 0; i < list.size(); i++)
+        {
+            IFTTTComponent component = list.get(i);
+            description += component.getComponentName(context);
+            if(i < list.size() - 2)
+            {
+                description += ", ";
+            }
+            if(i == list.size() - 2)
+            {
+                description += String.format(" %s ", context.getString(R.string.connective_and));
+            }
+            else
+            {
+                description += " ";
+            }
+        }
+        Spannable spannableDescription = new SpannableString(description);
+        spannableDescription.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, list.get(0).getColorId())), 0, description.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableDescription;
+    }
+
+    public CharSequence getDescription(Context context)
+    {
+        SpannableStringBuilder description = new SpannableStringBuilder(String.format("%s ", context.getString(R.string.rule_description_start)));
+
+        description.append(listToDescription(context, iftttFilters));
+        description.append(String.format(" %s ", context.getString(R.string.clause_when)));
+        description.append(listToDescription(context, iftttEvents));
+        description.append(String.format(" %s ", context.getString(R.string.clause_if)));
+        description.append(listToDescription(context, iftttContexts));
+        description.append(String.format(" %s ", context.getString(R.string.clause_then)));
+        description.append(listToDescription(context, iftttActions));
+
+        return description;
+    }
+
     @Override
     protected long doSave(Context context, IFTTTDatabase database)
     {
@@ -386,5 +439,10 @@ public class IFTTTRule extends Databasable
         }
 
         return deleted_count;
+    }
+
+    public long getRuleid()
+    {
+        return ruleid;
     }
 }

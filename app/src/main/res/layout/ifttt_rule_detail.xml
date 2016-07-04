@@ -3,10 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/rule_description_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
+
+        <include layout="@layout/rule_row"/>
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/component_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rule_description_container">
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/component_pager_title_strip"

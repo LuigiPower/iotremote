@@ -23,8 +23,7 @@ import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.
- * Se aggiungo questa riga magari
- * AndroidStudio smette di lamentarsi...
+ * Database helper class for {@link Databasable} objects
  */
 public class IFTTTDatabase extends SQLiteOpenHelper
 {
@@ -102,6 +101,51 @@ public class IFTTTDatabase extends SQLiteOpenHelper
         c2.close();
         c1.close();
         sql.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    /**
+     * Get a single rule that matches the passed ID
+     * @param ruleid ID of the rule to find
+     * @return an IFTTTRule instance that corresponds to the given ID
+     */
+    public IFTTTRule findRuleById(long ruleid) throws ClassNotFoundException
+    {
+        SQLiteDatabase sql = getReadableDatabase();
+
+        Cursor c = sql.query(
+                IFTTTContract.IFTTTRuleEntry.TABLE_NAME,
+                new String[]{
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID,
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME
+                },
+                IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID + " - ?",
+                new String[]{
+                        "" + ruleid
+                },
+                null,
+                null,
+                null
+        );
+
+        IFTTTRule rule = null;
+
+        if(c.moveToFirst())
+        {
+            long id = c.getLong(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID));
+            String rulename = c.getString(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME));
+
+            LinkedList<IFTTTFilter> iftttFilters = (LinkedList<IFTTTFilter>) getComponentsOfType(ruleid, IFTTTFilter.TYPE, sql);
+            LinkedList<IFTTTContext> iftttContexts = (LinkedList<IFTTTContext>) getComponentsOfType(ruleid, IFTTTContext.TYPE, sql);
+            LinkedList<IFTTTEvent> iftttEvents = (LinkedList<IFTTTEvent>) getComponentsOfType(ruleid, IFTTTEvent.TYPE, sql);
+            LinkedList<IFTTTAction> iftttActions = (LinkedList<IFTTTAction>) getComponentsOfType(ruleid, IFTTTAction.TYPE, sql);
+
+            rule = new IFTTTRule(id, rulename, iftttFilters, iftttContexts, iftttEvents, iftttActions);
+        }
+
+        c.close();
+        sql.close();
+        return rule;
     }
 
     @SuppressWarnings("unchecked")

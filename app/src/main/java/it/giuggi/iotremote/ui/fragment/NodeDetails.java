@@ -18,11 +18,28 @@ public class NodeDetails extends BaseFragment
     public static final String TAG = "NODE_DETAILS";
     private IOTNode myNode;
 
+    public NodeDetails()
+    {
+        putRight();
+    }
+
     public static NodeDetails newInstance(IOTNode node)
     {
         NodeDetails details = new NodeDetails();
         details.myNode = node;
         return details;
+    }
+
+    @Override
+    public BaseFragment createFillin()
+    {
+        return NodeList.newInstance();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable

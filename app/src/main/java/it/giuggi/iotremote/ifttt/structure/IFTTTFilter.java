@@ -1,20 +1,12 @@
 package it.giuggi.iotremote.ifttt.structure;
 
-import android.content.Context;
-
-import com.google.gson.Gson;
-
-import java.util.LinkedList;
-
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.ifttt.database.Databasable;
-import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.iot.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
- * Se aggiungo questa riga magari
- * AndroidStudio smette di lamentarsi...
+ * {@link IFTTTComponent} of type FILTER
+ * Handles node type filtering
  */
 public abstract class IFTTTFilter extends IFTTTComponent
 {

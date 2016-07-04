@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -33,10 +34,13 @@ import java.util.ArrayList;
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.implementations.context.LocationContext;
+import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
+import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTRuleDetail;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ui.adapter.DrawerItem;
 import it.giuggi.iotremote.ui.adapter.DrawerItemAdapter;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
+import it.giuggi.iotremote.ui.fragment.NodeDetails;
 import it.giuggi.iotremote.ui.fragment.NodeList;
 
 public class MainActivity extends AppCompatActivity implements INavigationController
@@ -46,9 +50,25 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int PERMISSIONS_CHECKED_REQUEST = 9001;
 
+    private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
+    private static final String CURRENT_FRAGMENT_TAG_LEFT = "current_fragment_tag_left";
+    private static final String CURRENT_FRAGMENT_TAG_RIGHT = "current_fragment_tag_right";
+
+    @SuppressWarnings("FieldCanBeLocal")
     private int fragmentContainer = R.id.fragment_container;
+    @SuppressWarnings("FieldCanBeLocal")
+    private int fragmentContainerLeft = R.id.fragment_container_left;
+    @SuppressWarnings("FieldCanBeLocal")
+    private int fragmentContainerRight = R.id.fragment_container_right;
+
+    private boolean isMasterDetail = false;
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private String currentFragmentTag;
+    private String currentFragmentTagLeft;
+    private String currentFragmentTagRight;
 
     //GCM api key
     //AIzaSyAh1LQr0p_0qB6b4RKhrMr_nxPtjxZfqiI
@@ -56,18 +76,43 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     //224490332382
 
     @SuppressWarnings("ResourceType")
-    @SuppressLint("CommitTransaction")
+    @SuppressLint({"CommitTransaction", "RtlHardcoded"})
     private void changeFragment(BaseFragment in, boolean backstack)
     {
-        Log.i("it.giuggi.iotremote", "CHANGING FRAGMENT TO " + in.generateTag());
+        Log.i("Fillin creation...", "Showing fragment " + in + " master: " + isMasterDetail);
+        String tag = in.generateTag();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction()
                 .setCustomAnimations(R.anim.fragment_right_in,
                         R.anim.fragment_right_out,
                         R.anim.fragment_left_in,
-                        R.anim.fragment_left_out)
-                .replace(fragmentContainer, in, in.generateTag());
+                        R.anim.fragment_left_out);
+
+        if(isMasterDetail)
+        {
+            Log.i("MASTER DETAIL", "MASTER DETAIL GRAVITY IS " + in.getGravity());
+            if(in.getGravity() == Gravity.LEFT)
+            {
+                currentFragmentTagLeft = tag;
+                transaction = transaction.replace(fragmentContainerLeft, in, tag);
+            }
+            else
+            {
+                currentFragmentTagRight = tag;
+                transaction = transaction.replace(fragmentContainerRight, in, tag);
+            }
+
+            currentFragmentTag = null;
+        }
+        else
+        {
+            currentFragmentTag = tag;
+            transaction = transaction.replace(fragmentContainer, in, tag);
+
+            currentFragmentTagLeft = null;
+            currentFragmentTagRight = null;
+        }
 
         if(backstack)
         {
@@ -83,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        View view = findViewById(fragmentContainer);
+        isMasterDetail = view == null;
 
         BaseFragment.initNavigation(this);
         BaseViewHolder.initNavigation(this);
@@ -170,7 +218,92 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         }
         /***************************************************************************/
 
+
+        /**
+         * Restoring saved state after configuration change
+         */
+        if(savedInstanceState != null)
+        {
+            String tag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG, null);
+            String tag_left = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_LEFT, null);
+            String tag_right = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_RIGHT, null);
+
+            if(tag != null)
+            {
+                BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
+
+                if(isMasterDetail)
+                {
+                    detachFromContainer(toshow);
+                    changeFragment(toshow, true);
+                }
+                else
+                {
+                    changeFragment(toshow, false);
+                }
+
+                if(isMasterDetail)
+                {
+                    BaseFragment fillin = toshow.createFillin();
+                    Log.i("Fillin creation...", "Creating fillin " + fillin);
+                    if(fillin != null)
+                    {
+                        changeFragment(fillin, false);
+                    }
+                }
+                return;
+            }
+
+            if(tag_right != null)
+            {
+                BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag_right);
+                if(!isMasterDetail)
+                {
+                    detachFromContainer(toshow);
+                    changeFragment(toshow, true);
+                }
+                else
+                {
+                    changeFragment(toshow, false);
+                }
+
+                return;
+            }
+
+            if(tag_left != null)
+            {
+                if(isMasterDetail)
+                {
+                    BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag_left);
+                    changeFragment(toshow, false);
+                }
+
+                return;
+            }
+        }
+        /***************************************************************************/
+
         changeFragment(NodeList.newInstance(), false);
+    }
+
+    protected void detachFromContainer(BaseFragment in)
+    {
+        getSupportFragmentManager().popBackStackImmediate();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(in)
+                .commit();
+        getSupportFragmentManager().executePendingTransactions();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        Log.i("onSaveInstanceState", "tags: " + currentFragmentTag + " " + currentFragmentTagLeft + " " + currentFragmentTagRight);
+        outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
+        outState.putString(CURRENT_FRAGMENT_TAG_LEFT, currentFragmentTagLeft);
+        outState.putString(CURRENT_FRAGMENT_TAG_RIGHT, currentFragmentTagRight);
     }
 
     @Override
@@ -264,12 +397,14 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void closeDrawer()
     {
         drawerLayout.closeDrawer(Gravity.LEFT);
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void openDrawer()
     {

@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Created by Federico Giuggioloni on 27/04/16.
  * Databasable interface
- * enables class that extends it to be saved to permanent storage in a MySQL Database
+ * Enables class that extends it to be saved to permanent storage in a MySQL Database
  */
 public abstract class Databasable
 {
