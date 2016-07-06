@@ -57,6 +57,16 @@ public class CompositeMode extends IOperatingMode
     }
 
     @Override
+    protected void setOwner(IOTNode node)
+    {
+        super.setOwner(node);
+        for(IOperatingMode mode : modeList)
+        {
+            mode.setOwner(node);
+        }
+    }
+
+    @Override
     public boolean has(String modename)
     {
         for(IOperatingMode mode : modeList)
@@ -86,6 +96,36 @@ public class CompositeMode extends IOperatingMode
         list.setAdapter(adapter);
 
         return v;
+    }
+
+    @Override
+    public void destroyDashboardLayout(ViewGroup container)
+    {
+
+    }
+
+    @Override
+    public void valueUpdate(JSONObject newParameters) throws JSONException
+    {
+        JSONArray modeArray = newParameters.getJSONArray("modes");
+
+        for(int i = 0; i < modeArray.length(); i++)
+        {
+            JSONObject mode = modeArray.getJSONObject(i);
+
+            String modeName = mode.getString("name");
+            JSONObject modeParams = mode.getJSONObject("params");
+
+            for(IOperatingMode opmode : modeList)
+            {
+                if(opmode.getName().equalsIgnoreCase(modeName))
+                {
+                    opmode.valueUpdate(modeParams);
+                }
+            }
+
+        }
+        //TODO remove any mode I didn't find in the new parameters
     }
 
     public void addMode(IOperatingMode mode)

@@ -321,11 +321,13 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     @Override
     protected void onResume() {
         super.onResume();
+        TaskHandler.getInstance().onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        TaskHandler.getInstance().onPause();
     }
 
     @Override

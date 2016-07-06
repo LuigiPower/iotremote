@@ -8,6 +8,7 @@ import android.widget.TextView;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTAction;
 import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.
@@ -33,7 +34,14 @@ public class SendCommandAction extends IFTTTAction
     @Override
     public void doAction(Context context)
     {
-        this.target.sendCommand(action);
+        this.target.sendCommand(action, new WebRequestTask.OnResponseListener()
+        {
+            @Override
+            public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
+            {
+                //Noop?
+            }
+        });
     }
 
     @Override

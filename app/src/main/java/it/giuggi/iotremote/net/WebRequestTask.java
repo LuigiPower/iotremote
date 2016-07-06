@@ -33,7 +33,8 @@ import java.net.URLEncoder;
 public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer, WebRequestTask.WebRequest[]> {
 
     //public static final String WEBSITE = "http://mbp-di-federico:5000";
-    public static final String WEBSITE = "http://192.168.43.132:5000";
+    //public static final String WEBSITE = "http://192.168.43.132:5000";
+    public static final String WEBSITE = "http://192.168.1.102:5000";
     //public static final String WEBSITE = "http://federico:5000";
     public static final String POST = "POST";
     public static final String GET = "GET";
@@ -43,13 +44,15 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
     private static final String ERROR = "error";
 
     public enum Tipo{ JSON, STRING, ESITO, JSON_ARRAY, LONG }
-    public enum Azione{ SEND_GCM_ID, LOGOUT_GCM, GET_NODE_LIST, SEND_COMMAND }
+    public enum Azione{ SEND_GCM_ID, LOGOUT_GCM, GET_NODE_LIST, SEND_COMMAND, SEND_TEST_COMMAND }
 
     private String scripts[] = new String[]
             {
                     "/gcm/registration",
                     "/gcm/logout",
-                    "/node/list"
+                    "/node/list",
+                    "/node/",
+                    "/testnode/"
             };
 
     /**
@@ -327,8 +330,24 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
                     tipo = Tipo.JSON_ARRAY;
                     break;
                 case SEND_COMMAND:
-                    response_string = request(valori, scripts[azione.ordinal()], GET);
-                    tipo = Tipo.ESITO;
+                    assert post != null;
+                    String action = post[0];
+                    String nodeid = post[1];
+                    try
+                    {
+                        response_string = request(valori, scripts[azione.ordinal()] + URLEncoder.encode(nodeid, "utf-8") + "/" + URLEncoder.encode(action, "utf-8"), GET);
+                    } catch (UnsupportedEncodingException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    tipo = Tipo.JSON;
+                    break;
+                case SEND_TEST_COMMAND:
+                    assert post != null;
+                    String testaction = post[0];
+                    String testnodeid = post[1];
+                    response_string = request(valori, scripts[azione.ordinal()] + testnodeid + "/" + testaction, GET);
+                    tipo = Tipo.JSON;
                     break;
                 default:
                     break;

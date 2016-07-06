@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.TaskHandler;
 import it.giuggi.iotremote.ui.adapter.IOTNodeAdapter;
 import it.giuggi.iotremote.iot.IOTNode;
 import it.giuggi.iotremote.iot.IOperatingMode;
@@ -59,8 +60,6 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.iot_list, container, false);
 
-        loadData();
-
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.light_blue,
@@ -76,9 +75,34 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
         return v;
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        swipeRefreshLayout.setRefreshing(true);
+        loadData();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
     public void loadData()
     {
+        TaskHandler.getInstance().clear();
+        Log.i("Received data", "GETTING node list: ");
         WebRequestTask.perform(WebRequestTask.Azione.GET_NODE_LIST)
+                .error(new WebRequestTask.FailureHandler()
+                {
+                    @Override
+                    public boolean onFailure(WebRequestTask.WebRequest request)
+                    {
+                        swipeRefreshLayout.setRefreshing(false);
+                        return false;
+                    }
+                })
                 .listen(new WebRequestTask.OnResponseListener()
                 {
                     @Override

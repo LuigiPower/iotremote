@@ -20,6 +20,7 @@ public class NodeDetails extends BaseFragment
 
     public NodeDetails()
     {
+        setRetainInstance(true);
         putRight();
     }
 
@@ -46,14 +47,18 @@ public class NodeDetails extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View v = myNode.mode.loadDashboardLayout(inflater, container);
-
-        return v;
+        return myNode.mode.loadDashboard(inflater, container);
     }
 
     @Override
     public String generateTag()
     {
         return TAG;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
     }
 }

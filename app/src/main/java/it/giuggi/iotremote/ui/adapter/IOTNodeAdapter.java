@@ -2,6 +2,7 @@ package it.giuggi.iotremote.ui.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.iot.CompositeMode;
 import it.giuggi.iotremote.ui.fragment.NodeDetails;
 import it.giuggi.iotremote.iot.IOTNode;
 
@@ -40,8 +42,9 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IOTNode iotNode = iotNodeList.get(i);
 
-        customViewHolder.nodeName.setText(iotNode.name);
-        customViewHolder.nodeMode.setText(iotNode.mode.getName());
+        customViewHolder.nodeName.setTitle(iotNode.name);
+        customViewHolder.nodeName.setBackgroundResource(R.color.colorPrimary);
+        //customViewHolder.nodeMode.setText(iotNode.mode.getName());
 
         LayoutInflater inflater = LayoutInflater.from(customViewHolder.nodeName.getContext());
 
@@ -50,15 +53,43 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
             customViewHolder.dashboardContainer.removeAllViews();
         }
 
-        customViewHolder.dashboardContainer.addView(iotNode.mode.loadDashboardLayout(inflater, customViewHolder.dashboardContainer));
+        if(iotNode.mode.getName().equalsIgnoreCase(CompositeMode.NAME))
+        {
+            customViewHolder.dashboardContainer.addView(iotNode.mode.loadPreview(inflater, customViewHolder.dashboardContainer));
+        }
+        else
+        {
+            customViewHolder.dashboardContainer.addView(iotNode.mode.loadDashboard(inflater, customViewHolder.dashboardContainer));
+        }
 
         customViewHolder.card.setTag(iotNode);
+        customViewHolder.nodeName.setTag(iotNode);
+        customViewHolder.dashboardContainer.setTag(iotNode);
+
         customViewHolder.card.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                customViewHolder.showDetailsDialog((IOTNode) v.getTag());
+                customViewHolder.goDetails((IOTNode) v.getTag());
+            }
+        });
+
+        customViewHolder.nodeName.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                customViewHolder.goDetails((IOTNode) v.getTag());
+            }
+        });
+
+        customViewHolder.dashboardContainer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                customViewHolder.goDetails((IOTNode) v.getTag());
             }
         });
     }
@@ -69,16 +100,16 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
     }
 
     public class CustomViewHolder extends BaseViewHolder {
-        protected TextView nodeName;
-        protected TextView nodeMode;
+        protected Toolbar nodeName;
+        //protected TextView nodeMode;
         protected ViewGroup dashboardContainer;
         protected CardView card;
 
         public CustomViewHolder(View view) {
             super(view);
 
-            this.nodeName = (TextView) view.findViewById(R.id.node_name);
-            this.nodeMode = (TextView) view.findViewById(R.id.current_mode);
+            this.nodeName = (Toolbar) view.findViewById(R.id.node_name);
+            //this.nodeMode = (TextView) view.findViewById(R.id.current_mode);
             this.dashboardContainer = (ViewGroup) view.findViewById(R.id.dashboard_container);
             this.card = (CardView) view.findViewById(R.id.card_view);
         }

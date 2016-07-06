@@ -7,23 +7,21 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import it.giuggi.iotremote.R;
-
 /**
- * Created by Federico Giuggioloni on 15/03/16.
+ * Created by Federico Giuggioloni on 05/07/16.
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class EmptyMode extends IOperatingMode
+public class BasicMode extends IOperatingMode
 {
-    public static final String NAME = "empty_mode";
+    public static final String NAME = "basic_mode";
 
-    public EmptyMode()
+    public BasicMode()
     {
         super();
     }
 
-    public EmptyMode(JSONObject params)
+    public BasicMode(JSONObject params)
     {
         super(params);
     }
@@ -37,7 +35,8 @@ public class EmptyMode extends IOperatingMode
     @Override
     public View loadDashboardLayout(LayoutInflater inflater, ViewGroup container)
     {
-        return inflater.inflate(R.layout.empty_mode, container, false);
+        //TODO this should be 'settings' kind of mode (change name and such)
+        return new View(container.getContext());
     }
 
     @Override
@@ -49,6 +48,6 @@ public class EmptyMode extends IOperatingMode
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
     {
-
+        //TODO this shouldn't be needed for basicmode, or use this to register configuration changes
     }
 }

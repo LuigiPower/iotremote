@@ -1,53 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
-    android:layout_gravity="center"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_width="match_parent"
-    android:layout_height="240dp"
-    card_view:cardCornerRadius="4dp"
-    android:foreground="?android:attr/selectableItemBackground" >
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    xmlns:app="http://schemas.android.com/tools"
+                                    android:id="@+id/card_view"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    card_view:cardCornerRadius="4dp"
+                                    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--
         <TextView android:id="@+id/node_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            style="@style/TitleText"
-            android:text="NODE#1"/>
+            style="@style/TitleText"/>
+        -->
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/node_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorFilter"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextColor="@color/white" />
+
+        <!--
         <TextView android:id="@+id/current_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/node_name"
             android:layout_alignLeft="@+id/node_name"
             android:layout_alignStart="@+id/node_name"
+            android:visibility="gone"
             style="@style/StandardText"
             android:text="Current mode"/>
+        -->
 
         <LinearLayout android:id="@+id/dashboard_container"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_below="@+id/current_mode"
-            android:layout_above="@+id/edit_button"
-            android:layout_marginTop="8dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/node_name"
             android:layout_alignLeft="@+id/node_name"
             android:layout_alignStart="@+id/node_name"
-            android:layout_alignRight="@+id/node_name"
-            android:layout_alignEnd="@+id/node_name"
             android:orientation="horizontal">
 
         </LinearLayout>
 
+        <!--
         <Button android:id="@+id/edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +66,7 @@
             android:layout_alignParentEnd="true"
             style="?attr/borderlessButtonStyle"
             android:text="Edit..."/>
+        -->
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

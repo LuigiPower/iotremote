@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mode_container"
-    android:layout_gravity="center"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mode_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorFilter"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white" />
+
+    <View android:id="@+id/mode_line"
+          android:layout_width="2dp"
+          android:layout_height="match_parent"
+          android:layout_alignTop="@+id/mode_scroll"
+          android:layout_alignBottom="@+id/mode_scroll"
+          android:background="@color/grey"/>
+
+    <ScrollView android:id="@+id/mode_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/mode_toolbar">
+        <LinearLayout android:id="@+id/mode_details"
+                      android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="32dp"
+                      android:layout_marginStart="32dp"
+                      android:gravity="center_vertical">
+            <!-- This container is for each component's specific layout (xml files for each component type) -->
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

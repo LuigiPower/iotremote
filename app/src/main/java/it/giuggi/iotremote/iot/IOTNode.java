@@ -26,13 +26,13 @@ public class IOTNode
     {
         this.ipAddress = ipAddress;
         this.name = name;
-        this.mode = new EmptyMode();
+        setMode(new EmptyMode());
     }
 
     public IOTNode(String ipAddress, String name, IOperatingMode mode)
     {
         this(ipAddress, name);
-        this.mode = mode;
+        setMode(mode);
     }
 
     public View loadView(LayoutInflater inflater, ViewGroup container)
@@ -53,6 +53,7 @@ public class IOTNode
     public void setMode(IOperatingMode newMode)
     {
         this.mode = newMode;
+        this.mode.setOwner(this);
     }
 
     public boolean hasMode(String modename)
@@ -60,7 +61,7 @@ public class IOTNode
         return mode.has(modename);
     }
 
-    public void sendCommand(String action)
+    public void sendCommand(String action, WebRequestTask.OnResponseListener responseListener)
     {
         Bundle data = new Bundle();
         data.putStringArray(WebRequestTask.DATA, new String[]{
@@ -70,14 +71,7 @@ public class IOTNode
 
         WebRequestTask.perform(WebRequestTask.Azione.SEND_COMMAND)
                 .with(data)
-                .listen(new WebRequestTask.OnResponseListener()
-                {
-                    @Override
-                    public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
-                    {
-                        Log.i("IOTNode", "Sent action to node");
-                    }
-                })
+                .listen(responseListener)
                 .send();
     }
 }

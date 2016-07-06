@@ -1,16 +1,10 @@
 package it.giuggi.iotremote.ifttt.structure;
 
-import android.content.Context;
-
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.ifttt.database.Databasable;
-import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.

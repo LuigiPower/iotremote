@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.giuggi.iotremote.R;
@@ -35,5 +36,17 @@ public class UnknownMode extends IOperatingMode
     public View loadDashboardLayout(LayoutInflater inflater, ViewGroup container)
     {
         return inflater.inflate(R.layout.unknown_mode, container, false);
+    }
+
+    @Override
+    public void destroyDashboardLayout(ViewGroup container)
+    {
+
+    }
+
+    @Override
+    public void valueUpdate(JSONObject newParameters) throws JSONException
+    {
+
     }
 }

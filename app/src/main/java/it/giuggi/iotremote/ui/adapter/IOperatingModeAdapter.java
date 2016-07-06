@@ -1,6 +1,7 @@
 package it.giuggi.iotremote.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,29 @@ public class IOperatingModeAdapter extends RecyclerView.Adapter<IOperatingModeAd
     }
 
     @Override
+    public void onViewRecycled(CustomViewHolder holder)
+    {
+        super.onViewRecycled(holder);
+
+        int adapterPosition = holder.getAdapterPosition();
+        // This check is required in case a component is deleted (index would be out of range)
+        if(adapterPosition > 0 && adapterPosition < IOperatingModeList.size())
+        {
+            IOperatingMode mode = IOperatingModeList.get(adapterPosition);
+            mode.destroyDashboardLayout(holder.modeContainer);
+        }
+    }
+
+    @Override
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
         IOperatingMode mode = IOperatingModeList.get(i);
 
         LayoutInflater inflater = LayoutInflater.from(customViewHolder.modeContainer.getContext());
 
         customViewHolder.modeContainer.addView(mode.loadDashboardLayout(inflater, customViewHolder.modeContainer));
+
+        customViewHolder.modeToolbar.setTitle(mode.getName());
+        customViewHolder.modeToolbar.setBackgroundResource(mode.getColorId());
     }
 
     @Override
@@ -48,11 +66,13 @@ public class IOperatingModeAdapter extends RecyclerView.Adapter<IOperatingModeAd
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected ViewGroup modeContainer;
+        protected Toolbar modeToolbar;
 
         public CustomViewHolder(View view) {
             super(view);
 
-            this.modeContainer = (ViewGroup) view.findViewById(R.id.mode_container);
+            this.modeToolbar = (Toolbar) view.findViewById(R.id.mode_toolbar);
+            this.modeContainer = (ViewGroup) view.findViewById(R.id.mode_details);
         }
     }
 }
