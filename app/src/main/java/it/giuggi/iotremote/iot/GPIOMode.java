@@ -21,7 +21,7 @@ import it.giuggi.iotremote.net.WebRequestTask;
  */
 public class GPIOMode extends IOperatingMode
 {
-    private static final String GPIO_GROUP = "/gpio";
+    private static final String GPIO_GROUP = "gpio";
 
     public static final String NAME = "gpio_mode";
 
@@ -54,7 +54,7 @@ public class GPIOMode extends IOperatingMode
         @Override
         public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
         {
-            String result = (String) ris;
+            JSONObject result = (JSONObject) ris;
             Log.i("GPIOMode Response", "Result is " + result);
         }
     };

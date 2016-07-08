@@ -70,35 +70,26 @@ public class SensorMode extends IOperatingMode
                 return;
             }
 
-            Bundle data = new Bundle();
-            data.putStringArray(WebRequestTask.DATA, new String[]{
-                    "sensor" + id + "/value",
-                    owner.name
-            });
-
-            WebRequestTask.perform(WebRequestTask.Azione.SEND_TEST_COMMAND)
-                    .with(data)
-                    .listen(new WebRequestTask.OnResponseListener()
+            owner.sendCommand("sensor" + id + "/value", new WebRequestTask.OnResponseListener()
+            {
+                @Override
+                public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
+                {
+                    Log.i("SensorMode", "Done sending test command, response is: " + ris);
+                    if(ris == null)
                     {
-                        @Override
-                        public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
-                        {
-                            Log.i("SensorMode", "Done sending test command, response is: " + ris);
-                            if(ris == null)
-                            {
-                                return;
-                            }
+                        return;
+                    }
 
-                            try
-                            {
-                                valueUpdate((JSONObject) ris);
-                            } catch (JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                    })
-                    .send();
+                    try
+                    {
+                        valueUpdate((JSONObject) ris);
+                    } catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     };
 
@@ -196,7 +187,7 @@ public class SensorMode extends IOperatingMode
         this.id = newParameters.getString(ID);
         float value = (float) newParameters.getDouble(CURRENT_VALUE);
         long millis = newParameters.getLong(TIME_MILLIS)/1000;
-        Log.i("Entries size", "entries size is " + entries.size());
+
         Entry data = new Entry(entries.size(), value);
         //entries.add(data);
 

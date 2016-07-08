@@ -172,6 +172,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             target.setLongitude(longitude);
 
             float distance = location.distanceTo(target);
+            Log.i("IFTTTCurrentSitu", "Current target is " + latitude + ", " + longitude + " location is " + location.getLatitude() + ", " + location.getLongitude() + " Distance is " + distance + " radius is " + radius);
             return distance < radius;
         }
 
@@ -192,11 +193,6 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             return false;
         }
 
-        public String toLogString()
-        {
-            return toString() + " Location: " + this.location + " wifi: " + this.wifi+ " bluetooth: " + this.bluetooth + " mobile: " + this.mobile;
-        }
-
         /**
          * Checks if wifi is connected to specified SSID
          * @param ssid SSID to check (Ex.: Home WIFI)
@@ -204,7 +200,10 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
          */
         public boolean isConnectedTo(String ssid)
         {
-            return wifiStatus != null && wifiStatus.getSSID() != null && wifiStatus.getSSID().equalsIgnoreCase(ssid);
+            if(wifiStatus == null) return false;
+
+            String currentssid = wifiStatus.getSSID().replace("\"", "");
+            return currentssid.equalsIgnoreCase(ssid);
         }
 
         /**

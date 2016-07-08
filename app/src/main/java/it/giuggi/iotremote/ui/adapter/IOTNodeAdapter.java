@@ -1,5 +1,6 @@
 package it.giuggi.iotremote.ui.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ public class IOTNodeAdapter extends RecyclerView.Adapter<IOTNodeAdapter.CustomVi
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         IOTNode iotNode = iotNodeList.get(i);
 
+        customViewHolder.nodeName.setTitleTextColor(Color.WHITE);
         customViewHolder.nodeName.setTitle(iotNode.name);
         customViewHolder.nodeName.setBackgroundResource(R.color.colorPrimary);
         //customViewHolder.nodeMode.setText(iotNode.mode.getName());

@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.ifttt.implementations.context;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,6 +16,27 @@ import it.giuggi.iotremote.ifttt.structure.IFTTTCurrentSituation;
  */
 public class WifiNameContext extends IFTTTContext
 {
+    private transient TextWatcher update = new TextWatcher()
+    {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+            ssid = s.toString();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+
+        }
+    };
+
     private String ssid;
 
     public WifiNameContext()
@@ -55,6 +78,8 @@ public class WifiNameContext extends IFTTTContext
     {
         TextView wifiname = (TextView) view.findViewById(R.id.wifi_name);
         wifiname.setText(this.ssid);
+
+        wifiname.addTextChangedListener(update);
     }
 
     @Override
@@ -62,6 +87,8 @@ public class WifiNameContext extends IFTTTContext
     {
         EditText wifiname = (EditText) view.findViewById(R.id.wifi_name);
         wifiname.setText(this.ssid);
+
+        wifiname.addTextChangedListener(update);
     }
 
     @Override

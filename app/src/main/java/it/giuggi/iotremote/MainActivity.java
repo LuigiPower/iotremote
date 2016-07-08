@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     @SuppressWarnings("FieldCanBeLocal")
     private int fragmentContainerLeft = R.id.fragment_container_left;
     @SuppressWarnings("FieldCanBeLocal")
-    private int fragmentContainerRight = R.id.fragment_container_right;
+    private int fragmentContainerRight = R.id.fragment_container;
 
     private boolean isMasterDetail = false;
 
@@ -83,11 +83,12 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         String tag = in.generateTag();
 
         FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction()
+        FragmentTransaction transaction = manager.beginTransaction();
+                /*
                 .setCustomAnimations(R.anim.fragment_right_in,
                         R.anim.fragment_right_out,
                         R.anim.fragment_left_in,
-                        R.anim.fragment_left_out);
+                        R.anim.fragment_left_out);*/
 
         if(isMasterDetail)
         {
@@ -129,8 +130,8 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View view = findViewById(fragmentContainer);
-        isMasterDetail = view == null;
+        View view = findViewById(fragmentContainerLeft);
+        isMasterDetail = view != null;
 
         BaseFragment.initNavigation(this);
         BaseViewHolder.initNavigation(this);

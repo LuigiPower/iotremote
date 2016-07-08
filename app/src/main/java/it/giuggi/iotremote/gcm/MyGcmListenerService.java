@@ -42,13 +42,16 @@ public class MyGcmListenerService extends GcmListenerService
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
 
-        JSONObject jsonData = null;
+        JSONObject jsonData = new JSONObject();
         try
         {
-            jsonData = new JSONObject((String) data.get("data"));
-            //TODO darlo in pasto alle IFTTTRule
+            String nodestring = data.getString("node");
+            String eventstring = data.getString("event");
+
+            jsonData.put("node", new JSONObject(nodestring));
+            jsonData.put("event", new JSONObject(eventstring));
+
             Log.d(TAG, "Data from GCM is " + jsonData.toString(4));
         } catch (JSONException e)
         {

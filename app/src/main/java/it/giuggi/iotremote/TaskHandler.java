@@ -23,6 +23,26 @@ public class TaskHandler
             this.delay = delay;
             this.periodically = periodically;
         }
+
+        private void run(final Handler handler)
+        {
+            handler.postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    r.run();
+                    if(periodically)
+                    {
+                        RunnableWithDelay.this.run(handler);
+                    }
+                    else
+                    {
+                        runningList.remove(RunnableWithDelay.this);
+                    }
+                }
+            }, delay);
+        }
     }
 
     private static TaskHandler instance;
@@ -54,35 +74,14 @@ public class TaskHandler
 
     public void runDelay(final Runnable r, long delay)
     {
-        Runnable real = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                r.run();
-                runningList.remove(r);
-            }
-        };
-
-        runningList.add(new RunnableWithDelay(r, delay, false));
-        handler.postDelayed(real, delay);
+        final RunnableWithDelay runnable = new RunnableWithDelay(r, delay, false);
+        runnable.run(handler);
     }
 
     public void runPeriodically(final Runnable r, final long delay)
     {
-        Runnable real = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                r.run();
-                runningList.remove(r);
-                runPeriodically(r, delay);
-            }
-        };
-
-        runningList.add(new RunnableWithDelay(r, delay, true));
-        handler.postDelayed(real, delay);
+        final RunnableWithDelay runnable = new RunnableWithDelay(r, delay, true);
+        runnable.run(handler);
     }
 
     public void onPause()

@@ -69,7 +69,7 @@ public class IOTNode
                 name
         });
 
-        WebRequestTask.perform(WebRequestTask.Azione.SEND_COMMAND)
+        WebRequestTask.perform(WebRequestTask.Azione.SEND_TEST_COMMAND)
                 .with(data)
                 .listen(responseListener)
                 .send();
