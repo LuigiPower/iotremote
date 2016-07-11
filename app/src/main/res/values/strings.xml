@@ -106,4 +106,56 @@
         <item>Settings</item>
     </string-array>
 
+
+    <string name="mode_basic">Basic Mode</string>
+    <string name="mode_composite">Composite Mode</string>
+    <string name="mode_empty">Empty Mode</string>
+    <string name="mode_gpio">GPIO Mode</string>
+    <string name="mode_gpio_read">GPIO Read Only Mode</string>
+    <string name="mode_sensor">Sensor Mode</string>
+    <string name="mode_unknown">Unidentified Mode</string>
+
+    <string-array name="modes_localized">
+        <item>@string/mode_basic</item>
+        <item>@string/mode_composite</item>
+        <item>@string/mode_empty</item>
+        <item>@string/mode_gpio</item>
+        <item>@string/mode_gpio_read</item>
+        <item>@string/mode_sensor</item>
+        <item>@string/mode_unknown</item>
+    </string-array>
+
+
+    <string name="parameter_status">Status of the Node</string>
+    <string name="parameter_gpio">Current GPIO Pin setting</string>
+    <string name="parameter_id">ID of a Mode</string>
+    <string name="parameter_current_value">Current value of a Sensor</string>
+    <string name="parameter_time_millis">Current time in milliseconds of a Sensor</string>
+
+    <string-array name="parameters_localized">
+        <item>@string/parameter_status</item>
+        <item>@string/parameter_gpio</item>
+        <item>@string/parameter_id</item>
+        <item>@string/parameter_current_value</item>
+        <item>@string/parameter_time_millis</item>
+    </string-array>
+
+
+    <string name="event_any">Any event</string>
+    <string name="event_unknown">An event that is not in this list</string>
+    <string name="event_connected">A Node just Connected</string>
+    <string name="event_disconnected">A Node just Disconnected</string>
+    <string name="event_value_changed">A Node\'s Parameter just changed value</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+
+    <!-- For events, ORDER IS IMPORTANT! I'm using .ordinal() of the enum inside IFTTTEvent -->
+    <string-array name="events_localized">
+        <item>@string/event_any</item>
+        <item>@string/event_unknown</item>
+        <item>@string/event_connected</item>
+        <item>@string/event_disconnected</item>
+        <item>@string/event_value_changed</item>
+    </string-array>
+
 </resources>

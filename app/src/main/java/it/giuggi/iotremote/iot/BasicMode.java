@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import it.giuggi.iotremote.R;
+
 /**
  * Created by Federico Giuggioloni on 05/07/16.
  * Se aggiungo questa riga magari
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 public class BasicMode extends IOperatingMode
 {
     public static final String NAME = "basic_mode";
+    public static final int LOCALIZED_STRING = R.string.mode_basic;
 
     public BasicMode()
     {
@@ -30,6 +33,12 @@ public class BasicMode extends IOperatingMode
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     @Override

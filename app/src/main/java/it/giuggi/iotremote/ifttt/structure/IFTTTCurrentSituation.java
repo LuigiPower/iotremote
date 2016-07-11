@@ -54,7 +54,7 @@ import it.giuggi.iotremote.ifttt.activityrecognition.ActivityDetectionIntentServ
 public class IFTTTCurrentSituation extends BroadcastReceiver implements LocationListener, SensorEventListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
 
-    private final GoogleApiClient activityRecognitionApi;
+    private static GoogleApiClient activityRecognitionApi = null;
 
     public interface OnSnapshotReadyListener
     {
@@ -181,7 +181,11 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             boolean ready = this.location != null           //Wait for the current location
                     && totalSensors == initializedSensors   //Wait until all sensors have been initialized
                     && currentActivities != null;          //Wait for activity detection
-            Log.d("IFTTTCurrentSituation", "Checking ready, which is " + ready);
+            Log.d("IFTTTCurrentSituation", "Checking ready, which is " + ready + " / " + this.location + " " + totalSensors + " " + currentActivities + " " + activityRecognitionApi.isConnected() + " " + activityRecognitionApi.isConnecting());
+            if(currentActivities == null && !activityRecognitionApi.isConnected() && !activityRecognitionApi.isConnecting())
+            {
+                activityRecognitionApi.connect();
+            }
 
             if(ready)
             {
@@ -230,11 +234,20 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         situation = new CurrentSituation(listener);
 
         /** ACTIVITY RECOGNITION SETUP ***********************************************************/
-        activityRecognitionApi = new GoogleApiClient.Builder(context)
-                .addApi(ActivityRecognition.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        if(activityRecognitionApi == null)
+        {
+            activityRecognitionApi = new GoogleApiClient.Builder(context)
+                    .addApi(ActivityRecognition.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+        else
+        {
+            activityRecognitionApi.registerConnectionCallbacks(this);
+            activityRecognitionApi.registerConnectionFailedListener(this);
+        }
+
         LocalBroadcastManager.getInstance(context).registerReceiver(this, new IntentFilter(ActivityDetectionIntentService.BROADCAST_ACTION));
         activityRecognitionApi.connect();
         /** END ACTIVITY RECOGNITIION SETUP  *****************************************************/
@@ -463,6 +476,12 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         return PendingIntent.getService(activityRecognitionApi.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    protected void unregisterActivityRecognition()
+    {
+        activityRecognitionApi.unregisterConnectionCallbacks(this);
+        activityRecognitionApi.unregisterConnectionFailedListener(this);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -470,6 +489,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         ArrayList<DetectedActivity> updatedActivities = intent.getParcelableArrayListExtra(ActivityDetectionIntentService.ACTIVITY_EXTRA);
         LocalBroadcastManager.getInstance(activityRecognitionApi.getContext()).unregisterReceiver(this);
         ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(activityRecognitionApi, getRecognitionIntent());
+        unregisterActivityRecognition();
 
         situation.currentActivities = updatedActivities;
         situation.checkReady();

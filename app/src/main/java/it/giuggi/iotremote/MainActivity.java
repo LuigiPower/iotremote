@@ -3,6 +3,8 @@ package it.giuggi.iotremote;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,11 +31,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.MapView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collection;
 
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.implementations.context.LocationContext;
+import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTRuleDetail;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
@@ -335,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     protected void onDestroy()
     {
         super.onDestroy();
-        new IFTTTDatabase(this).close();
+        IFTTTDatabase.getHelper(this).close();
     }
 
     /**

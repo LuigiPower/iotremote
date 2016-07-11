@@ -129,7 +129,6 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentAdapter.Cust
         @Override
         public void onClick(View v)
         {
-            //TODO Maybe just a dialog?
             IFTTTComponent component = (IFTTTComponent) v.getTag();
 
             controller.go(IFTTTComponentDetail.newInstance(componentList, owner, component));

@@ -3,12 +3,23 @@ package it.giuggi.iotremote.ifttt.implementations.filter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.structure.AutoCompleteEntry;
+import it.giuggi.iotremote.ifttt.structure.AutoCompleteStringEntry;
 import it.giuggi.iotremote.ifttt.structure.IFTTTFilter;
+import it.giuggi.iotremote.ifttt.ui.adapter.AutoCompleteAdapter;
 import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.
@@ -54,10 +65,38 @@ public class NameFilter extends IFTTTFilter
     }
 
     @Override
-    protected void populateEditView(View view)
+    protected void populateEditView(final View view)
     {
-        EditText nodename = (EditText) view.findViewById(R.id.node_name);
+        final AutoCompleteTextView nodename = (AutoCompleteTextView) view.findViewById(R.id.node_name);
         nodename.setText(this.name);
+
+        WebRequestTask.perform(WebRequestTask.Azione.GET_NODE_LIST)
+                .listen(new WebRequestTask.OnResponseListener()
+                {
+                    @Override
+                    public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
+                    {
+                        JSONArray array = (JSONArray) ris;
+
+                        ArrayList<AutoCompleteEntry> list = new ArrayList<>(10);
+                        for(int i = 0; i < array.length(); i++)
+                        {
+                            try
+                            {
+                                JSONObject obj = array.getJSONObject(i);
+                                list.add(new AutoCompleteStringEntry(obj.getString("name")));
+                            }
+                            catch (JSONException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        AutoCompleteAdapter adapter = new AutoCompleteAdapter(view.getContext(), R.layout.autocompletetextentry, list);
+                        nodename.setAdapter(adapter);
+                    }
+                })
+                .send();
 
         nodename.addTextChangedListener(new TextWatcher()
         {

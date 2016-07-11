@@ -1,8 +1,13 @@
 package it.giuggi.iotremote.ifttt.structure;
 
+import android.content.res.Resources;
+import android.support.v4.util.Pair;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
 
@@ -83,23 +88,17 @@ public abstract class IFTTTEvent extends IFTTTComponent
 
         public static IFTTTEventType typeToEvent(String type)
         {
-            if(type.equalsIgnoreCase("ANY"))
+            IFTTTEventType toReturn = IFTTTEventType.UNKNOWN;
+            try
             {
-                return IFTTTEventType.ANY;
+                toReturn = IFTTTEventType.valueOf(type.toUpperCase());
             }
-            else if(type.equalsIgnoreCase("VALUE_CHANGED"))
+            catch(IllegalArgumentException ex)
             {
-                return IFTTTEventType.VALUE_CHANGED;
+                ex.printStackTrace();
             }
-            else if(type.equalsIgnoreCase("DISCONNECTED"))
-            {
-                return IFTTTEventType.DISCONNECTED;
-            }
-            else if(type.equalsIgnoreCase("CONNECTED"))
-            {
-                return IFTTTEventType.CONNECTED;
-            }
-            else return IFTTTEventType.ANY;
+
+            return toReturn;
         }
 
         public String[] getOldValues()
@@ -113,7 +112,25 @@ public abstract class IFTTTEvent extends IFTTTComponent
         }
     }
 
-    public enum IFTTTEventType { ANY, VALUE_CHANGED, DISCONNECTED, CONNECTED }
+    public enum IFTTTEventType {
+        ANY,
+        UNKNOWN,
+        DISCONNECTED,
+        CONNECTED,
+        VALUE_CHANGED }
+
+    public static ArrayList<Pair<String, String>> getListOfEvents(Resources resources)
+    {
+        String[] events = resources.getStringArray(R.array.events_localized);
+        ArrayList<Pair<String, String>> list = new ArrayList<>(5);
+        IFTTTEventType[] values = IFTTTEventType.values();
+
+        for(int i = 0; i < events.length; i++)
+        {
+            list.add(new Pair<>(values[i].name(), events[i]));
+        }
+        return list;
+    }
 
     /**
      * Applies this IFTTTEvent to given event string

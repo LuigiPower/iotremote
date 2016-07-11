@@ -51,8 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_below="@+id/node_name"
-            android:layout_alignLeft="@+id/node_name"
-            android:layout_alignStart="@+id/node_name"
             android:orientation="horizontal">
 
         </LinearLayout>

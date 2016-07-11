@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import it.giuggi.iotremote.GlobalBroadcastReceiver;
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
@@ -32,6 +33,12 @@ public class MyGcmListenerService extends GcmListenerService
 {
 
     private static final String TAG = "MyGcmListenerService";
+
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+    }
 
     /**
      * Called when message is received.
@@ -74,6 +81,7 @@ public class MyGcmListenerService extends GcmListenerService
         final ArrayList<IFTTTRule> finalRules = rules;
         final JSONObject finalJsonData = jsonData;
 
+        // Acquire the current context and apply the rules
         IFTTTCurrentSituation.acquireSnapshot(getBaseContext(), new IFTTTCurrentSituation.OnSnapshotReadyListener()
         {
             @Override
@@ -94,20 +102,10 @@ public class MyGcmListenerService extends GcmListenerService
             }
         });
 
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-        //sendNotification(message);
-        // [END_EXCLUDE]
+        //TODO check the event type first
+        Intent broadcast = new Intent(GlobalBroadcastReceiver.NODE_UPDATE);
+        broadcast.putExtra("data", jsonData.toString());
+        sendBroadcast(broadcast);
     }
 
     /**

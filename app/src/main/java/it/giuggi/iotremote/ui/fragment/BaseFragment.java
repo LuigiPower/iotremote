@@ -5,7 +5,13 @@ import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
 import it.giuggi.iotremote.INavigationController;
+import it.giuggi.iotremote.OnBroadcastEvent;
 
 /**
  * Created by Federico Giuggioloni on 15/03/16.
@@ -22,6 +28,23 @@ public abstract class BaseFragment extends Fragment
      * Gravity.RIGHT is the right part of the Master-Detail Flow (Content)
      */
     protected int gravity;
+
+    private static HashSet<OnBroadcastEvent> receivers = new HashSet<>();
+
+    public static void registerReceiver(OnBroadcastEvent receiver)
+    {
+        receivers.add(receiver);
+    }
+
+    public static void unregisterReceiver(OnBroadcastEvent receiver)
+    {
+        receivers.remove(receiver);
+    }
+
+    public static Collection<OnBroadcastEvent> getCurrentReceivers()
+    {
+        return receivers;
+    }
 
     @SuppressLint("RtlHardcoded")
     protected void putLeft()

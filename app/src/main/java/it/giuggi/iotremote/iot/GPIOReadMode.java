@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
+import it.giuggi.iotremote.R;
+
 /**
  * Created by Federico Giuggioloni on 05/07/16.
  * GPIOReadMode does the same stuff as GPIOMode, but disables
@@ -14,6 +16,7 @@ import org.json.JSONObject;
 public class GPIOReadMode extends GPIOMode
 {
     public static final String NAME = "gpio_read_mode";
+    public static final int LOCALIZED_STRING = R.string.mode_gpio_read;
 
     public GPIOReadMode()
     {
@@ -29,6 +32,12 @@ public class GPIOReadMode extends GPIOMode
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     @Override

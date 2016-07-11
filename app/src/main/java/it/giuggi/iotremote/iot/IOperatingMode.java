@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.iot;
 
+import android.content.res.Resources;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.ScrollView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
 
@@ -28,11 +32,68 @@ import it.giuggi.iotremote.R;
  */
 public abstract class IOperatingMode
 {
+    public class Parameters
+    {
+        /**
+         * Generic parameters
+         */
+        public static final String STATUS = "status";
+        /**********************************************************/
+
+        /**
+         * GPIO Modes parameters
+         */
+        public static final String GPIO = "gpio";
+        /**********************************************************/
+
+        /**
+         * Sensor Modes parameters
+         */
+        protected static final String ID = "id";
+        protected static final String CURRENT_VALUE = "current_value";
+        protected static final String TIME_MILLIS = "time_millis";
+        /**********************************************************/
+
+    }
+
     public static final String NAME = "operating_mode";
 
     protected IOTNode owner;
 
     private JSONObject parameters;
+
+    /**
+     * Gets a list of (parameter_value, parameter_name) to be used in any adapter (for example, spinners)
+     * @param resources resources from which to load the localized strings
+     * @return ArrayList of Pair(String, String), containing (parameter_value, parameter_name) pairs
+     */
+    public static ArrayList<Pair<String, String>> getParameterList(Resources resources)
+    {
+        ArrayList<Pair<String, String>> list = new ArrayList<>(10);
+        list.add(new Pair<>(Parameters.STATUS, resources.getString(R.string.parameter_status)));
+        list.add(new Pair<>(Parameters.GPIO, resources.getString(R.string.parameter_gpio)));
+        list.add(new Pair<>(Parameters.ID, resources.getString(R.string.parameter_id)));
+        list.add(new Pair<>(Parameters.CURRENT_VALUE, resources.getString(R.string.parameter_current_value)));
+        list.add(new Pair<>(Parameters.TIME_MILLIS, resources.getString(R.string.parameter_time_millis)));
+        return list;
+    }
+
+    /**
+     * Gets a list of (mode_value, mode_name) to be used in any adapter (for example, spinners)
+     * @param resources resources from which to load the localized strings
+     * @return ArrayList of Pair(String, String), containing (mode_value, mode_name) pairs
+     */
+    public static ArrayList<Pair<String, String>> getModeValueMatching(Resources resources)
+    {
+        ArrayList<Pair<String, String>> list = new ArrayList<>(10);
+        list.add(new Pair<>(BasicMode.NAME, resources.getString(BasicMode.LOCALIZED_STRING)));
+        list.add(new Pair<>(EmptyMode.NAME, resources.getString(EmptyMode.LOCALIZED_STRING)));
+        list.add(new Pair<>(GPIOReadMode.NAME, resources.getString(GPIOReadMode.LOCALIZED_STRING)));
+        list.add(new Pair<>(GPIOMode.NAME, resources.getString(GPIOMode.LOCALIZED_STRING)));
+        list.add(new Pair<>(SensorMode.NAME, resources.getString(SensorMode.LOCALIZED_STRING)));
+        list.add(new Pair<>(UnknownMode.NAME, resources.getString(UnknownMode.LOCALIZED_STRING)));
+        return list;
+    }
 
     /**
      * Standard constructor without params
@@ -78,12 +139,14 @@ public abstract class IOperatingMode
 
     public abstract String getName();
 
+    public abstract int getLocalizedNameId();
+
     public View loadPreview(LayoutInflater inflater, ViewGroup container)
     {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.riga_iot_mode, container, false);
         Toolbar modeToolbar = (Toolbar) v.findViewById(R.id.mode_toolbar);
 
-        modeToolbar.setTitle(getName());
+        modeToolbar.setTitle(getLocalizedNameId());
         modeToolbar.setBackgroundResource(getColorId());
         return v;
     }
@@ -96,11 +159,16 @@ public abstract class IOperatingMode
         ScrollView modeScrollbar = (ScrollView) v.findViewById(R.id.mode_scroll);
 
         modeScrollbar.setVerticalScrollBarEnabled(false);
-        modeToolbar.setTitle(getName());
+        modeToolbar.setTitle(getLocalizedNameId());
         modeToolbar.setBackgroundResource(getColorId());
         View toAdd = loadDashboardLayout(inflater, modeDetails);
         modeDetails.addView(toAdd);
         return v;
+    }
+
+    public static Pair<String, String> getModeName(Resources resources)
+    {
+        return new Pair<>("none", "none");
     }
 
     public abstract View loadDashboardLayout(LayoutInflater inflater, ViewGroup container);

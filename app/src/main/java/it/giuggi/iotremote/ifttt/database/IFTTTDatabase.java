@@ -64,7 +64,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     /**
      * Debug method to check all elements in database
      */
-    public void checkDatabase()
+    public synchronized void checkDatabase()
     {
         Log.i(DATABASE_NAME, "CHECKING DATABASE...");
         SQLiteDatabase sql = getReadableDatabase();
@@ -109,7 +109,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param ruleid ID of the rule to find
      * @return an IFTTTRule instance that corresponds to the given ID
      */
-    public IFTTTRule findRuleById(long ruleid) throws ClassNotFoundException
+    public synchronized IFTTTRule findRuleById(long ruleid) throws ClassNotFoundException
     {
         SQLiteDatabase sql = getReadableDatabase();
 
@@ -152,7 +152,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     /**
      * Get a list of all saved rules
      */
-    public List<IFTTTRule> getRuleList() throws ClassNotFoundException
+    public synchronized List<IFTTTRule> getRuleList() throws ClassNotFoundException
     {
         SQLiteDatabase sql = getReadableDatabase();
 
@@ -198,7 +198,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @return List of components
      * @throws ClassNotFoundException
      */
-    public List<? extends IFTTTComponent> getComponentsOfType(long ruleid, String type, @Nullable SQLiteDatabase sql) throws ClassNotFoundException
+    public synchronized List<? extends IFTTTComponent> getComponentsOfType(long ruleid, String type, @Nullable SQLiteDatabase sql) throws ClassNotFoundException
     {
         boolean needToClose = false;
         if(sql == null)
@@ -251,7 +251,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param clazz class of the component, to allow reinstantiation through Java Reflection
      * @return component id
      */
-    public long addComponent(String gson, String type, Class<?> clazz)
+    public synchronized long addComponent(String gson, String type, Class<?> clazz)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Adding component " + gson + " class: " + clazz.getName());
@@ -274,7 +274,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param clazz class of the component, to allow reinstantiation through Java Reflection
      * @return updated components count (should always be 1 if successful, 0 otherwise)
      */
-    public int updateComponent(long componentid, String gson, String type, Class<?> clazz)
+    public synchronized int updateComponent(long componentid, String gson, String type, Class<?> clazz)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Updating component " + componentid + " with " + gson + " and " + clazz.getName());
@@ -297,7 +297,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param componentid component to delete
      * @return number of rows deleted
      */
-    public int deleteComponent(long componentid)
+    public synchronized int deleteComponent(long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Deleting component " + componentid);
@@ -316,7 +316,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param ruleid rule to link
      * @param componentid component to link
      */
-    public void addLink(long ruleid, long componentid)
+    public synchronized void addLink(long ruleid, long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Adding link " + ruleid + " : " + componentid);
@@ -334,7 +334,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param componentid component to unlink
      * @return number of links deleted, should always be 1 if successful, 0 otherwise
      */
-    public int deleteLink(long ruleid, long componentid)
+    public synchronized int deleteLink(long ruleid, long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Deleting link " + ruleid + " : " + componentid);
@@ -354,7 +354,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param name name of the rule
      * @return rule id
      */
-    public long addRule(String name)
+    public synchronized long addRule(String name)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Adding rule " + name);
@@ -373,7 +373,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param name new name of the rule
      * @return number of updated rules (should be always 1 if succesful, 0 otherwise)
      */
-    public int updateRule(long ruleid, String name)
+    public synchronized int updateRule(long ruleid, String name)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Updating rule " + ruleid);
@@ -394,7 +394,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param ruleid rule to delete
      * @return number of rows deleted
      */
-    public int deleteRule(long ruleid)
+    public synchronized int deleteRule(long ruleid)
     {
         SQLiteDatabase sql = getWritableDatabase();
         Log.i(DATABASE_NAME, "Deleting rule " + ruleid);

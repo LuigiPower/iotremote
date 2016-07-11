@@ -11,16 +11,33 @@
     <style name="TitleText" parent="@style/TextAppearance.AppCompat.Headline">
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
         <item name="android:layout_marginTop">16dp</item>
     </style>
 
     <style name="StandardText" parent="@style/TextAppearance.AppCompat.Body1">
         <item name="android:textSize">16sp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="StandardText.NoMarginsRight" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+    </style>
+
+    <style name="StandardText.NoMarginsRight.FixedWidth" parent="@style/StandardText.NoMarginsRight">
+        <item name="android:layout_width">64dp</item>
+    </style>
+
+    <style name="StandardEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_width">180dp</item>
     </style>
 
     <style name="StandardText.Drawer" parent="StandardText">

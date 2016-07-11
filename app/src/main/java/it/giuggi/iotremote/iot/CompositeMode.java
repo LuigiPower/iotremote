@@ -23,6 +23,7 @@ import it.giuggi.iotremote.ui.adapter.IOperatingModeAdapter;
 public class CompositeMode extends IOperatingMode
 {
     public static final String NAME = "composite_mode";
+    public static final int LOCALIZED_STRING = R.string.mode_composite;
 
     private ArrayList<IOperatingMode> modeList = new ArrayList<>(3);
     private IOperatingModeAdapter adapter;
@@ -83,6 +84,12 @@ public class CompositeMode extends IOperatingMode
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     @Override

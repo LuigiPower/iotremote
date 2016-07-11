@@ -92,8 +92,6 @@ public class DummyComponent extends IFTTTComponent
     @Override
     protected void populateEditView(View view)
     {
-        //TODO interface to create new Component
-
         final String[] data;
         final String[] values;
         final String packagename;

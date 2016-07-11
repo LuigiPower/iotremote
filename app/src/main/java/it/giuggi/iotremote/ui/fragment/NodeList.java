@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import it.giuggi.iotremote.OnBroadcastEvent;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.TaskHandler;
 import it.giuggi.iotremote.ui.adapter.IOTNodeAdapter;
@@ -28,7 +29,7 @@ import it.giuggi.iotremote.net.WebRequestTask;
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
+public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, OnBroadcastEvent
 {
 
     public static final String TAG = "NODE_LIST";
@@ -79,6 +80,7 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     public void onResume()
     {
         super.onResume();
+        registerReceiver(this);
         swipeRefreshLayout.setRefreshing(true);
         loadData();
     }
@@ -87,6 +89,7 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     public void onPause()
     {
         super.onPause();
+        unregisterReceiver(this);
     }
 
     public void loadData()
@@ -157,5 +160,12 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     public void onRefresh()
     {
         loadData();
+    }
+
+    @Override
+    public void nodeUpdate(JSONObject newValues)
+    {
+        Log.d("Node update", "NODE UPDATE HAPPENED");
+        onRefresh();
     }
 }

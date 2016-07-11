@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <Spinner android:id="@+id/parameter_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/StandardText"/>
+
+    <TextView android:id="@+id/from"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/parameter_from"
+        style="@style/StandardText.NoMarginsRight.FixedWidth"
+        android:text="@string/from"/>
+
+    <EditText android:id="@+id/parameter_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/parameter_name"
+        android:layout_toRightOf="@+id/from"
+        android:layout_toEndOf="@+id/from"
+        android:inputType="textNoSuggestions"
+        style="@style/StandardEditText"/>
+
+</RelativeLayout>

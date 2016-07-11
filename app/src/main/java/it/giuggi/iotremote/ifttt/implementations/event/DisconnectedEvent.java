@@ -1,5 +1,8 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import android.view.View;
+import android.view.ViewGroup;
+
 import it.giuggi.iotremote.R;
 
 /**
@@ -18,6 +21,30 @@ public class DisconnectedEvent extends TypeEvent
     protected int getComponentNameResourceId()
     {
         return R.string.disconnected_event;
+    }
+
+    @Override
+    public int getLayoutResourceId()
+    {
+        return R.layout.detail_empty;
+    }
+
+    @Override
+    public int getEditLayoutResourceId()
+    {
+        return R.layout.detail_empty;
+    }
+
+    @Override
+    public View loadView(ViewGroup parent)
+    {
+        return new View(parent.getContext());
+    }
+
+    @Override
+    public View loadEditView(ViewGroup parent)
+    {
+        return new View(parent.getContext());
     }
 
     @Override

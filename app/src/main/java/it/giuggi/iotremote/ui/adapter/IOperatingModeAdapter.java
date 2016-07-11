@@ -55,7 +55,7 @@ public class IOperatingModeAdapter extends RecyclerView.Adapter<IOperatingModeAd
 
         customViewHolder.modeContainer.addView(mode.loadDashboardLayout(inflater, customViewHolder.modeContainer));
 
-        customViewHolder.modeToolbar.setTitle(mode.getName());
+        customViewHolder.modeToolbar.setTitle(mode.getLocalizedNameId());
         customViewHolder.modeToolbar.setBackgroundResource(mode.getColorId());
     }
 

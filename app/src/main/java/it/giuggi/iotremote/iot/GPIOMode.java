@@ -22,15 +22,23 @@ import it.giuggi.iotremote.net.WebRequestTask;
 public class GPIOMode extends IOperatingMode
 {
     private static final String GPIO_GROUP = "gpio";
+    public static final int LOCALIZED_STRING = R.string.mode_gpio;
 
     public static final String NAME = "gpio_mode";
 
     protected CheckBox gpioStatus = null;
     protected int gpio = 0;
+    protected int status = 0;
 
     public GPIOMode()
     {
         super();
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     public GPIOMode(JSONObject params)
@@ -39,7 +47,8 @@ public class GPIOMode extends IOperatingMode
 
         try
         {
-            gpio = params.getInt("gpio");
+            gpio = params.getInt(Parameters.GPIO);
+            status = params.getInt(Parameters.STATUS);
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -94,7 +103,7 @@ public class GPIOMode extends IOperatingMode
     private void loadCheckBox(CheckBox v)
     {
         v.setOnCheckedChangeListener(null);
-        v.setChecked(gpio > 0);
+        v.setChecked(status > 0);
         v.setOnCheckedChangeListener(onStatusChange);
         v.setText("GPIO " + gpio);
     }
@@ -102,7 +111,7 @@ public class GPIOMode extends IOperatingMode
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
     {
-        this.gpio = newParameters.getInt("gpio");
+        this.gpio = newParameters.getInt(Parameters.GPIO);
         loadCheckBox(gpioStatus);
     }
 

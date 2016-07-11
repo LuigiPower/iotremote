@@ -68,7 +68,7 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
             if (savedRule != -1L)
             {
                 //TODO load data from database...
-                IFTTTDatabase database = new IFTTTDatabase(getContext());
+                IFTTTDatabase database = IFTTTDatabase.getHelper(getContext());
                 try
                 {
                     rule = database.findRuleById(savedRule);

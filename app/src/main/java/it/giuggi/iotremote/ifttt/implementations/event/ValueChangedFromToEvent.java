@@ -1,5 +1,12 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import it.giuggi.iotremote.R;
 
 /**
@@ -13,7 +20,7 @@ public class ValueChangedFromToEvent extends ValueChangedFromEvent
 
     public ValueChangedFromToEvent()
     {
-        this("LOW", "HIGH");
+        this("0", "1");
     }
 
     public ValueChangedFromToEvent(String valueFrom, String valueTo)
@@ -23,9 +30,59 @@ public class ValueChangedFromToEvent extends ValueChangedFromEvent
     }
 
     @Override
+    public int getLayoutResourceId()
+    {
+        return R.layout.detail_type_value_changed_from_to;
+    }
+
+    @Override
+    public int getEditLayoutResourceId()
+    {
+        return R.layout.edit_detail_type_value_changed_from_to;
+    }
+
+    @Override
+    protected void populateView(View view)
+    {
+        super.populateView(view);
+
+        TextView parameterFrom = (TextView) view.findViewById(R.id.parameter_to);
+        parameterFrom.setText(valueTo);
+    }
+
+    @Override
+    protected void populateEditView(View view)
+    {
+        super.populateEditView(view);
+
+        EditText parameterFrom = (EditText) view.findViewById(R.id.parameter_to);
+        parameterFrom.setText(valueTo);
+        parameterFrom.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                valueTo = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+
+            }
+        });
+    }
+
+    @Override
     public boolean apply(Event event)
     {
-        boolean ok = true;
+        boolean ok = super.apply(event);
 
         for(String value : event.getNewValues())
         {

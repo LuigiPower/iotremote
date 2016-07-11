@@ -17,6 +17,7 @@ import it.giuggi.iotremote.R;
 public class EmptyMode extends IOperatingMode
 {
     public static final String NAME = "empty_mode";
+    public static final int LOCALIZED_STRING = R.string.mode_empty;
 
     public EmptyMode()
     {
@@ -32,6 +33,12 @@ public class EmptyMode extends IOperatingMode
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     @Override

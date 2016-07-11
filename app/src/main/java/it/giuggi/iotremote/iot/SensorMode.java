@@ -32,14 +32,11 @@ import it.giuggi.iotremote.net.WebRequestTask;
 public class SensorMode extends IOperatingMode
 {
     public static final String NAME = "sensor_mode";
+    public static final int LOCALIZED_STRING = R.string.mode_sensor;
 
     private static final long UPDATE_TIME = 5000;
     private boolean visible = true;
     private boolean updating = false;
-
-    private static final String ID = "id";
-    private static final String CURRENT_VALUE = "current_value";
-    private static final String TIME_MILLIS = "time_millis";
 
     private String id;
     private ArrayList<Entry> entries;
@@ -100,6 +97,12 @@ public class SensorMode extends IOperatingMode
     }
 
     @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
+    }
+
+    @Override
     public View loadDashboard(LayoutInflater inflater, ViewGroup container)
     {
         View v = super.loadDashboard(inflater, container);
@@ -118,7 +121,7 @@ public class SensorMode extends IOperatingMode
 
         if(!updating)
         {
-            TaskHandler.getInstance().runPeriodically(realTimeUpdate, UPDATE_TIME);
+            //TaskHandler.getInstance().runPeriodically(realTimeUpdate, UPDATE_TIME);
             updating = true;
         }
         return v;
@@ -184,9 +187,9 @@ public class SensorMode extends IOperatingMode
         }8
         */
 
-        this.id = newParameters.getString(ID);
-        float value = (float) newParameters.getDouble(CURRENT_VALUE);
-        long millis = newParameters.getLong(TIME_MILLIS)/1000;
+        this.id = newParameters.getString(IOperatingMode.Parameters.ID);
+        float value = (float) newParameters.getDouble(IOperatingMode.Parameters.CURRENT_VALUE);
+        long millis = newParameters.getLong(IOperatingMode.Parameters.TIME_MILLIS)/1000;
 
         Entry data = new Entry(entries.size(), value);
         //entries.add(data);

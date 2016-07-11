@@ -1,5 +1,12 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -16,13 +23,63 @@ public class ValueChangedFromEvent extends ValueChangedEvent
 
     public ValueChangedFromEvent()
     {
-        this("HIGH");
+        this("1");
     }
 
     public ValueChangedFromEvent(String valueFrom)
     {
         super();
         this.valueFrom = valueFrom;
+    }
+
+    @Override
+    public int getLayoutResourceId()
+    {
+        return R.layout.detail_type_value_changed_from;
+    }
+
+    @Override
+    public int getEditLayoutResourceId()
+    {
+        return R.layout.edit_detail_type_value_changed_from;
+    }
+
+    @Override
+    protected void populateView(View view)
+    {
+        super.populateView(view);
+
+        TextView parameterFrom = (TextView) view.findViewById(R.id.parameter_from);
+        parameterFrom.setText(valueFrom);
+    }
+
+    @Override
+    protected void populateEditView(View view)
+    {
+        super.populateEditView(view);
+
+        EditText parameterFrom = (EditText) view.findViewById(R.id.parameter_from);
+        parameterFrom.setText(valueFrom);
+        parameterFrom.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                valueFrom = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+
+            }
+        });
     }
 
     @Override

@@ -1,11 +1,18 @@
 package it.giuggi.iotremote.ifttt.implementations.event;
 
+import android.support.v4.util.Pair;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
+import it.giuggi.iotremote.ifttt.ui.adapter.TextSpinnerAdapter;
+import it.giuggi.iotremote.iot.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.
@@ -52,17 +59,53 @@ public class TypeEvent extends IFTTTEvent
     @Override
     protected void populateView(View view)
     {
-        //TODO better layout
         TextView type = (TextView) view.findViewById(R.id.event_type);
-        type.setText(this.type.toString());
+        ArrayList<Pair<String, String>> list = IFTTTEvent.getListOfEvents(view.getResources());
+
+        for(Pair<String, String> pair : list)
+        {
+            if(pair.first.equalsIgnoreCase(this.type.name()))
+            {
+                type.setText(pair.second);
+                break;
+            }
+        }
     }
 
     @Override
-    protected void populateEditView(View view)
+    @SuppressWarnings("unchecked")
+    protected void populateEditView(final View view)
     {
-        //TODO better layout
-        EditText type = (EditText) view.findViewById(R.id.event_type);
-        type.setText(this.type.toString());
+        Spinner event = (Spinner) view.findViewById(R.id.event_type);
+        ArrayList<Pair<String, String>> list = IFTTTEvent.getListOfEvents(view.getResources());
+
+        TextSpinnerAdapter adapter = new TextSpinnerAdapter(view.getContext(), R.layout.autocompletetextentry, list);
+        event.setAdapter(adapter);
+
+        for(int i = 0; i < list.size(); i++)
+        {
+            if(list.get(i).first.equalsIgnoreCase(type.name()))
+            {
+                event.setSelection(i);
+                break;
+            }
+        }
+
+        event.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                Pair<String, String> selected = (Pair<String, String>) parent.getItemAtPosition(position);
+                type = IFTTTEvent.Event.typeToEvent(selected.first);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
     }
 
     @Override

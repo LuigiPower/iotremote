@@ -293,7 +293,7 @@ public class IFTTTRule extends Databasable
 
         long componentid = component.getComponentId();
 
-        IFTTTDatabase database = new IFTTTDatabase(context);
+        IFTTTDatabase database = IFTTTDatabase.getHelper(context);
         database.addLink(ruleid, componentid);
     }
 

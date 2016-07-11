@@ -16,6 +16,9 @@ import it.giuggi.iotremote.R;
  */
 public class UnknownMode extends IOperatingMode
 {
+    public static final String NAME = "unknown";
+    public static final int LOCALIZED_STRING = R.string.mode_unknown;
+
     public UnknownMode()
     {
         super();
@@ -30,6 +33,12 @@ public class UnknownMode extends IOperatingMode
     public String getName()
     {
         return "unknown";
+    }
+
+    @Override
+    public int getLocalizedNameId()
+    {
+        return LOCALIZED_STRING;
     }
 
     @Override
