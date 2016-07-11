@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,7 +112,43 @@ public class GPIOMode extends IOperatingMode
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
     {
-        this.gpio = newParameters.getInt(Parameters.GPIO);
+        JSONArray array;
+        try
+        {
+            this.gpio = newParameters.getInt(Parameters.GPIO);
+        }
+        catch(JSONException e)
+        {
+            JSONObject node = newParameters.getJSONObject(Parameters.NODE);
+            JSONObject mode = node.getJSONObject(Parameters.MODE);
+            JSONObject params = mode.getJSONObject(Parameters.PARAMS);
+            int pin = params.getInt(Parameters.GPIO);
+            String node_name = node.getString(Parameters.NAME);
+            String mode_name = mode.getString(Parameters.NAME);
+
+            if(!mode_name.equalsIgnoreCase(NAME) || !node_name.equalsIgnoreCase(this.owner.name) || gpio != pin)
+            {
+                return; //This data is not for me; throw it away
+            }
+
+            JSONObject object = newParameters.getJSONObject(Parameters.EVENT);
+            JSONArray arr = object.getJSONArray(Parameters.NEW_VALUES);
+            JSONArray parameters = object.getJSONArray(Parameters.PARAMS);
+
+            for(int i = 0; i < arr.length(); i++)
+            {
+                String par = parameters.getString(i);
+                if(par.equalsIgnoreCase(Parameters.GPIO))
+                {
+                    this.gpio = arr.getInt(i);
+                }
+                else if(par.equalsIgnoreCase(Parameters.STATUS))
+                {
+                    this.status = arr.getInt(i);
+                }
+            }
+        }
+
         loadCheckBox(gpioStatus);
     }
 

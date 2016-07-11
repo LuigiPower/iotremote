@@ -51,12 +51,28 @@ public abstract class IOperatingMode
          */
         protected static final String ID = "id";
         protected static final String CURRENT_VALUE = "current_value";
+        protected static final String VALUE_HISTORY = "value_history";
         protected static final String TIME_MILLIS = "time_millis";
         /**********************************************************/
 
+        /**
+         * Value Update Parameters
+         */
+        public static final String NODE = "node";
+        public static final String MODE = "mode";
+        public static final String IP = "ip";
+        public static final String NAME = "name";
+        public static final String EVENT = "event";
+        public static final String NEW_VALUES = "newvalues";
+        public static final String OLD_VALUES = "oldvalues";
+        public static final String MODE_NAME = "mode_name";
+        public static final String TYPE = "type";
+        public static final String PARAMS = "params";
+        /**********************************************************/
     }
 
     public static final String NAME = "operating_mode";
+    public static final String DASHBOARD_VIEW = "DASHBOARD_VIEW";
 
     protected IOTNode owner;
 
@@ -73,7 +89,8 @@ public abstract class IOperatingMode
         list.add(new Pair<>(Parameters.STATUS, resources.getString(R.string.parameter_status)));
         list.add(new Pair<>(Parameters.GPIO, resources.getString(R.string.parameter_gpio)));
         list.add(new Pair<>(Parameters.ID, resources.getString(R.string.parameter_id)));
-        list.add(new Pair<>(Parameters.CURRENT_VALUE, resources.getString(R.string.parameter_current_value)));
+        list.add(new Pair<>(Parameters.VALUE_HISTORY, resources.getString(R.string.parameter_current_value)));  //TODO change this or the other
+        //list.add(new Pair<>(Parameters.CURRENT_VALUE, resources.getString(R.string.parameter_current_value))); //TODO change this or the other
         list.add(new Pair<>(Parameters.TIME_MILLIS, resources.getString(R.string.parameter_time_millis)));
         return list;
     }
@@ -162,6 +179,7 @@ public abstract class IOperatingMode
         modeToolbar.setTitle(getLocalizedNameId());
         modeToolbar.setBackgroundResource(getColorId());
         View toAdd = loadDashboardLayout(inflater, modeDetails);
+        toAdd.setTag(DASHBOARD_VIEW);
         modeDetails.addView(toAdd);
         return v;
     }

@@ -491,7 +491,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(activityRecognitionApi, getRecognitionIntent());
         unregisterActivityRecognition();
 
-        situation.currentActivities = updatedActivities;
+        situation.currentActivities = updatedActivities != null ? updatedActivities : new ArrayList<DetectedActivity>();
         situation.checkReady();
     }
 
