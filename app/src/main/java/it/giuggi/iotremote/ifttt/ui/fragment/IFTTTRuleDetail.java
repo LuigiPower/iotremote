@@ -47,7 +47,6 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
     @Override
     public BaseFragment createFillin()
     {
-        Log.i("creaiodnaoin", "FILLIN CREATION FROM IFTTTRULEDETAIL");
         return IFTTTListFragment.newInstance();
     }
 

@@ -124,7 +124,6 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         @Override
         public void onClick(View v)
         {
-            Log.i("RULEADAPTER", "RULEADAPTER ONCLICK");
             IFTTTRule rule = (IFTTTRule) v.getTag(R.id.complete_rule);
             int position = (int) v.getTag(R.id.location_name);
             controller.go(IFTTTRuleDetail.newInstance(rule, position));

@@ -26,46 +26,9 @@ public class AutoCompleteAdapter extends ArrayAdapter<AutoCompleteEntry>
     private ArrayList<AutoCompleteEntry> data;
     private int resource;
 
-    public AutoCompleteAdapter(Context context, int resource)
-    {
-        super(context, resource);
-        this.resource = resource;
-        this.data = null;
-    }
-
-    public AutoCompleteAdapter(Context context, int resource, int textViewResourceId)
-    {
-        super(context, resource, textViewResourceId);
-        this.resource = resource;
-        this.data = null;
-    }
-
-    public AutoCompleteAdapter(Context context, int resource, AutoCompleteEntry[] objects)
-    {
-        super(context, resource, objects);
-        this.resource = resource;
-        this.data = new ArrayList<AutoCompleteEntry>(objects.length);
-        Collections.addAll(this.data, objects);
-    }
-
-    public AutoCompleteAdapter(Context context, int resource, int textViewResourceId, AutoCompleteEntry[] objects)
-    {
-        super(context, resource, textViewResourceId, objects);
-        this.resource = resource;
-        this.data = new ArrayList<AutoCompleteEntry>(objects.length);
-        Collections.addAll(this.data, objects);
-    }
-
     public AutoCompleteAdapter(Context context, int resource, ArrayList<AutoCompleteEntry> objects)
     {
         super(context, resource, objects);
-        this.resource = resource;
-        this.data = objects;
-    }
-
-    public AutoCompleteAdapter(Context context, int resource, int textViewResourceId, ArrayList<AutoCompleteEntry> objects)
-    {
-        super(context, resource, textViewResourceId, objects);
         this.resource = resource;
         this.data = objects;
     }

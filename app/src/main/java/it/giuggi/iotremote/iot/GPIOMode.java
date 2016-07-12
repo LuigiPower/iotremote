@@ -65,7 +65,6 @@ public class GPIOMode extends IOperatingMode
         public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
         {
             JSONObject result = (JSONObject) ris;
-            Log.i("GPIOMode Response", "Result is " + result);
         }
     };
 

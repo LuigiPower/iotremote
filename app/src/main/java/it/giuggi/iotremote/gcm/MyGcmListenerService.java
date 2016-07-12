@@ -87,8 +87,6 @@ public class MyGcmListenerService extends GcmListenerService
             @Override
             public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
             {
-                Log.i(TAG, "Starting rule check with " + situation.toString());
-
                 for(IFTTTRule rule : finalRules)
                 {
                     try

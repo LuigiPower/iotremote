@@ -26,7 +26,6 @@ public class GlobalBroadcastReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent)
     {
         String action = intent.getAction();
-        Log.d("onReceive", "RECEIVED A BROADCAST " + action);
 
         if (NODE_UPDATE.equalsIgnoreCase(action))
         {
@@ -42,8 +41,6 @@ public class GlobalBroadcastReceiver extends BroadcastReceiver
 
                 jsonData.put("node", new JSONObject(nodestring));
                 jsonData.put("event", new JSONObject(eventstring));
-
-                Log.d("GlobalBroadcast", "Data from Broadcast is " + jsonData.toString(4));
 
                 Collection<OnBroadcastEvent> list = BaseFragment.getCurrentReceivers();
                 for(OnBroadcastEvent event : list)

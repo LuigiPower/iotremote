@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.iot.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
@@ -40,7 +41,10 @@ public abstract class IFTTTEvent extends IFTTTComponent
     /**
      *          "event": {
      *              "type": "VALUE_CHANGED",            //One of the event types
-     *              "mode_name": "gpio_read_mode",      //Mode that made this event happen TODO consider changing this into a copy of said mode taken from the node part
+     *              "mode": {
+     *                  "name": "gpio_read_mode",      //Mode that made this event happen (copy of the mode)
+     *                  "status": 1
+     *               },
      *              "params": ["status"],           //Parameters that made this event happen
      *              "oldvalues": [0],                   //Old values of said parameters
      *              "newvalues": [1],                   //New values of said parameters
@@ -54,26 +58,22 @@ public abstract class IFTTTEvent extends IFTTTComponent
         private String[] oldvalues;
         private String[] newvalues;
 
-        public String toLogString()
-        {
-            return toString() + " Type: " + this.type + " mode: " + this.mode_name + " parameters: " + this.parameters + " oldvalues: " + this.oldvalues + " newvalues: " + this.newvalues;
-        }
-
         public Event(JSONObject obj) throws JSONException
         {
-            String type = obj.getString("type");
+            String type = obj.getString(IOperatingMode.Parameters.TYPE);
             this.type = typeToEvent(type);
-            this.mode_name = obj.getString("mode_name");
+            JSONObject target_mode = obj.getJSONObject(IOperatingMode.Parameters.MODE);
+            this.mode_name = target_mode.getString(IOperatingMode.Parameters.NAME);
 
-            JSONArray params = obj.getJSONArray("params");
+            JSONArray params = obj.getJSONArray(IOperatingMode.Parameters.PARAMS);
             this.parameters = new String[params.length()];
             for(int i = 0; i < params.length(); i++)
             {
                 this.parameters[i] = params.getString(i);
             }
 
-            JSONArray oldvalues = obj.getJSONArray("oldvalues");
-            JSONArray newvalues = obj.getJSONArray("newvalues");
+            JSONArray oldvalues = obj.getJSONArray(IOperatingMode.Parameters.OLD_VALUES);
+            JSONArray newvalues = obj.getJSONArray(IOperatingMode.Parameters.NEW_VALUES);
 
             this.oldvalues = new String[oldvalues.length()];
             this.newvalues = new String[newvalues.length()];

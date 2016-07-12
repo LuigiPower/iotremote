@@ -1,9 +1,7 @@
 package it.giuggi.iotremote.iot;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.TaskHandler;
-import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
  * Created by Federico Giuggioloni on 05/07/16.
@@ -43,7 +39,6 @@ public class SensorMode extends IOperatingMode
     private ArrayList<Long> times;
     private LineChart chart;
     private LineData lineData;
-    private boolean chartInitialized = false;
 
     public SensorMode(JSONObject parameters)
     {
@@ -139,7 +134,7 @@ public class SensorMode extends IOperatingMode
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
     {
-        JSONArray array;
+        JSONArray array = null;
         try
         {
             array = newParameters.getJSONArray(Parameters.VALUE_HISTORY);
@@ -148,59 +143,47 @@ public class SensorMode extends IOperatingMode
         catch(JSONException e)
         {
             JSONObject node = newParameters.getJSONObject(Parameters.NODE);
-            JSONObject mode = node.getJSONObject(Parameters.MODE);
-            JSONObject params = mode.getJSONObject(Parameters.PARAMS);
-            JSONObject object = newParameters.getJSONObject(Parameters.EVENT);
-            JSONArray arr = object.getJSONArray(Parameters.NEW_VALUES);
-            String id = params.getString(Parameters.ID); //TODO need the full mode inside the event, to avoid navigating a compositemode tree
+            JSONObject event = newParameters.getJSONObject(Parameters.EVENT);
+            JSONArray arr = event.getJSONArray(Parameters.NEW_VALUES);
+            JSONArray changed_params = event.getJSONArray(Parameters.PARAMS);
+            JSONObject target_mode = event.getJSONObject(Parameters.MODE);
+            JSONObject params = target_mode.getJSONObject(Parameters.PARAMS);
 
-            String node_name = object.getString(Parameters.MODE_NAME);
-            String mode_name = mode.getString(Parameters.NAME);
+            String node_name = node.getString(Parameters.NAME);
+            String mode_name = target_mode.getString(Parameters.NAME);
+            String id = params.getString(Parameters.ID);
 
-            Log.i("SensorMode", "SensorMode Checking incoming data: " + mode_name + " " + node_name + " " + this.owner.name + " and " + id + " " + this.id);
-            if(!node_name.equalsIgnoreCase(this.owner.name) || !id.equalsIgnoreCase(this.id))
+            if(!mode_name.equalsIgnoreCase(NAME) || !node_name.equalsIgnoreCase(this.owner.name) || !id.equalsIgnoreCase(this.id))
             {
                 return; //This data is not for me; throw it away
             }
 
-            array = arr.getJSONArray(0);
+            for(int i = 0; i < arr.length(); i++)
+            {
+                if(changed_params.getString(i).equalsIgnoreCase(Parameters.VALUE_HISTORY))
+                {
+                    array = arr.getJSONArray(i);
+                }
+            }
+
+            if(array == null) return; //TODO check for other changes (for example descriptions...)
         }
 
         entries.clear();
         times.clear();
         for(int i = 0; i < array.length(); i++) // expect the values to be in order
         {
-            float value = (float) array.getDouble(i);
-            //long millis = obj.getLong("timemillis");
+            JSONObject fullvalue = array.getJSONObject(i);
+            float value = (float) fullvalue.getDouble(Parameters.CURRENT_VALUE);
+            long millis = fullvalue.getLong(Parameters.TIME_MILLIS);
             Entry data = new Entry(i, value);
             entries.add(data);
-            times.add(System.currentTimeMillis());
+            times.add(millis);
         }
 
         if(chart != null)
         {
             loadChart(chart);
         }
-
-        /*
-        this.id = newParameters.getString(IOperatingMode.Parameters.ID);
-        float value = (float) newParameters.getDouble(IOperatingMode.Parameters.CURRENT_VALUE);
-        long millis = newParameters.getLong(IOperatingMode.Parameters.TIME_MILLIS)/1000;
-
-        Entry data = new Entry(entries.size(), value);
-        //entries.add(data);
-
-        if(!chartInitialized && chart != null)
-        {
-            loadChart(chart);
-        }
-        else if(chart != null)
-        {
-            lineData.addEntry(data, 0);
-            lineData.notifyDataChanged();
-            chart.notifyDataSetChanged();
-            chart.invalidate();
-        }
-        */
     }
 }

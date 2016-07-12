@@ -39,11 +39,13 @@ public class ActivityDetectionIntentService extends IntentService
         ArrayList<DetectedActivity> detectedActivities = (ArrayList<DetectedActivity>) result.getProbableActivities();
 
         // Log each activity.
+        /*
         Log.i(TAG, "activities detected " + detectedActivities);
         for (DetectedActivity da: detectedActivities)
         {
             Log.i(TAG, da.getType() + " " + da.getConfidence() + "%");
         }
+        */
 
         // Broadcast the list of detected activities.
         localIntent.putExtra(ACTIVITY_EXTRA, detectedActivities);

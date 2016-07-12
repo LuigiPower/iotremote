@@ -66,7 +66,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      */
     public synchronized void checkDatabase()
     {
-        Log.i(DATABASE_NAME, "CHECKING DATABASE...");
         SQLiteDatabase sql = getReadableDatabase();
 
         Cursor c1 = sql.rawQuery("SELECT * FROM " + IFTTTContract.IFTTTRuleComponentEntry.TABLE_NAME, null);
@@ -254,7 +253,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized long addComponent(String gson, String type, Class<?> clazz)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Adding component " + gson + " class: " + clazz.getName());
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTRuleComponentEntry.COLUMN_NAME_GSON, gson);
@@ -277,7 +275,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized int updateComponent(long componentid, String gson, String type, Class<?> clazz)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Updating component " + componentid + " with " + gson + " and " + clazz.getName());
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTRuleComponentEntry.COLUMN_NAME_GSON, gson);
@@ -300,7 +297,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized int deleteComponent(long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Deleting component " + componentid);
 
         ContentValues values = new ContentValues();
         int number_deleted = sql.delete(IFTTTContract.IFTTTRuleComponentEntry.TABLE_NAME,
@@ -319,7 +315,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized void addLink(long ruleid, long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Adding link " + ruleid + " : " + componentid);
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTComponentLinkEntry.COLUMN_NAME_RULE_ID, ruleid);
@@ -337,7 +332,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized int deleteLink(long ruleid, long componentid)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Deleting link " + ruleid + " : " + componentid);
 
         ContentValues values = new ContentValues();
         int number_deleted = sql.delete(IFTTTContract.IFTTTComponentLinkEntry.TABLE_NAME,
@@ -357,7 +351,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized long addRule(String name)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Adding rule " + name);
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME, name);
@@ -376,7 +369,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized int updateRule(long ruleid, String name)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Updating rule " + ruleid);
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME, name);
@@ -397,7 +389,6 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     public synchronized int deleteRule(long ruleid)
     {
         SQLiteDatabase sql = getWritableDatabase();
-        Log.i(DATABASE_NAME, "Deleting rule " + ruleid);
 
         int number_deleted = sql.delete(IFTTTContract.IFTTTRuleEntry.TABLE_NAME,
                 IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID + " = ?",

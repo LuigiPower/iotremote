@@ -34,15 +34,11 @@ public class RegistrationIntentService extends IntentService
     @Override
     public void onHandleIntent(Intent intent) {
 
-        Log.e("it.giuggi.iotremote", "ONHANDLEINTENT: " + intent);
-
         InstanceID instanceID = InstanceID.getInstance(this);
         try
         {
             String token = instanceID.getToken(getString(R.string.sender_id),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-            Log.i("it.giuggi.iotremote", "TOKEN RECEIVED: " + token);
 
             Bundle dati = new Bundle();
             dati.putStringArray(WebRequestTask.DATA, new String[]{ token });
@@ -76,7 +72,6 @@ public class RegistrationIntentService extends IntentService
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("Server", ">>>onCreate()");
     }
 
 }

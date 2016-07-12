@@ -87,7 +87,7 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
          * @param request request which has failed
          * @return true if the error has been handled, else false
          */
-        public boolean onFailure(WebRequest request);
+        boolean onFailure(WebRequest request);
     }
 
     public enum EsitoConnessione{
@@ -242,7 +242,7 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
 
     public interface OnResponseListener {
 
-        public void onResponseReceived(Object ris, Tipo t, Object... datiIniziali);
+        void onResponseReceived(Object ris, Tipo t, Object... datiIniziali);
 
     }
 

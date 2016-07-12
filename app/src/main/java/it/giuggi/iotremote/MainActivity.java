@@ -43,6 +43,7 @@ import it.giuggi.iotremote.ifttt.implementations.context.LocationContext;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTRuleDetail;
+import it.giuggi.iotremote.net.WebRequestTask;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ui.adapter.DrawerItem;
 import it.giuggi.iotremote.ui.adapter.DrawerItemAdapter;
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     @SuppressLint({"CommitTransaction", "RtlHardcoded"})
     private void changeFragment(BaseFragment in, boolean backstack)
     {
-        Log.i("Fillin creation...", "Showing fragment " + in + " master: " + isMasterDetail);
         String tag = in.generateTag();
 
         FragmentManager manager = getSupportFragmentManager();
@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
         if(isMasterDetail)
         {
-            Log.i("MASTER DETAIL", "MASTER DETAIL GRAVITY IS " + in.getGravity());
             if(in.getGravity() == Gravity.LEFT)
             {
                 currentFragmentTagLeft = tag;
@@ -137,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initializing WebRequest handler
+        WebRequestTask.initContext();
+
         View view = findViewById(fragmentContainerLeft);
         isMasterDetail = view != null;
 
@@ -160,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Log.i("it.giuggi.iotremote", "play services checked, starting registration intent service");
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -253,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
                 if(isMasterDetail)
                 {
                     BaseFragment fillin = toshow.createFillin();
-                    Log.i("Fillin creation...", "Creating fillin " + fillin);
                     if(fillin != null)
                     {
                         changeFragment(fillin, false);
@@ -308,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        Log.i("onSaveInstanceState", "tags: " + currentFragmentTag + " " + currentFragmentTagLeft + " " + currentFragmentTagRight);
         outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
         outState.putString(CURRENT_FRAGMENT_TAG_LEFT, currentFragmentTagLeft);
         outState.putString(CURRENT_FRAGMENT_TAG_RIGHT, currentFragmentTagRight);
@@ -446,7 +445,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i(TAG, "ONACTIVITYRESULT requestcode: " + requestCode);
         if(requestCode == LocationContext.PLACE_PICKER_REQUEST)
         {
             if(resultCode == RESULT_OK)

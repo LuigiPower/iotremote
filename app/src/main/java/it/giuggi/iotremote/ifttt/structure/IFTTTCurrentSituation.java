@@ -172,7 +172,6 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             target.setLongitude(longitude);
 
             float distance = location.distanceTo(target);
-            Log.i("IFTTTCurrentSitu", "Current target is " + latitude + ", " + longitude + " location is " + location.getLatitude() + ", " + location.getLongitude() + " Distance is " + distance + " radius is " + radius);
             return distance < radius;
         }
 
@@ -181,10 +180,12 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             boolean ready = this.location != null           //Wait for the current location
                     && totalSensors == initializedSensors   //Wait until all sensors have been initialized
                     && currentActivities != null;          //Wait for activity detection
-            Log.d("IFTTTCurrentSituation", "Checking ready, which is " + ready + " / " + this.location + " " + totalSensors + " " + currentActivities + " " + activityRecognitionApi.isConnected() + " " + activityRecognitionApi.isConnecting());
+
             if(currentActivities == null && !activityRecognitionApi.isConnected() && !activityRecognitionApi.isConnecting())
             {
+                currentActivities = new ArrayList<>();
                 activityRecognitionApi.connect();
+                return checkReady(); //This makes sense, as if currentActivities was the problem, it will return true, else it won't loop
             }
 
             if(ready)
@@ -453,9 +454,9 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             default: //I don't use data from this sensor
                 break;
         }
-        Log.d("IFTTTCurrent", "Initialized sensor " + event.sensor + " with values " + event);
+        //Log.d("IFTTTCurrent", "Initialized sensor " + event.sensor + " with values " + event);
         situation.initializedSensors++;
-        Log.d("IFTTTCurrent", "Counters: total | current /  " + situation.totalSensors + " | " + situation.initializedSensors);
+        //Log.d("IFTTTCurrent", "Counters: total | current /  " + situation.totalSensors + " | " + situation.initializedSensors);
         mSensorManager.unregisterListener(this, event.sensor);
         situation.checkReady();
     }
@@ -463,7 +464,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy)
     {
-        Log.i("IFTTTCurrent", "onAccuracyChanged");
+        //Log.i("IFTTTCurrent", "onAccuracyChanged");
     }
 
     /** ACTIVITY DETECTION API *******************************************************************/

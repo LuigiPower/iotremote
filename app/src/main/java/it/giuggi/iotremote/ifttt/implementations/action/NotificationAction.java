@@ -60,7 +60,6 @@ public class NotificationAction extends IFTTTAction
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setSound(notification)
                 .build();
-        Log.i("NotificationAction", "Notifying " + message);
         manager.notify(this.notificationId, n);
     }
 

@@ -95,7 +95,6 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     public void loadData()
     {
         TaskHandler.getInstance().clear();
-        Log.i("Received data", "GETTING node list: ");
         WebRequestTask.perform(WebRequestTask.Azione.GET_NODE_LIST)
                 .error(new WebRequestTask.FailureHandler()
                 {
@@ -111,8 +110,6 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onResponseReceived(Object ris, WebRequestTask.Tipo t, Object... datiIniziali)
                     {
-                        Log.i("Received data", "Received node list: " + ris);
-
                         if(ris == null)
                         {
                             swipeRefreshLayout.setRefreshing(false);
