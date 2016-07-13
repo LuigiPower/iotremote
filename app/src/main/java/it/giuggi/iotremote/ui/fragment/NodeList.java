@@ -20,8 +20,7 @@ import it.giuggi.iotremote.OnBroadcastEvent;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.TaskHandler;
 import it.giuggi.iotremote.ui.adapter.IOTNodeAdapter;
-import it.giuggi.iotremote.iot.IOTNode;
-import it.giuggi.iotremote.iot.IOperatingMode;
+import it.giuggi.iotremote.iot.node.IOTNode;
 import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
@@ -117,7 +116,6 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
                         }
 
                         nodeList.clear();
-
                         JSONArray arr = (JSONArray) ris;
                         for (int i = 0; i < arr.length(); i++)
                         {
@@ -125,15 +123,7 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
                             {
                                 JSONObject obj = arr.getJSONObject(i);
 
-                                String name = obj.getString("name");
-                                String ip = obj.getString("ip");
-                                JSONObject mode = obj.getJSONObject("mode");
-                                String modeName = mode.getString("name");
-
-                                JSONObject modeParams = mode.getJSONObject("params");
-
-                                IOTNode node = new IOTNode(ip, name, IOperatingMode.stringToMode(modeName, modeParams));
-                                nodeList.add(node);
+                                nodeList.add(IOTNode.fromJSON(obj));
                             } catch (JSONException e)
                             {
                                 e.printStackTrace();

@@ -1,7 +1,7 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.iot.node.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.

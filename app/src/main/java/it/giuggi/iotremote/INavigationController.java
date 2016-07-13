@@ -1,5 +1,6 @@
 package it.giuggi.iotremote;
 
+import android.content.Intent;
 import android.view.View;
 
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
@@ -12,6 +13,7 @@ import it.giuggi.iotremote.ui.fragment.BaseFragment;
 public interface INavigationController
 {
     public void goBack();
+    public void go(Intent intent);
     public void go(BaseFragment in);
     public void go(BaseFragment in, boolean backstack);
     public void showDialog(View view);

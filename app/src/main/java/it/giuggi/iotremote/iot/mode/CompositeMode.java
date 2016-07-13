@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.iot.node.IOTNode;
 import it.giuggi.iotremote.ui.adapter.IOperatingModeAdapter;
 
 /**
@@ -22,11 +23,10 @@ import it.giuggi.iotremote.ui.adapter.IOperatingModeAdapter;
  */
 public class CompositeMode extends IOperatingMode
 {
-    public static final String NAME = "composite_mode";
-    public static final int LOCALIZED_STRING = R.string.mode_composite;
+    transient public static final String NAME = "composite_mode";
+    transient public static final int LOCALIZED_STRING = R.string.mode_composite;
 
     private ArrayList<IOperatingMode> modeList = new ArrayList<>(3);
-    private IOperatingModeAdapter adapter;
 
     public CompositeMode()
     {
@@ -58,7 +58,7 @@ public class CompositeMode extends IOperatingMode
     }
 
     @Override
-    protected void setOwner(IOTNode node)
+    public void setOwner(IOTNode node)
     {
         super.setOwner(node);
         for(IOperatingMode mode : modeList)
@@ -99,7 +99,7 @@ public class CompositeMode extends IOperatingMode
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.mode_list);
         list.setLayoutManager(new LinearLayoutManager(list.getContext()));
-        adapter = new IOperatingModeAdapter(modeList, list);
+        IOperatingModeAdapter adapter = new IOperatingModeAdapter(modeList, list);
         list.setAdapter(adapter);
 
         return v;

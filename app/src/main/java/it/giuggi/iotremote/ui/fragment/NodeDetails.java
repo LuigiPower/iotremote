@@ -2,7 +2,6 @@ package it.giuggi.iotremote.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.giuggi.iotremote.OnBroadcastEvent;
-import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.iot.node.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 16/03/16.

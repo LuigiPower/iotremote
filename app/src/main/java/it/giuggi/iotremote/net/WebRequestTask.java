@@ -34,8 +34,8 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
 
     //public static final String WEBSITE = "http://mbp-di-federico:5000";
     //public static final String WEBSITE = "http://192.168.43.132:5000";
-    public static final String WEBSITE = "http://192.168.1.102:5000";
-    //public static final String WEBSITE = "http://hotdoglex.westeurope.cloudapp.azure.com:5000";
+    //public static String WEBSITE = "http://192.168.1.102:5000";
+    public static String WEBSITE = "http://hotdoglex.westeurope.cloudapp.azure.com:5000";
     //public static final String WEBSITE = "http://federico:5000";
     public static final String POST = "POST";
     public static final String GET = "GET";
@@ -250,6 +250,22 @@ public class WebRequestTask extends AsyncTask<WebRequestTask.WebRequest, Integer
     {
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+
+    }
+
+    public static void setWebsite(String website)
+    {
+        if(!website.equalsIgnoreCase(WEBSITE))
+        {
+            initContext();
+        }
+
+        if(!website.startsWith("http://") && !website.startsWith("https://"))
+        {
+            website = "http://" + website;
+        }
+
+        WebRequestTask.WEBSITE = website;
     }
 
     public static WebRequestTask eseguiRichiestaWithContext(Azione azione,

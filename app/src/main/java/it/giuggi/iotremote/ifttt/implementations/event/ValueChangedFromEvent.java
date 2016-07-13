@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.structure.Event;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 
 /**

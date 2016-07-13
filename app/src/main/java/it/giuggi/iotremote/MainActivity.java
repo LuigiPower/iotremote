@@ -3,18 +3,18 @@ package it.giuggi.iotremote;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,24 +31,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.MapView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collection;
 
 import it.giuggi.iotremote.gcm.RegistrationIntentService;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
 import it.giuggi.iotremote.ifttt.implementations.context.LocationContext;
-import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
-import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
-import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTRuleDetail;
 import it.giuggi.iotremote.net.WebRequestTask;
 import it.giuggi.iotremote.ui.adapter.BaseViewHolder;
 import it.giuggi.iotremote.ui.adapter.DrawerItem;
 import it.giuggi.iotremote.ui.adapter.DrawerItemAdapter;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
-import it.giuggi.iotremote.ui.fragment.NodeDetails;
 import it.giuggi.iotremote.ui.fragment.NodeList;
 
 public class MainActivity extends AppCompatActivity implements INavigationController
@@ -136,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initializing WebRequest handler
         WebRequestTask.initContext();
 
         View view = findViewById(fragmentContainerLeft);
@@ -180,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 4);
             }
-            return;
         }
 
         /**
@@ -189,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         LinearLayout leftDrawer = (LinearLayout) findViewById(R.id.left_drawer);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.drawer_list);
-        ArrayList<DrawerItem> list = new ArrayList<>(3);
+        ArrayList<DrawerItem> list = new ArrayList<>(4);
 
         String[] drawerText = getResources().getStringArray(R.array.drawer_items);
         for(String s : drawerText)
@@ -294,6 +284,15 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         changeFragment(NodeList.newInstance(), false);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     protected void detachFromContainer(BaseFragment in)
     {
         getSupportFragmentManager().popBackStackImmediate();
@@ -329,6 +328,12 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     protected void onResume() {
         super.onResume();
         TaskHandler.getInstance().onResume();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String website = preferences.getString("web_server_url", getString(R.string.default_website));
+
+        // Initializing WebRequest handler
+        WebRequestTask.setWebsite(website);
     }
 
     @Override
@@ -369,6 +374,12 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     public void goBack()
     {
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void go(Intent intent)
+    {
+        startActivity(intent);
     }
 
     @Override

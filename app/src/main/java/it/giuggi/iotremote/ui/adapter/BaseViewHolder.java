@@ -1,5 +1,6 @@
 package it.giuggi.iotremote.ui.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -17,6 +18,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder
     {
         @Override
         public void goBack()
+        {
+            //NOOP
+        }
+
+        @Override
+        public void go(Intent intent)
         {
             //NOOP
         }

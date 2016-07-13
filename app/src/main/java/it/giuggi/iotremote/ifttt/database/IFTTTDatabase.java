@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.giuggi.iotremote.ifttt.structure.Event;
 import it.giuggi.iotremote.ifttt.structure.IFTTTAction;
 import it.giuggi.iotremote.ifttt.structure.IFTTTComponent;
 import it.giuggi.iotremote.ifttt.structure.IFTTTContext;
@@ -51,6 +52,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
         db.execSQL(IFTTTContract.SQL_CREATE_COMPONENT_LINK_ENTRIES);
         db.execSQL(IFTTTContract.SQL_CREATE_RULE_ENTRIES);
         db.execSQL(IFTTTContract.SQL_CREATE_RULECOMPONENT_ENTRIES);
+        db.execSQL(IFTTTContract.SQL_CREATE_EVENTLOG_ENTRIES);
     }
 
     @Override
@@ -239,9 +241,96 @@ public class IFTTTDatabase extends SQLiteOpenHelper
         return componentList;
     }
 
+    /**
+     * Get full event Log
+     * @param sql database, can be null (will be created and closed as needed)
+     * @return List of Event objects
+     * @throws ClassNotFoundException if GSON fails in finding the Event class
+     */
+    public synchronized ArrayList<Event> getEventLogList(@Nullable SQLiteDatabase sql) throws ClassNotFoundException
+    {
+        Log.i("IFTTTDATABASE", "getEventLogList");
+        boolean needToClose = false;
+        if(sql == null)
+        {
+            sql = getReadableDatabase();
+            needToClose = true;
+        }
+
+        String query = "SELECT * FROM " + IFTTTContract.IFTTTEventLog.TABLE_NAME;
+
+        Cursor c = sql.rawQuery(query, null);
+
+        ArrayList<Event> eventlist = new ArrayList<>();
+        Gson gson = new Gson();
+
+        while(c.moveToNext())
+        {
+            String json = c.getString(c.getColumnIndex(IFTTTContract.IFTTTRuleComponentEntry.COLUMN_NAME_GSON));
+            String classname = c.getString(c.getColumnIndex(IFTTTContract.IFTTTRuleComponentEntry.COLUMN_NAME_CLASS_NAME));
+
+            Class<?> clazz = Class.forName(classname);
+            Event event = (Event) gson.fromJson(json, clazz);
+            event.logid = c.getLong(c.getColumnIndex(IFTTTContract.IFTTTRuleComponentEntry.COLUMN_NAME_ENTRY_ID));
+            event.timestamp = c.getString(c.getColumnIndex(IFTTTContract.IFTTTEventLog.COLUMN_NAME_TIMESTAMP));
+
+            eventlist.add(event);
+        }
+
+        c.close();
+        if(needToClose)
+        {
+            sql.close();
+        }
+        Log.i("IFTTTDATABASE", "getEventLogList returning " + eventlist);
+        return eventlist;
+    }
     /* ---- END: METHODS THAT QUERY DATABASE CONTENTS ---- */
 
     /* ---- START: METHODS THAT MODIFY DATABASE CONTENTS ---- */
+
+    /**
+     * Add a new Event Log
+     * @param gson data of the event
+     * @param sender_name name of the event sender
+     * @param mode_name name of the mode
+     * @param type event type
+     * @param clazz event class
+     * @return newly generated id of the log entry
+     */
+    public synchronized long addEventLog(String gson, String sender_name, String mode_name, String type, Class<?> clazz)
+    {
+        SQLiteDatabase sql = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(IFTTTContract.IFTTTEventLog.COLUMN_NAME_GSON, gson);
+        values.put(IFTTTContract.IFTTTEventLog.COLUMN_NAME_TYPE, type); //These are in the database only for querying purposes
+        values.put(IFTTTContract.IFTTTEventLog.COLUMN_NAME_SENDER_NAME, sender_name); //These are in the database only for querying purposes
+        values.put(IFTTTContract.IFTTTEventLog.COLUMN_NAME_MODE_NAME, mode_name); //These are in the database only for querying purposes
+        values.put(IFTTTContract.IFTTTEventLog.COLUMN_NAME_CLASS_NAME, clazz.getName());
+        long inserted_id = sql.insert(IFTTTContract.IFTTTEventLog.TABLE_NAME, null, values);
+        sql.close();
+
+        return inserted_id;
+    }
+
+    /**
+     * Deletes the specified log entry
+     * @param logid log entry to delete
+     * @return number of deleted log entries (should be 1)
+     */
+    public synchronized int deleteEventLog(long logid)
+    {
+        SQLiteDatabase sql = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        int number_deleted = sql.delete(IFTTTContract.IFTTTEventLog.TABLE_NAME,
+                IFTTTContract.IFTTTEventLog.COLUMN_NAME_ENTRY_ID + " = ?",
+                new String[]{String.valueOf(logid)});
+        sql.close();
+
+        return number_deleted;
+    }
 
     /**
      * addComponent adds the specified component in gson form into the database

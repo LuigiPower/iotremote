@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.structure.Event;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.

@@ -74,15 +74,15 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
          */
         private IFTTTContext.IFTTTContextType contextType = IFTTTContext.IFTTTContextType.ANY;
 
-        private Location location;
-        private OnSnapshotReadyListener listener;
+        transient private Location location;
+        transient private OnSnapshotReadyListener listener;
 
-        private WifiInfo wifiStatus;
-        private NetworkInfo activeNetwork;
+        transient private WifiInfo wifiStatus;
+        transient private NetworkInfo activeNetwork;
 
-        private LinkedList<NetworkInfo> wifi;
-        private LinkedList<NetworkInfo> bluetooth;
-        private LinkedList<NetworkInfo> mobile;
+        transient private LinkedList<NetworkInfo> wifi;
+        transient private LinkedList<NetworkInfo> bluetooth;
+        transient private LinkedList<NetworkInfo> mobile;
 
         private int totalSensors = -1;
         private int initializedSensors = 0;
@@ -379,9 +379,9 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         situation.checkReady();
     }
 
-    public static void acquireSnapshot(Context context, OnSnapshotReadyListener listener)
+    public static IFTTTCurrentSituation acquireSnapshot(Context context, OnSnapshotReadyListener listener)
     {
-        IFTTTCurrentSituation iftttCurrentSituation = new IFTTTCurrentSituation(context, listener);
+        return new IFTTTCurrentSituation(context, listener);
     }
 
     @SuppressWarnings("ResourceType")

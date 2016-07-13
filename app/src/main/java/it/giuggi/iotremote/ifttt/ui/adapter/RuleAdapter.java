@@ -1,5 +1,7 @@
 package it.giuggi.iotremote.ifttt.ui.adapter;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,8 +48,8 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         customViewHolder.card.setTag(R.id.complete_rule, rule);
         customViewHolder.card.setTag(R.id.location_name, 0);
         customViewHolder.card.setOnClickListener(customViewHolder);
+        customViewHolder.card.setOnLongClickListener(customViewHolder);
 
-        //TODO set default (not-set) icon
         int filterImage = R.drawable.ic_done_black_24dp;
         int eventImage = filterImage;
         int contextImage = filterImage;
@@ -87,6 +89,11 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         customViewHolder.context.setOnClickListener(customViewHolder);
         customViewHolder.action.setOnClickListener(customViewHolder);
 
+        customViewHolder.filter.setOnLongClickListener(customViewHolder);
+        customViewHolder.event.setOnLongClickListener(customViewHolder);
+        customViewHolder.context.setOnLongClickListener(customViewHolder);
+        customViewHolder.action.setOnLongClickListener(customViewHolder);
+
         customViewHolder.filter.setTag(R.id.complete_rule, rule);
         customViewHolder.event.setTag(R.id.complete_rule, rule);
         customViewHolder.context.setTag(R.id.complete_rule, rule);
@@ -103,7 +110,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         return (null != ruleList ? ruleList.size() : 0);
     }
 
-    public class CustomViewHolder extends BaseViewHolder implements View.OnClickListener
+    public class CustomViewHolder extends BaseViewHolder implements View.OnClickListener, View.OnLongClickListener
     {
         protected CardView card;
         protected ImageView filter;
@@ -127,6 +134,49 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
             IFTTTRule rule = (IFTTTRule) v.getTag(R.id.complete_rule);
             int position = (int) v.getTag(R.id.location_name);
             controller.go(IFTTTRuleDetail.newInstance(rule, position));
+        }
+
+        @Override
+        public boolean onLongClick(final View v)
+        {
+            AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                    .setTitle(R.string.dialog_delete_rule_title)
+                    .setMessage(R.string.dialog_delete_rule_message)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            IFTTTRule rule = (IFTTTRule) v.getTag(R.id.complete_rule);
+                            int position = 0;
+
+                            for(int i = 0; i < ruleList.size(); i++)
+                            {
+                                IFTTTRule r = ruleList.get(i);
+                                if(rule.getRuleid() == r.getRuleid())
+                                {
+                                    position = i;
+                                    break;
+                                }
+                            }
+
+                            ruleList.remove(position);
+                            notifyItemRemoved(position);
+                            rule.delete(v.getContext());
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            dialog.show();
+
+            return true;
         }
     }
 }

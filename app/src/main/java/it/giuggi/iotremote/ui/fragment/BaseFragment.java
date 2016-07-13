@@ -1,6 +1,7 @@
 package it.giuggi.iotremote.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
@@ -72,6 +73,12 @@ public abstract class BaseFragment extends Fragment
     {
         @Override
         public void goBack()
+        {
+            //NOOP
+        }
+
+        @Override
+        public void go(Intent intent)
         {
             //NOOP
         }

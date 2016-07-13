@@ -1,28 +1,24 @@
 package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.Databasable;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
-import it.giuggi.iotremote.iot.IOTNode;
-import it.giuggi.iotremote.iot.IOperatingMode;
+import it.giuggi.iotremote.iot.node.IOTNode;
+import it.giuggi.iotremote.iot.mode.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.
@@ -227,42 +223,25 @@ public class IFTTTRule extends Databasable
      *      }
      * @return true if it is applicable, false otherwise
      */
-    public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, JSONObject gcmMessage, Context context) throws JSONException
+    public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, Event event, Context context) throws JSONException
     {
-        //Log.d("IFTTTRule", "Applying rule " + name);
+        IOTNode node = event.sender_node;
 
-        /**
-         * Initialize IoTNode from node part of the GCM message
-         */
-        JSONObject nodeJson = gcmMessage.getJSONObject("node");
-        JSONObject modeJson = nodeJson.getJSONObject("mode");
-        IOperatingMode mode = IOperatingMode.stringToMode(modeJson.getString("name"), modeJson.getJSONObject("params"));
-        IOTNode node = new IOTNode(nodeJson.getString("ip"), nodeJson.getString("name"), mode);
-
-        /**
-         * Initialize Event from event part of the GCM message
-         */
-        JSONObject eventJson = gcmMessage.getJSONObject("event");
-        IFTTTEvent.Event event = new IFTTTEvent.Event(eventJson);
-
-        boolean result = false;
+        boolean result;
         for(IFTTTFilter iftttFilter : iftttFilters)
         {
-            //Log.d("IFTTTRule", "Applying filter " + iftttFilter.getClass().getName());
             result = iftttFilter.apply(node);
             if(!result) return false;
         }
 
         for(IFTTTEvent iftttEvent : iftttEvents)
         {
-            //Log.d("IFTTTRule", "Applying filter " + iftttEvent.getClass().getName());
             result = iftttEvent.apply(event);
             if(!result) return false;
         }
 
         for(IFTTTContext iftttContext : iftttContexts)
         {
-            //Log.d("IFTTTRule", "Applying filter " + iftttContext.getClass().getName());
             result = iftttContext.apply(currentSituation);
             if(!result) return false;
         }
@@ -270,7 +249,6 @@ public class IFTTTRule extends Databasable
         //All done, run the actions and return true
         for(IFTTTAction action : iftttActions)
         {
-            //Log.d("IFTTTRule", "Applying filter " + action.getClass().getName());
             action.doAction(context);
         }
         return true;

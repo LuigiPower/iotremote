@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.structure.IFTTTFilter;
 import it.giuggi.iotremote.ifttt.ui.adapter.TextSpinnerAdapter;
-import it.giuggi.iotremote.iot.IOTNode;
-import it.giuggi.iotremote.iot.IOperatingMode;
+import it.giuggi.iotremote.iot.node.IOTNode;
+import it.giuggi.iotremote.iot.mode.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.

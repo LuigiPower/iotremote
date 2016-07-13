@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.content.res.Resources;
 import android.support.v4.util.Pair;
@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.iot.node.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 15/03/16.
@@ -74,9 +75,9 @@ public abstract class IOperatingMode
     public static final String NAME = "operating_mode";
     public static final String DASHBOARD_VIEW = "DASHBOARD_VIEW";
 
-    protected IOTNode owner;
+    transient protected IOTNode owner;
 
-    private JSONObject parameters;
+    transient private JSONObject parameters;
 
     /**
      * Gets a list of (parameter_value, parameter_name) to be used in any adapter (for example, spinners)
@@ -115,7 +116,7 @@ public abstract class IOperatingMode
     /**
      * Standard constructor without params
      */
-    protected IOperatingMode()
+    public IOperatingMode()
     {
         this.parameters = new JSONObject();
     }
@@ -140,11 +141,16 @@ public abstract class IOperatingMode
         return this.parameters.get(parameter);
     }
 
+    public JSONObject getParameters()
+    {
+        return parameters;
+    }
+
     /**
      * Sets the Mode's owner
      * @param node IOTNode that owns this mode instance
      */
-    protected void setOwner(IOTNode node)
+    public void setOwner(IOTNode node)
     {
         this.owner = node;
     }
@@ -228,4 +234,5 @@ public abstract class IOperatingMode
         }
         else return new UnknownMode(params);
     }
+
 }

@@ -7,14 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.iot.CompositeMode;
+import it.giuggi.iotremote.iot.mode.CompositeMode;
 import it.giuggi.iotremote.ui.fragment.NodeDetails;
-import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.iot.node.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 15/03/16.

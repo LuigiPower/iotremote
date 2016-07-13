@@ -1,26 +1,41 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.node;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.iot.mode.EmptyMode;
+import it.giuggi.iotremote.iot.mode.IOperatingMode;
 import it.giuggi.iotremote.net.WebRequestTask;
 
 /**
  * Created by Federico Giuggioloni on 10/03/16.
  * Class that contains all iotnode relevant data
  * Also allows a simple way to send commands to nodes
- * TODO sendCommand Method: Send command to this node on the server
  */
 public class IOTNode
 {
     public String ipAddress;
     public String name;
-    public IOperatingMode mode;
+    transient public IOperatingMode mode;
+
+    public static IOTNode fromJSON(JSONObject obj) throws JSONException
+    {
+        String name = obj.getString("name");
+        String ip = obj.getString("ip");
+        JSONObject mode = obj.getJSONObject("mode");
+        String modeName = mode.getString("name");
+
+        JSONObject modeParams = mode.getJSONObject("params");
+
+        return new IOTNode(ip, name, IOperatingMode.stringToMode(modeName, modeParams));
+    }
 
     public IOTNode(String ipAddress, String name)
     {

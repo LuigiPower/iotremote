@@ -4,10 +4,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -21,8 +23,11 @@ import it.giuggi.iotremote.GlobalBroadcastReceiver;
 import it.giuggi.iotremote.MainActivity;
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
+import it.giuggi.iotremote.ifttt.structure.Event;
 import it.giuggi.iotremote.ifttt.structure.IFTTTCurrentSituation;
+import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
+import it.giuggi.iotremote.iot.node.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/03/16.
@@ -79,7 +84,19 @@ public class MyGcmListenerService extends GcmListenerService
         }
 
         final ArrayList<IFTTTRule> finalRules = rules;
-        final JSONObject finalJsonData = jsonData;
+
+        final Event event;
+
+        try
+        {
+            JSONObject eventJson = jsonData.getJSONObject("event");
+            event = new Event(jsonData);
+        }
+        catch(JSONException ex)
+        {
+            ex.printStackTrace();
+            return;
+        }
 
         // Acquire the current context and apply the rules
         IFTTTCurrentSituation.acquireSnapshot(getBaseContext(), new IFTTTCurrentSituation.OnSnapshotReadyListener()
@@ -87,11 +104,23 @@ public class MyGcmListenerService extends GcmListenerService
             @Override
             public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
             {
+                event.snapshot = situation;
+                event.save(getBaseContext());
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                boolean enabled = preferences.getBoolean("active_rules_enabled", true);
+
+                if(!enabled)
+                {
+                    //TODO first log the event, then throw the event away
+                    return;
+                }
+
                 for(IFTTTRule rule : finalRules)
                 {
                     try
                     {
-                        rule.apply(situation, finalJsonData, MyGcmListenerService.this);
+                        rule.apply(situation, event, MyGcmListenerService.this);
                     } catch (JSONException e)
                     {
                         e.printStackTrace();

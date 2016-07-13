@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +15,8 @@ import it.giuggi.iotremote.R;
  */
 public class GPIOReadMode extends GPIOMode
 {
-    public static final String NAME = "gpio_read_mode";
-    public static final int LOCALIZED_STRING = R.string.mode_gpio_read;
+    transient public static final String NAME = "gpio_read_mode";
+    transient public static final int LOCALIZED_STRING = R.string.mode_gpio_read;
 
     public GPIOReadMode()
     {

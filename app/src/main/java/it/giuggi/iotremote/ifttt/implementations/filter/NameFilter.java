@@ -4,7 +4,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -18,7 +17,7 @@ import it.giuggi.iotremote.ifttt.structure.AutoCompleteEntry;
 import it.giuggi.iotremote.ifttt.structure.AutoCompleteStringEntry;
 import it.giuggi.iotremote.ifttt.structure.IFTTTFilter;
 import it.giuggi.iotremote.ifttt.ui.adapter.AutoCompleteAdapter;
-import it.giuggi.iotremote.iot.IOTNode;
+import it.giuggi.iotremote.iot.node.IOTNode;
 import it.giuggi.iotremote.net.WebRequestTask;
 
 /**

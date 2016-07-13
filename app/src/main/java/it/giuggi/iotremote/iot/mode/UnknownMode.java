@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +10,21 @@ import org.json.JSONObject;
 import it.giuggi.iotremote.R;
 
 /**
- * Created by Federico Giuggioloni on 05/07/16.
+ * Created by Federico Giuggioloni on 16/03/16.
  * Se aggiungo questa riga magari
  * AndroidStudio smette di lamentarsi...
  */
-public class BasicMode extends IOperatingMode
+public class UnknownMode extends IOperatingMode
 {
-    public static final String NAME = "basic_mode";
-    public static final int LOCALIZED_STRING = R.string.mode_basic;
+    transient public static final String NAME = "unknown";
+    transient public static final int LOCALIZED_STRING = R.string.mode_unknown;
 
-    public BasicMode()
+    public UnknownMode()
     {
         super();
     }
 
-    public BasicMode(JSONObject params)
+    public UnknownMode(JSONObject params)
     {
         super(params);
     }
@@ -32,7 +32,7 @@ public class BasicMode extends IOperatingMode
     @Override
     public String getName()
     {
-        return NAME;
+        return "unknown";
     }
 
     @Override
@@ -44,8 +44,7 @@ public class BasicMode extends IOperatingMode
     @Override
     public View loadDashboardLayout(LayoutInflater inflater, ViewGroup container)
     {
-        //TODO this should be 'settings' kind of mode (change name and such)
-        return new View(container.getContext());
+        return inflater.inflate(R.layout.unknown_mode, container, false);
     }
 
     @Override
@@ -57,6 +56,6 @@ public class BasicMode extends IOperatingMode
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
     {
-        //TODO this shouldn't be needed for basicmode, or use this to register configuration changes
+
     }
 }

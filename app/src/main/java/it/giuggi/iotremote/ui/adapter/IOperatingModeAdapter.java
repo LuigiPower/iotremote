@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.iot.IOperatingMode;
+import it.giuggi.iotremote.iot.mode.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 15/03/16.

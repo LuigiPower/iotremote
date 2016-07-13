@@ -1,7 +1,6 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,13 @@ import it.giuggi.iotremote.net.WebRequestTask;
  */
 public class GPIOMode extends IOperatingMode
 {
-    private static final String GPIO_GROUP = "gpio";
-    public static final int LOCALIZED_STRING = R.string.mode_gpio;
+    transient private static final String GPIO_GROUP = "gpio";
+    transient public static final int LOCALIZED_STRING = R.string.mode_gpio;
 
-    public static final String NAME = "gpio_mode";
+    transient public static final String NAME = "gpio_mode";
 
-    protected CheckBox gpioStatus = null;
+    transient protected CheckBox gpioStatus = null;
+
     protected int gpio = 0;
     protected int status = 0;
 

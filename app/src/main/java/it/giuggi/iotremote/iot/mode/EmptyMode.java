@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +16,8 @@ import it.giuggi.iotremote.R;
  */
 public class EmptyMode extends IOperatingMode
 {
-    public static final String NAME = "empty_mode";
-    public static final int LOCALIZED_STRING = R.string.mode_empty;
+    transient public static final String NAME = "empty_mode";
+    transient public static final int LOCALIZED_STRING = R.string.mode_empty;
 
     public EmptyMode()
     {

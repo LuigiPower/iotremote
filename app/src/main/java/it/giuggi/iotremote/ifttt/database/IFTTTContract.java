@@ -34,11 +34,27 @@ public final class IFTTTContract
         public static final String COLUMN_NAME_COMPONENT_ID = "componentid";
     }
 
+    public static abstract class IFTTTEventLog implements BaseColumns
+    {
+        public static final String TABLE_NAME = "IFTTTEventLog";
+        public static final String COLUMN_NAME_ENTRY_ID = "entryid";
+        public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
+        public static final String COLUMN_NAME_TYPE = "type";
+        public static final String COLUMN_NAME_SENDER_NAME = "sender";
+        public static final String COLUMN_NAME_MODE_NAME = "mode";
+        public static final String COLUMN_NAME_GSON = "gson";
+        public static final String COLUMN_NAME_CLASS_NAME = "class_name";   //class name
+
+    }
+
     public static final String INTEGER_PRIMARY_KEY = "INTEGER PRIMARY KEY";
     public static final String PRIMARY_KEY = "PRIMARY KEY";
     public static final String FOREIGN_KEY = "FOREIGN KEY";
     public static final String ON_DELETE_CASCADE = "ON DELETE CASCADE";
     public static final String ON_UPDATE_CASCADE = "ON UPDATE CASCADE";
+    public static final String DATETIME = "DATETIME";
+    public static final String DEFAULT = "DEFAULT";
+    public static final String CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
     public static final String REFERENCES = "REFERENCES";
     public static final String INTEGER = "INTEGER";
     public static final String TEXT = "TEXT";
@@ -74,26 +90,16 @@ public final class IFTTTContract
                         REFERENCES + SPACE + IFTTTRuleComponentEntry.TABLE_NAME + "(" + IFTTTRuleComponentEntry.COLUMN_NAME_ENTRY_ID + ")" + SPACE + ON_DELETE_CASCADE  +
                     ")";
 
-    /*
-    public static abstract class IFTTTEventEntry implements BaseColumns
-    {
-        public static final String TABLE_NAME = "IFTTTEvent";
-        public static final String COLUMN_NAME_ENTRY_ID = "entryid";
-        public static final String COLUMN_NAME_GSON = "gson";
-    }
+    public static final String SQL_CREATE_EVENTLOG_ENTRIES =
+            "CREATE TABLE " + IFTTTEventLog.TABLE_NAME + " ( " +
+                    IFTTTEventLog.COLUMN_NAME_ENTRY_ID + SPACE + INTEGER_PRIMARY_KEY + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_TIMESTAMP + SPACE + DATETIME + SPACE + DEFAULT + SPACE + CURRENT_TIMESTAMP + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_GSON + SPACE + TEXT + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_TYPE + SPACE + TEXT + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_SENDER_NAME + SPACE + TEXT + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_MODE_NAME + SPACE + TEXT + COMMA +
+                    IFTTTEventLog.COLUMN_NAME_CLASS_NAME + SPACE + TEXT +
+                    ")";
 
-    public static abstract class IFTTTContextEntry implements BaseColumns
-    {
-        public static final String TABLE_NAME = "IFTTTContext";
-        public static final String COLUMN_NAME_ENTRY_ID = "entryid";
-        public static final String COLUMN_NAME_GSON = "gson";
-    }
 
-    public static abstract class IFTTTActionEntry implements BaseColumns
-    {
-        public static final String TABLE_NAME = "IFTTTAction";
-        public static final String COLUMN_NAME_ENTRY_ID = "entryid";
-        public static final String COLUMN_NAME_GSON = "gson";
-    }
-    */
 }

@@ -3,16 +3,15 @@ package it.giuggi.iotremote.ifttt.implementations.event;
 import android.support.v4.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.structure.Event;
 import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
 import it.giuggi.iotremote.ifttt.ui.adapter.TextSpinnerAdapter;
-import it.giuggi.iotremote.iot.IOperatingMode;
 
 /**
  * Created by Federico Giuggioloni on 21/04/16.
@@ -97,7 +96,7 @@ public class TypeEvent extends IFTTTEvent
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 Pair<String, String> selected = (Pair<String, String>) parent.getItemAtPosition(position);
-                type = IFTTTEvent.Event.typeToEvent(selected.first);
+                type = Event.typeToEvent(selected.first);
             }
 
             @Override

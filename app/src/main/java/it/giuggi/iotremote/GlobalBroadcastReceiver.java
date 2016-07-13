@@ -11,6 +11,9 @@ import org.json.JSONObject;
 
 import java.util.Collection;
 
+import it.giuggi.iotremote.ifttt.structure.Event;
+import it.giuggi.iotremote.ifttt.structure.IFTTTEvent;
+import it.giuggi.iotremote.iot.node.IOTNode;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
 
 /**
@@ -39,13 +42,21 @@ public class GlobalBroadcastReceiver extends BroadcastReceiver
                 String nodestring = data.getString("node");
                 String eventstring = data.getString("event");
 
-                jsonData.put("node", new JSONObject(nodestring));
-                jsonData.put("event", new JSONObject(eventstring));
+                JSONObject nodejson = new JSONObject(nodestring);
+                JSONObject eventjson = new JSONObject(eventstring);
+
+                jsonData.put("node", nodejson);
+                jsonData.put("event", eventjson);
+
+                Event event = new Event(jsonData);
+
+                //TODO save event to database
 
                 Collection<OnBroadcastEvent> list = BaseFragment.getCurrentReceivers();
-                for(OnBroadcastEvent event : list)
+
+                for(OnBroadcastEvent ev : list)
                 {
-                    event.nodeUpdate(data);
+                    ev.nodeUpdate(jsonData);
                 }
             } catch (JSONException e)
             {

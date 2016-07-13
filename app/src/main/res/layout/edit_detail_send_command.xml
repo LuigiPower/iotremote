@@ -14,11 +14,19 @@
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:inputType="textCapSentences"
+                          android:hint="@string/node_name"
                           style="@style/StandardText" />
 
     <EditText android:id="@+id/custom_command"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              style="@style/StandardEditText" />
+              android:inputType="text"
+              android:hint="@string/custom_command"
+              style="@style/StandardEditText"/>
 
+    <LinearLayout android:id="@+id/parameter_container"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+    </LinearLayout>
 </LinearLayout>

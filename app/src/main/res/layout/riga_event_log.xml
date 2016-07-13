@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    xmlns:app="http://schemas.android.com/tools"
+                                    android:id="@+id/card_view"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    card_view:cardCornerRadius="4dp"
+                                    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <!-- EVENT TYPE - TIMESTAMP -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/event_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextColor="@color/white" />
+
+        <TextView android:id="@+id/node_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_summary"
+            style="@style/StandardText"/>
+
+        <TextView android:id="@+id/node_ip"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/node_name"
+                  style="@style/StandardText"/>
+
+        <TextView android:id="@+id/mode_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/node_ip"
+            style="@style/StandardText"/>
+
+        <TextView android:id="@+id/parameters"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/mode_name"
+                  style="@style/StandardText"/>
+
+        <TextView android:id="@+id/timestamp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/parameters"
+                  android:layout_alignParentRight="true"
+                  android:layout_alignParentEnd="true"
+                  style="@style/StandardText.Small"/>
+
+<!-- TODO show a dialog with this stuff, it's huge...
+        <TextView android:id="@+id/oldvalues"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/node_ip"
+                  style="@style/StandardText"/>
+
+        <TextView android:id="@+id/newvalues"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/node_ip"
+                  style="@style/StandardText"/>
+-->
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

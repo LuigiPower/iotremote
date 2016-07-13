@@ -1,5 +1,6 @@
 package it.giuggi.iotremote.ui.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,11 @@ import java.util.List;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
+import it.giuggi.iotremote.ui.activity.SettingsActivity;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
+import it.giuggi.iotremote.ui.fragment.EventLogList;
 import it.giuggi.iotremote.ui.fragment.NodeList;
+import it.giuggi.iotremote.ui.fragment.SettingsFragment;
 
 /**
  * Created by Federico Giuggioloni on 05/05/16.
@@ -76,9 +80,12 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Cu
                     fragment = IFTTTListFragment.newInstance();
                     break;
                 case 2:
-                    //TODO settings fragment;
-                    fragment = NodeList.newInstance();
+                    fragment = EventLogList.newInstance();
                     break;
+                case 3:
+                    Intent intent = new Intent(view.getContext(), SettingsActivity.class);
+                    controller.go(intent);
+                    return;
                 default:
                     fragment = NodeList.newInstance();
                     break;

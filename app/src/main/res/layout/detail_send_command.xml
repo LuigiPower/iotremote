@@ -6,7 +6,13 @@
 
     <TextView android:id="@+id/command_name"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              style="@style/StandardText" />
+
+    <TextView android:id="@+id/custom_command"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:gravity="center"
               style="@style/StandardText" />
 

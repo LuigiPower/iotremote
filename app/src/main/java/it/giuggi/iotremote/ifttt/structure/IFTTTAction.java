@@ -2,12 +2,7 @@ package it.giuggi.iotremote.ifttt.structure;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import it.giuggi.iotremote.R;
-import it.giuggi.iotremote.ifttt.database.Databasable;
-import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
-import it.giuggi.iotremote.iot.IOTNode;
 
 /**
  * Created by Federico Giuggioloni on 14/04/16.

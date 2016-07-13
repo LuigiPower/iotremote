@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.node;
 
 import android.content.res.Resources;
 import android.support.v4.util.Pair;

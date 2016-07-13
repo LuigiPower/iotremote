@@ -1,4 +1,4 @@
-package it.giuggi.iotremote.iot;
+package it.giuggi.iotremote.iot.mode;
 
 import android.graphics.Color;
 import android.text.format.DateFormat;
@@ -29,16 +29,15 @@ import it.giuggi.iotremote.R;
  */
 public class SensorMode extends IOperatingMode
 {
-    public static final String NAME = "sensor_mode";
-    public static final int LOCALIZED_STRING = R.string.mode_sensor;
-
-    private static final long UPDATE_TIME = 5000;
+    transient public static final String NAME = "sensor_mode";
+    transient public static final int LOCALIZED_STRING = R.string.mode_sensor;
 
     private String id;
     private ArrayList<Entry> entries;
     private ArrayList<Long> times;
-    private LineChart chart;
-    private LineData lineData;
+
+    transient private LineChart chart;
+    transient private LineData lineData;
 
     public SensorMode(JSONObject parameters)
     {

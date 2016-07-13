@@ -7,6 +7,7 @@
     <TextView android:id="@+id/node_name"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:hint="@string/node_name"
               style="@style/StandardText"/>
 
 </LinearLayout>
