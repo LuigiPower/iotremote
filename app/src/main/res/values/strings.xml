@@ -158,4 +158,14 @@
         <item>@string/event_value_changed</item>
     </string-array>
 
+    <string name="custom_command">Custom command</string>
+    <string name="set_gpio">Set value on GPIO pin</string>
+    <string name="set_mode">Set Node operating mode</string>
+
+    <string-array name="commands_localized">
+        <item>@string/custom_command</item>
+        <item>@string/set_gpio</item>
+        <item>@string/set_mode</item>
+    </string-array>
+
 </resources>

@@ -4,8 +4,21 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <EditText android:id="@+id/command_name"
+    <Spinner android:id="@+id/command_preset"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:inputType="textCapSentences"
+             style="@style/StandardText" />
+
+    <AutoCompleteTextView android:id="@+id/node_name"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:inputType="textCapSentences"
+                          style="@style/StandardText" />
+
+    <EditText android:id="@+id/custom_command"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               style="@style/StandardEditText" />
+
 </LinearLayout>

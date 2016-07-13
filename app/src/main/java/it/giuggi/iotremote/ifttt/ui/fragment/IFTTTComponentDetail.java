@@ -28,6 +28,11 @@ public class IFTTTComponentDetail extends BaseFragment implements View.OnClickLi
     private IFTTTRule owner;
     private IFTTTComponent component;
 
+    public IFTTTComponentDetail()
+    {
+        setRetainInstance(true);
+    }
+
     public static IFTTTComponentDetail newInstance(List<IFTTTComponent> listWithDummy, IFTTTRule owner, IFTTTComponent component)
     {
         IFTTTComponentDetail fragment = new IFTTTComponentDetail();
