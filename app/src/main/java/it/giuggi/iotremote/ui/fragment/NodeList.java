@@ -44,8 +44,7 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
 
     public static NodeList newInstance()
     {
-        NodeList nodeList = new NodeList();
-        return nodeList;
+        return new NodeList();
     }
 
     @Override

@@ -234,6 +234,16 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
          */
         if(savedInstanceState != null)
         {
+            //TODO check whether or not this is needed...
+            Fragment nodelist = getSupportFragmentManager().findFragmentByTag(NodeList.TAG);
+            if(nodelist != null)
+            {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(nodelist)
+                        .commit();
+            }
+            //TODO END
+
             String tag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG, null);
             String tag_left = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_LEFT, null);
             String tag_right = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_RIGHT, null);
@@ -453,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         {
             FragmentManager manager = getSupportFragmentManager();
             Fragment fragment = manager.findFragmentByTag(currentFragmentTagRight);
+
             if(fragment != null)
             {
                 manager.beginTransaction()
