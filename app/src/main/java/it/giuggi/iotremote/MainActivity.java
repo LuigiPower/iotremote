@@ -372,19 +372,24 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        Intent nintent = new Intent(this, AlarmReceiver.class);
-        PendingIntent operation = PendingIntent.getBroadcast(this, 0, nintent, PendingIntent.FLAG_NO_CREATE);
-        if(operation == null)
+        SharedPreferences preferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean enabled = preferences.getBoolean("passive_rules_enabled", true);
+
+        if(enabled)
         {
-            operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
-            manager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + 1000L,
-                    5000L, //TODO interval based on settings
-                    operation);
+            Intent nintent = new Intent(this, AlarmReceiver.class);
+            PendingIntent operation = PendingIntent.getBroadcast(this, 0, nintent, PendingIntent.FLAG_NO_CREATE);
+            if (operation == null)
+            {
+                operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
+                manager.setInexactRepeating(
+                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + 1000L,
+                        AlarmManager.INTERVAL_HALF_HOUR, //TODO interval based on settings
+                        operation);
+            }
         }
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String website = preferences.getString("web_server_url", getString(R.string.default_website));
 
         // Initializing WebRequest handler

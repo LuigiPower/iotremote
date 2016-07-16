@@ -1,9 +1,12 @@
 package it.giuggi.iotremote;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
@@ -25,6 +28,23 @@ public class AlarmReceiver extends BroadcastReceiver
     @Override
     public void onReceive(final Context context, Intent intent)
     {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean enabled = preferences.getBoolean("passive_rules_enabled", true);
+
+        if(!enabled)
+        {
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            Intent nintent = new Intent(context, AlarmReceiver.class);
+            PendingIntent operation = PendingIntent.getBroadcast(context, 0, nintent, PendingIntent.FLAG_NO_CREATE);
+            if(operation == null)
+            {
+                operation = PendingIntent.getBroadcast(context, 0, nintent, 0);
+                manager.cancel(operation);
+            }
+            return;
+        }
+
         IFTTTDatabase database = IFTTTDatabase.getHelper(context);
         ArrayList<IFTTTRule> rules;
 
@@ -45,14 +65,6 @@ public class AlarmReceiver extends BroadcastReceiver
             @Override
             public void onSnapshotReady(IFTTTCurrentSituation.CurrentSituation situation)
             {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean enabled = preferences.getBoolean("passive_rules_enabled", true);
-
-                if(!enabled)
-                {
-                    return;
-                }
-
                 for(IFTTTRule rule : finalRules)
                 {
                     try
