@@ -293,6 +293,16 @@ public class IFTTTDatabase extends SQLiteOpenHelper
 
     /* ---- START: METHODS THAT MODIFY DATABASE CONTENTS ---- */
 
+    public synchronized int clearEventLog()
+    {
+        SQLiteDatabase sql = getWritableDatabase();
+
+        int count = sql.delete(IFTTTContract.IFTTTEventLog.TABLE_NAME, null, null);
+
+        sql.close();
+        return count;
+    }
+
     /**
      * Add a new Event Log
      * @param gson data of the event

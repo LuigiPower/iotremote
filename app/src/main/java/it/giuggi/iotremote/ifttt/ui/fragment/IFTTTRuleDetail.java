@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import it.giuggi.iotremote.R;
 import it.giuggi.iotremote.ifttt.database.IFTTTDatabase;
@@ -214,6 +215,7 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
         else
         {
             //TODO toast or something to show error (Add at least one Action!)
+            Toast.makeText(getContext(), R.string.add_at_least_one_action, Toast.LENGTH_SHORT).show();
         }
     }
 

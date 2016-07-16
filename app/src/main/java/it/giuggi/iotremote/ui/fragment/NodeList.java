@@ -151,7 +151,7 @@ public class NodeList extends BaseFragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void nodeUpdate(JSONObject newValues)
     {
-        Log.d("Node update", "NODE UPDATE HAPPENED");
+        //Log.d("Node update", "NODE UPDATE HAPPENED");
         onRefresh();
     }
 }

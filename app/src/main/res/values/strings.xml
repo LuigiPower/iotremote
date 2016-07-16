@@ -216,6 +216,7 @@
     <string name="settings_category_general_web_server_summary">All data will be loaded from the specified URL</string>
     <string name="settings_category_general_web_server_dialog">Enter Web Server URL</string>
 
-    <string name="default_website" translatable="false">https://hotdoglex.westeurope.cloudapp.azure.net</string>
+    <string name="default_website" translatable="false">http://hotdoglex.westeurope.cloudapp.azure.com</string>
     <string name="no_data_to_display">No data to display</string>
+    <string name="add_at_least_one_action">Add at least one action!</string>
 </resources>

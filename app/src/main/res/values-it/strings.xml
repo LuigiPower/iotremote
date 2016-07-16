@@ -81,4 +81,5 @@
     <string name="value_changed_to_event">Quando un parametro cambia a un valore</string>
     <string name="wifi_name_context">Nome WiFi</string>
     <string name="yes">Si</string>
+    <string name="add_at_least_one_action">Aggiungi almeno un\'azione!</string>
 </resources>

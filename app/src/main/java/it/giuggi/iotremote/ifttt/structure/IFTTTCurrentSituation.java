@@ -231,7 +231,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
      */
     private IFTTTCurrentSituation(Context context, OnSnapshotReadyListener listener)
     {
-        Log.d("IFTTTCurrentSituation", "Building IFTTTCurrentSituation");
+        //Log.d("IFTTTCurrentSituation", "Building IFTTTCurrentSituation");
         situation = new CurrentSituation(listener);
 
         /** ACTIVITY RECOGNITION SETUP ***********************************************************/
@@ -308,7 +308,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             //TODO get the most recent known location6
             if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000)   //TODO set time differently
             {
-                Log.d("IFTTTCurrent", "last known location is (" + location + ")");
+                //Log.d("IFTTTCurrent", "last known location is (" + location + ")");
                 situation.location = location;
                 situation.checkReady();
             }
@@ -388,7 +388,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     @Override
     public void onLocationChanged(Location location)
     {
-        Log.d("IFTTTCurrent", "onLocationChanged(" + location + ")");
+        //Log.d("IFTTTCurrent", "onLocationChanged(" + location + ")");
         manager.removeUpdates(this);
         situation.location = location;
         situation.checkReady();
@@ -486,7 +486,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Log.i("IFTTTCurrent", "onReceive");
+        //Log.i("IFTTTCurrent", "onReceive");
         ArrayList<DetectedActivity> updatedActivities = intent.getParcelableArrayListExtra(ActivityDetectionIntentService.ACTIVITY_EXTRA);
         LocalBroadcastManager.getInstance(activityRecognitionApi.getContext()).unregisterReceiver(this);
         ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(activityRecognitionApi, getRecognitionIntent());
@@ -499,7 +499,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     @Override
     public void onConnected(Bundle bundle)
     {
-        Log.i("IFTTTCurrent", "onConnected");
+        //Log.i("IFTTTCurrent", "onConnected");
         if(!activityRecognitionApi.isConnected())
         {
             //TODO check if detected activities work most of the time in rules
@@ -514,14 +514,14 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     @Override
     public void onConnectionSuspended(int i)
     {
-        Log.i("IFTTTCurrent", "Connection suspended");
+        //Log.i("IFTTTCurrent", "Connection suspended");
         activityRecognitionApi.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
-        Log.i("IFTTTCurrent", "Connection failed");
+        //Log.i("IFTTTCurrent", "Connection failed");
         LocalBroadcastManager.getInstance(activityRecognitionApi.getContext()).unregisterReceiver(this);
         situation.currentActivities = new ArrayList<>();
         situation.checkReady();
