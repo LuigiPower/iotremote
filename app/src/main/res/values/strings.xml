@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">IoTRemote</string>
 
-    <string name="sender_id">224490332382</string>
+    <string name="sender_id" translatable="false">224490332382</string>
 
     <string name="empty_mode_text">Node not setup yet.</string>
     <string name="close">Close</string>
@@ -14,10 +14,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="filter_package">it.giuggi.iotremote.ifttt.implementations.filter.</string>
-    <string name="event_package">it.giuggi.iotremote.ifttt.implementations.event.</string>
-    <string name="context_package">it.giuggi.iotremote.ifttt.implementations.context.</string>
-    <string name="action_package">it.giuggi.iotremote.ifttt.implementations.action.</string>
+    <string name="filter_package" translatable="false">it.giuggi.iotremote.ifttt.implementations.filter.</string>
+    <string name="event_package" translatable="false">it.giuggi.iotremote.ifttt.implementations.event.</string>
+    <string name="context_package" translatable="false">it.giuggi.iotremote.ifttt.implementations.context.</string>
+    <string name="action_package" translatable="false">it.giuggi.iotremote.ifttt.implementations.action.</string>
 
     <string name="mode_filter">By mode</string>
     <string name="name_filter">By name</string>
@@ -48,7 +48,7 @@
     <string name="dummy">New</string>
     <string name="drawer_title">Main menu</string>
     <string name="choose_place">Choose place</string>
-    <string name="choose_place_dots">Choose place...</string>
+    <string name="choose_place_dots">Choose place…</string>
 
     <string name="no_conditions">any</string>
 
@@ -216,6 +216,6 @@
     <string name="settings_category_general_web_server_summary">All data will be loaded from the specified URL</string>
     <string name="settings_category_general_web_server_dialog">Enter Web Server URL</string>
 
-    <string name="default_website">https://hotdoglex.westeurope.cloudapp.azure.net</string>
+    <string name="default_website" translatable="false">https://hotdoglex.westeurope.cloudapp.azure.net</string>
     <string name="no_data_to_display">No data to display</string>
 </resources>

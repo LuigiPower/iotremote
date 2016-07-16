@@ -57,7 +57,7 @@ public class NotificationAction extends IFTTTAction
         Notification n = new NotificationCompat.Builder(context)
                 .setContentTitle("IoTRemote")
                 .setContentText(this.message)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_generic)
                 .setSound(notification)
                 .build();
         manager.notify(this.notificationId, n);
