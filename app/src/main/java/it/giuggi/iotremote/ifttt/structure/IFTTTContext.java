@@ -11,6 +11,8 @@ public abstract class IFTTTContext extends IFTTTComponent
 {
     public static final String TYPE = "CONTEXT";
 
+    public static final int DEFAULT_CONFIDENCE_THRESHOLD = 50;
+
     public IFTTTContext()
     {
 

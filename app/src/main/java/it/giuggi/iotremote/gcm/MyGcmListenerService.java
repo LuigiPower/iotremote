@@ -64,7 +64,7 @@ public class MyGcmListenerService extends GcmListenerService
             jsonData.put("node", new JSONObject(nodestring));
             jsonData.put("event", new JSONObject(eventstring));
 
-            Log.d(TAG, "Data from GCM is " + jsonData.toString(4));
+            //Log.d(TAG, "Data from GCM is " + jsonData.toString(4));
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class MyGcmListenerService extends GcmListenerService
 
         try
         {
-            rules = (ArrayList<IFTTTRule>) database.getRuleList();
+            rules = (ArrayList<IFTTTRule>) database.getRuleList(IFTTTRule.RULE_TYPE_ACTIVE);
         } catch (ClassNotFoundException e)
         {
             e.printStackTrace();

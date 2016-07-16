@@ -16,6 +16,7 @@ public final class IFTTTContract
         public static final String TABLE_NAME = "IFTTTRule";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
         public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_RULE_TYPE = "ruletype";
     }
 
     public static abstract class IFTTTRuleComponentEntry implements BaseColumns
@@ -57,6 +58,8 @@ public final class IFTTTContract
     public static final String CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
     public static final String REFERENCES = "REFERENCES";
     public static final String INTEGER = "INTEGER";
+    public static final String ZERO = "0";
+    public static final String ONE = "1";
     public static final String TEXT = "TEXT";
     public static final String SPACE = " ";
     public static final String COMMA = ",";
@@ -67,7 +70,8 @@ public final class IFTTTContract
     public static final String SQL_CREATE_RULE_ENTRIES =
             "CREATE TABLE " + IFTTTRuleEntry.TABLE_NAME + " ( " +
                     IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID + SPACE + INTEGER_PRIMARY_KEY + COMMA +
-                    IFTTTRuleEntry.COLUMN_NAME_NAME + SPACE + TEXT +
+                    IFTTTRuleEntry.COLUMN_NAME_NAME + SPACE + TEXT + COMMA +
+                    IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE + SPACE + INTEGER + DEFAULT + ONE +
                     ")";
 
     public static final String SQL_CREATE_RULECOMPONENT_ENTRIES =

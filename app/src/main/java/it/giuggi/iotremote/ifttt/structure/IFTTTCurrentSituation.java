@@ -98,7 +98,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         private float[] proximity = null;
         private float[] humidity = null;
 
-        private ArrayList<DetectedActivity> currentActivities = null;
+        public ArrayList<DetectedActivity> currentActivities = null;
 
         public CurrentSituation(OnSnapshotReadyListener listener)
         {
@@ -276,7 +276,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             {
                 //TODO is this sensor the default sensor for that type?
                 totalSensors++;
-                Log.d("IFTTTCurrent", "Listening on sensor " + sensor);
+                //Log.d("IFTTTCurrent", "Listening on sensor " + sensor);
                 mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
@@ -500,6 +500,14 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     public void onConnected(Bundle bundle)
     {
         Log.i("IFTTTCurrent", "onConnected");
+        if(!activityRecognitionApi.isConnected())
+        {
+            //TODO check if detected activities work most of the time in rules
+            situation.currentActivities = new ArrayList<>();
+            situation.checkReady();
+            return;
+        }
+
         ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(activityRecognitionApi, 0, getRecognitionIntent());
     }
 

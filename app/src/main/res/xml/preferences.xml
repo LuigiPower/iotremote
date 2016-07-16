@@ -11,6 +11,13 @@
             android:defaultValue="true"
             android:summary="@string/settings_category_rules_active_enable_summary" />
 
+        <CheckBoxPreference
+            android:key="passive_rules_enabled"
+            android:title="@string/settings_category_rules_passive_enable"
+            android:persistent="true"
+            android:defaultValue="true"
+            android:summary="@string/settings_category_rules_passive_enable_summary" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

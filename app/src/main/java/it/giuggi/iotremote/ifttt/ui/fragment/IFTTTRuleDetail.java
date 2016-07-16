@@ -31,23 +31,26 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
     private ViewPager pager;
     private int start_page;
 
+    private boolean[] options;
+
     public IFTTTRuleDetail()
     {
         putRight();
     }
 
-    public static IFTTTRuleDetail newInstance(IFTTTRule rule, int start_page)
+    public static IFTTTRuleDetail newInstance(IFTTTRule rule, int start_page, boolean options[])
     {
         IFTTTRuleDetail fragment = new IFTTTRuleDetail();
         fragment.rule = rule;
         fragment.start_page = start_page;
+        fragment.options = options;
         return fragment;
     }
 
     @Override
     public BaseFragment createFillin()
     {
-        return IFTTTListFragment.newInstance();
+        return IFTTTListFragment.newInstance(options, rule.getType());
     }
 
     @Override
@@ -63,6 +66,11 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
 
         if(savedInstanceState != null)
         {
+            if(savedInstanceState.containsKey("options"))
+            {
+                options = savedInstanceState.getBooleanArray("options");
+            }
+
             long savedRule = savedInstanceState.getLong("saved_rule", -1L);
             if (savedRule != -1L)
             {
@@ -138,6 +146,42 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
         event.setImageResource(eventImage);
         context.setImageResource(contextImage);
         action.setImageResource(actionImage);
+
+        if(!options[0])
+        {
+            ((View) filter.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            ((View) filter.getParent()).setVisibility(View.VISIBLE);
+        }
+
+        if(!options[1])
+        {
+            ((View) event.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            ((View) event.getParent()).setVisibility(View.VISIBLE);
+        }
+
+        if(!options[2])
+        {
+            ((View) context.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            ((View) context.getParent()).setVisibility(View.VISIBLE);
+        }
+
+        if(!options[3])
+        {
+            ((View) action.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            ((View) action.getParent()).setVisibility(View.VISIBLE);
+        }
         /**
          * Done setting images
          ********************************************************************/
@@ -145,7 +189,7 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
         View toShrink = v.findViewById(R.id.rule_description_container);
 
         pager = (ViewPager) v.findViewById(R.id.component_pager);
-        pager.setAdapter(new ComponentPagerAdapter(getChildFragmentManager(), rule, toShrink));
+        pager.setAdapter(new ComponentPagerAdapter(getChildFragmentManager(), rule, options, toShrink));
         pager.setCurrentItem(start_page, true);
 
         View completeRule = v.findViewById(R.id.complete_rule);
@@ -178,5 +222,7 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
     {
         super.onSaveInstanceState(outState);
         outState.putLong("saved_rule", rule.getRuleid());
+        outState.putBooleanArray("options", options);
+        outState.putInt("type", rule.getType());
     }
 }

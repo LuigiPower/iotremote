@@ -35,7 +35,7 @@ import it.giuggi.iotremote.ifttt.structure.IFTTTCurrentSituation;
 public class LocationContext extends IFTTTContext implements OnMapReadyCallback
 {
     public transient static final int PLACE_PICKER_REQUEST = 9049;
-    public transient static final float RADIUS = 100.0f; //TODO make it tweakable
+    public transient static final float RADIUS = 100.0f; //TODO make it tweakable (maybe in settings, not in the context's edit view)
     public transient static LocationContext placeRequester;
 
     private transient MapView mapView;

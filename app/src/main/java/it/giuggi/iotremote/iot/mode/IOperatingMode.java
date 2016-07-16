@@ -54,6 +54,9 @@ public abstract class IOperatingMode
         protected static final String CURRENT_VALUE = "current_value";
         protected static final String VALUE_HISTORY = "value_history";
         protected static final String TIME_MILLIS = "time_millis";
+        protected static final String SENSOR_DESCRIPTION = "sensor_description";
+        protected static final String UNIT_TYPE = "unit_type";
+        protected static final String UNIT_SYMBOL = "unit_symbol";
         /**********************************************************/
 
         /**

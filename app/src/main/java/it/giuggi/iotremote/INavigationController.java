@@ -16,6 +16,7 @@ public interface INavigationController
     public void go(Intent intent);
     public void go(BaseFragment in);
     public void go(BaseFragment in, boolean backstack);
+    public void go(BaseFragment in, boolean backstack, boolean clearRight);
     public void showDialog(View view);
 
     public void clearStack();

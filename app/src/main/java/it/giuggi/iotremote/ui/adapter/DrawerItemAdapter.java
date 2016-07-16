@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.giuggi.iotremote.R;
+import it.giuggi.iotremote.ifttt.structure.IFTTTRule;
 import it.giuggi.iotremote.ifttt.ui.fragment.IFTTTListFragment;
 import it.giuggi.iotremote.ui.activity.SettingsActivity;
 import it.giuggi.iotremote.ui.fragment.BaseFragment;
@@ -80,9 +81,12 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Cu
                     fragment = IFTTTListFragment.newInstance();
                     break;
                 case 2:
-                    fragment = EventLogList.newInstance();
+                    fragment = IFTTTListFragment.newInstance(new boolean[]{false, false, true, true}, IFTTTRule.RULE_TYPE_PASSIVE);
                     break;
                 case 3:
+                    fragment = EventLogList.newInstance();
+                    break;
+                case 4:
                     Intent intent = new Intent(view.getContext(), SettingsActivity.class);
                     controller.go(intent);
                     return;
@@ -93,7 +97,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Cu
 
             controller.clearStack();
             controller.closeDrawer();
-            controller.go(fragment);
+            controller.go(fragment, true, true);
         }
     }
 }

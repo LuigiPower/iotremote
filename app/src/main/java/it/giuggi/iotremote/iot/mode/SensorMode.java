@@ -1,14 +1,17 @@
 package it.giuggi.iotremote.iot.mode;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -33,6 +36,9 @@ public class SensorMode extends IOperatingMode
     transient public static final int LOCALIZED_STRING = R.string.mode_sensor;
 
     private String id;
+    private String unit = "";
+    private String unit_type = "";
+    private String description = "";
     private ArrayList<Entry> entries;
     private ArrayList<Long> times;
 
@@ -89,12 +95,36 @@ public class SensorMode extends IOperatingMode
 
     }
 
+    private AxisValueFormatter yFormatter = new AxisValueFormatter()
+    {
+        @SuppressLint("DefaultLocale")
+        @Override
+        public String getFormattedValue(float value, AxisBase axis)
+        {
+            return String.format("%.1f", value) + unit;
+        }
+
+        @Override
+        public int getDecimalDigits()
+        {
+            return 1;
+        }
+    };
+
     private void loadChart(final LineChart chart)
     {
         chart.clear();
-        LineDataSet set = new LineDataSet(entries, "Sensor values");
+
+        LineDataSet set = new LineDataSet(entries, unit_type);
         lineData = new LineData(set);
         chart.setData(lineData);
+        chart.setDescription(description);
+
+        YAxis yAxis = chart.getAxisLeft();
+        yAxis.setValueFormatter(yFormatter);
+
+        YAxis rAxis = chart.getAxisRight();
+        rAxis.setValueFormatter(yFormatter);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -102,7 +132,7 @@ public class SensorMode extends IOperatingMode
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(true);
-        //xAxis.setAxisMinValue(entries.get(0).getX()); //TODO in base al periodo da visualizzare
+        //xAxis.setAxisMinValue(entries.get(0).getX()); //TODO in base al periodo da visualizzare (quando ci sara' un db con i valori sul server)
 
         xAxis.setValueFormatter(new AxisValueFormatter()
         {
@@ -127,8 +157,8 @@ public class SensorMode extends IOperatingMode
 
     /**
      * Value update here should provide the latest value for this node
-     * @param newParameters
-     * @throws JSONException
+     * @param newParameters updated values for this mode, in JSON format
+     * @throws JSONException if something's wrong with the data (ex.: not for this mode)
      */
     @Override
     public void valueUpdate(JSONObject newParameters) throws JSONException
@@ -138,6 +168,9 @@ public class SensorMode extends IOperatingMode
         {
             array = newParameters.getJSONArray(Parameters.VALUE_HISTORY);
             id = newParameters.getString(Parameters.ID);
+            description = newParameters.getString(Parameters.SENSOR_DESCRIPTION);
+            unit = newParameters.getString(Parameters.UNIT_SYMBOL);
+            unit_type = newParameters.getString(Parameters.UNIT_TYPE);
         }
         catch(JSONException e)
         {
@@ -151,6 +184,9 @@ public class SensorMode extends IOperatingMode
             String node_name = node.getString(Parameters.NAME);
             String mode_name = target_mode.getString(Parameters.NAME);
             String id = params.getString(Parameters.ID);
+            description = params.getString(Parameters.SENSOR_DESCRIPTION);
+            unit = params.getString(Parameters.UNIT_SYMBOL);
+            unit_type = params.getString(Parameters.UNIT_TYPE);
 
             if(!mode_name.equalsIgnoreCase(NAME) || !node_name.equalsIgnoreCase(this.owner.name) || !id.equalsIgnoreCase(this.id))
             {
@@ -165,7 +201,7 @@ public class SensorMode extends IOperatingMode
                 }
             }
 
-            if(array == null) return; //TODO check for other changes (for example descriptions...)
+            if(array == null) return;
         }
 
         entries.clear();

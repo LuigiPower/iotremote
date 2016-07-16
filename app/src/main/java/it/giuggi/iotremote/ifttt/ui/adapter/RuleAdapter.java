@@ -26,19 +26,19 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
 {
     private List<IFTTTRule> ruleList;
     private ViewGroup container;
+    private boolean[] options;
 
-    public RuleAdapter(List<IFTTTRule> ruleList, ViewGroup container) {
+    public RuleAdapter(List<IFTTTRule> ruleList, ViewGroup container, boolean[] options) {
         this.ruleList = ruleList;
         this.container = container;
+        this.options = options;
     }
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rule_row, container, false);
 
-        CustomViewHolder viewHolder = new CustomViewHolder(view);
-
-        return viewHolder;
+        return new CustomViewHolder(view);
     }
 
     @Override
@@ -99,10 +99,49 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         customViewHolder.context.setTag(R.id.complete_rule, rule);
         customViewHolder.action.setTag(R.id.complete_rule, rule);
 
-        customViewHolder.filter.setTag(R.id.location_name, 0);
-        customViewHolder.event.setTag(R.id.location_name, 1);
-        customViewHolder.context.setTag(R.id.location_name, 2);
-        customViewHolder.action.setTag(R.id.location_name, 3);
+        int page = 0;
+        if(!options[0])
+        {
+            ((View) customViewHolder.filter.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            customViewHolder.filter.setTag(R.id.location_name, page);
+            ((View) customViewHolder.filter.getParent()).setVisibility(View.VISIBLE);
+            page++;
+        }
+
+        if(!options[1])
+        {
+            ((View) customViewHolder.event.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            customViewHolder.event.setTag(R.id.location_name, page);
+            ((View) customViewHolder.event.getParent()).setVisibility(View.VISIBLE);
+            page++;
+        }
+
+        if(!options[2])
+        {
+            ((View) customViewHolder.context.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            customViewHolder.context.setTag(R.id.location_name, page);
+            ((View) customViewHolder.context.getParent()).setVisibility(View.VISIBLE);
+            page++;
+        }
+
+        if(!options[3])
+        {
+            ((View) customViewHolder.action.getParent()).setVisibility(View.GONE);
+        }
+        else
+        {
+            customViewHolder.action.setTag(R.id.location_name, page);
+            ((View) customViewHolder.action.getParent()).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -133,7 +172,7 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.CustomViewHold
         {
             IFTTTRule rule = (IFTTTRule) v.getTag(R.id.complete_rule);
             int position = (int) v.getTag(R.id.location_name);
-            controller.go(IFTTTRuleDetail.newInstance(rule, position));
+            controller.go(IFTTTRuleDetail.newInstance(rule, position, options));
         }
 
         @Override

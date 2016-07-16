@@ -31,8 +31,6 @@ public class IFTTTComponentList extends BaseFragment
     private LinkedList<IFTTTComponent> originalRef = new LinkedList<>();
     private LinkedList<IFTTTComponent> componentList = new LinkedList<>();
 
-    private ComponentAdapter adapter;
-
     /**
      * newInstance: Creates a new IFTTTComponentList instance
      * @param rule Rule of which to show components
@@ -84,7 +82,7 @@ public class IFTTTComponentList extends BaseFragment
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.element_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ComponentAdapter(rule, originalRef, componentList, recyclerView);
+        ComponentAdapter adapter = new ComponentAdapter(rule, originalRef, componentList, recyclerView);
         recyclerView.setAdapter(adapter);;
 
         return v;

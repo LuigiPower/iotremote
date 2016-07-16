@@ -49,10 +49,7 @@ public abstract class IFTTTComponent extends Databasable
         return context.getString(resourceid);
     }
 
-    public int getIcon()
-    {
-        return R.drawable.ic_pages_24dp;
-    }
+    public abstract int getIcon();
 
     protected abstract String getType();
 

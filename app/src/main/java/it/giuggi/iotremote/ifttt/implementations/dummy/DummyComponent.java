@@ -78,6 +78,12 @@ public class DummyComponent extends IFTTTComponent
     }
 
     @Override
+    public int getIcon()
+    {
+        return R.drawable.ic_web_asset_black_24dp;
+    }
+
+    @Override
     protected String getType()
     {
         return type;

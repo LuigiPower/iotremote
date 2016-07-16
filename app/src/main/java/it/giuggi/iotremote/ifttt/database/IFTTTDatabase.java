@@ -118,7 +118,8 @@ public class IFTTTDatabase extends SQLiteOpenHelper
                 IFTTTContract.IFTTTRuleEntry.TABLE_NAME,
                 new String[]{
                         IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID,
-                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME,
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE
                 },
                 IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID + " - ?",
                 new String[]{
@@ -135,13 +136,14 @@ public class IFTTTDatabase extends SQLiteOpenHelper
         {
             long id = c.getLong(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID));
             String rulename = c.getString(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME));
+            int ruletype = c.getInt(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE));
 
             LinkedList<IFTTTFilter> iftttFilters = (LinkedList<IFTTTFilter>) getComponentsOfType(ruleid, IFTTTFilter.TYPE, sql);
             LinkedList<IFTTTContext> iftttContexts = (LinkedList<IFTTTContext>) getComponentsOfType(ruleid, IFTTTContext.TYPE, sql);
             LinkedList<IFTTTEvent> iftttEvents = (LinkedList<IFTTTEvent>) getComponentsOfType(ruleid, IFTTTEvent.TYPE, sql);
             LinkedList<IFTTTAction> iftttActions = (LinkedList<IFTTTAction>) getComponentsOfType(ruleid, IFTTTAction.TYPE, sql);
 
-            rule = new IFTTTRule(id, rulename, iftttFilters, iftttContexts, iftttEvents, iftttActions);
+            rule = new IFTTTRule(id, rulename, ruletype, iftttFilters, iftttContexts, iftttEvents, iftttActions);
         }
 
         c.close();
@@ -153,7 +155,7 @@ public class IFTTTDatabase extends SQLiteOpenHelper
     /**
      * Get a list of all saved rules
      */
-    public synchronized List<IFTTTRule> getRuleList() throws ClassNotFoundException
+    public synchronized List<IFTTTRule> getRuleList(int type) throws ClassNotFoundException
     {
         SQLiteDatabase sql = getReadableDatabase();
 
@@ -161,10 +163,11 @@ public class IFTTTDatabase extends SQLiteOpenHelper
                 IFTTTContract.IFTTTRuleEntry.TABLE_NAME,
                 new String[]{
                         IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID,
-                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME,
+                        IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE
                 },
-                null,
-                null,
+                IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE + " = ?",
+                new String[]{String.valueOf(type)},
                 null,
                 null,
                 null
@@ -176,13 +179,14 @@ public class IFTTTDatabase extends SQLiteOpenHelper
         {
             long ruleid = c.getLong(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_ENTRY_ID));
             String rulename = c.getString(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME));
+            int ruletype = c.getInt(c.getColumnIndex(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE));
 
             LinkedList<IFTTTFilter> iftttFilters = (LinkedList<IFTTTFilter>) getComponentsOfType(ruleid, IFTTTFilter.TYPE, sql);
             LinkedList<IFTTTContext> iftttContexts = (LinkedList<IFTTTContext>) getComponentsOfType(ruleid, IFTTTContext.TYPE, sql);
             LinkedList<IFTTTEvent> iftttEvents = (LinkedList<IFTTTEvent>) getComponentsOfType(ruleid, IFTTTEvent.TYPE, sql);
             LinkedList<IFTTTAction> iftttActions = (LinkedList<IFTTTAction>) getComponentsOfType(ruleid, IFTTTAction.TYPE, sql);
 
-            IFTTTRule rule = new IFTTTRule(ruleid, rulename, iftttFilters, iftttContexts, iftttEvents, iftttActions);
+            IFTTTRule rule = new IFTTTRule(ruleid, rulename, ruletype, iftttFilters, iftttContexts, iftttEvents, iftttActions);
             ruleList.add(rule);
         }
 
@@ -437,12 +441,13 @@ public class IFTTTDatabase extends SQLiteOpenHelper
      * @param name name of the rule
      * @return rule id
      */
-    public synchronized long addRule(String name)
+    public synchronized long addRule(String name, int type)
     {
         SQLiteDatabase sql = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_NAME, name);
+        values.put(IFTTTContract.IFTTTRuleEntry.COLUMN_NAME_RULE_TYPE, type);
         long inserted_id = sql.insert(IFTTTContract.IFTTTRuleEntry.TABLE_NAME, null, values);
         sql.close();
 

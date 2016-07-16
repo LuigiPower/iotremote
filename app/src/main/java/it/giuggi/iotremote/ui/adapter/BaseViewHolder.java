@@ -41,6 +41,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder
         }
 
         @Override
+        public void go(BaseFragment in, boolean backstack, boolean clearRight)
+        {
+            //NOOP
+        }
+
+        @Override
         public void showDialog(View view)
         {
             //NOOP

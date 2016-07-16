@@ -14,6 +14,14 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        style="@style/TitleText"
+        android:text="@string/no_data_to_display"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_button"
         android:layout_width="56dp"

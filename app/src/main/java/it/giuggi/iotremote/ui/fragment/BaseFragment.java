@@ -96,6 +96,12 @@ public abstract class BaseFragment extends Fragment
         }
 
         @Override
+        public void go(BaseFragment in, boolean backstack, boolean clearRight)
+        {
+            //NOOP
+        }
+
+        @Override
         public void showDialog(View view)
         {
             //NOOP

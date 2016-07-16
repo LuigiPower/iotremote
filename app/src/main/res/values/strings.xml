@@ -32,6 +32,14 @@
 
     <string name="wifi_name_context">Wifi name</string>
     <string name="location_context">When you are in this place</string>
+    <string name="not_location_context">When you are not in this place</string>
+    <string name="context_activity_vehicle">In a vehicle</string>
+    <string name="context_activity_bycicle">On a bicycle</string>
+    <string name="context_activity_foot">On foot</string>
+    <string name="context_activity_running">Running</string>
+    <string name="context_activity_walking">Walking</string>
+    <string name="context_activity_still">Standing still</string>
+    <string name="context_activity_tilting">Tilting</string>
 
     <string name="notification_action">Show notification</string>
     <string name="play_notification_sound_action">Play notification sound</string>
@@ -86,11 +94,27 @@
     <string-array name="contexts">
         <item>@string/wifi_name_context</item>
         <item>@string/location_context</item>
+        <item>@string/not_location_context</item>
+        <item>@string/context_activity_vehicle</item>
+        <item>@string/context_activity_bycicle</item>
+        <item>@string/context_activity_foot</item>
+        <item>@string/context_activity_running</item>
+        <item>@string/context_activity_walking</item>
+        <item>@string/context_activity_still</item>
+        <item>@string/context_activity_tilting</item>
     </string-array>
 
     <string-array name="context_classes">
         <item>WifiNameContext</item>
         <item>LocationContext</item>
+        <item>NotLocationContext</item>
+        <item>InVehicleContext</item>
+        <item>OnBicycleContext</item>
+        <item>OnFootContext</item>
+        <item>RunningContext</item>
+        <item>WalkingContext</item>
+        <item>StandStillContext</item>
+        <item>TiltingContext</item>
     </string-array>
 
     <string-array name="actions">
@@ -106,13 +130,15 @@
     </string-array>
 
     <string name="home_network">Home network</string>
-    <string name="rules">Rules</string>
+    <string name="rules">Active rules</string>
+    <string name="passive_rules">Passive rules</string>
     <string name="event_log">Event Log</string>
     <string name="settings">Settings</string>
 
     <string-array name="drawer_items">
         <item>@string/home_network</item>
         <item>@string/rules</item>
+        <item>@string/passive_rules</item>
         <item>@string/event_log</item>
         <item>@string/settings</item>
     </string-array>
@@ -169,7 +195,7 @@
         <item>@string/event_value_changed</item>
     </string-array>
 
-    <string name="custom_command">Custom command</string>
+    <string name="custom_command">Custom command</string>8
     <string name="set_gpio">Set value on GPIO pin</string>
     <string name="set_mode">Set Node operating mode</string>
     <string name="node_name">Node name</string>
@@ -181,12 +207,15 @@
     </string-array>
 
     <string name="settings_category_rules">Rules</string>
-    <string name="settings_category_rules_active_enable">Enable or disable active rule checking</string>
+    <string name="settings_category_rules_active_enable">Active rule checking</string>
     <string name="settings_category_rules_active_enable_summary">If disabled, events from nodes will be ignored</string>
+    <string name="settings_category_rules_passive_enable">Passive rule checking</string>
+    <string name="settings_category_rules_passive_enable_summary">Impacts battery life</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_general_web_server">Set Web Server URL</string>
     <string name="settings_category_general_web_server_summary">All data will be loaded from the specified URL</string>
     <string name="settings_category_general_web_server_dialog">Enter Web Server URL</string>
 
-    <string name="default_website">https://hotdoglex.westeurope.cloudapp.azure.net:5000</string>
+    <string name="default_website">https://hotdoglex.westeurope.cloudapp.azure.net</string>
+    <string name="no_data_to_display">No data to display</string>
 </resources>

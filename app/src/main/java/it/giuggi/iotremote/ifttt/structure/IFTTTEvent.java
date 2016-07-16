@@ -49,7 +49,7 @@ public abstract class IFTTTEvent extends IFTTTComponent
         UNKNOWN,
         DISCONNECTED,
         CONNECTED,
-        IFTTTEventType, VALUE_CHANGED }
+        VALUE_CHANGED }
 
     public static ArrayList<Pair<String, String>> getListOfEvents(Resources resources)
     {

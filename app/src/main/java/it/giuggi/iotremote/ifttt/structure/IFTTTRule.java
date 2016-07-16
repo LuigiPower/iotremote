@@ -34,7 +34,11 @@ import it.giuggi.iotremote.iot.mode.IOperatingMode;
  */
 public class IFTTTRule extends Databasable
 {
+    transient public static final int RULE_TYPE_ACTIVE = 1;
+    transient public static final int RULE_TYPE_PASSIVE = 2;
+
     protected long ruleid;
+    protected int type;
     protected String name;
     protected List<IFTTTFilter> iftttFilters;
     protected List<IFTTTContext> iftttContexts;
@@ -52,12 +56,13 @@ public class IFTTTRule extends Databasable
      */
     public IFTTTRule(long id,
             String name,
+            int type,
             @Nullable LinkedList<IFTTTFilter> iftttFilters,
             @Nullable LinkedList<IFTTTContext> iftttContexts,
             @Nullable LinkedList<IFTTTEvent> iftttEvents,
             @Nullable LinkedList<IFTTTAction> iftttActions)
     {
-        this(name, iftttFilters, iftttContexts, iftttEvents, iftttActions);
+        this(name, type, iftttFilters, iftttContexts, iftttEvents, iftttActions);
         this.ruleid = id;
     }
 
@@ -70,12 +75,14 @@ public class IFTTTRule extends Databasable
      * @param iftttActions An optional list of actions. if null, an empty list is created
      */
     public IFTTTRule(String name,
+            int type,
             @Nullable LinkedList<IFTTTFilter> iftttFilters,
             @Nullable LinkedList<IFTTTContext> iftttContexts,
             @Nullable LinkedList<IFTTTEvent> iftttEvents,
             @Nullable LinkedList<IFTTTAction> iftttActions)
     {
         this.ruleid = -1;
+        this.type = type;
         this.name = name;
 
         if(iftttFilters == null)
@@ -225,7 +232,11 @@ public class IFTTTRule extends Databasable
      */
     public boolean apply(IFTTTCurrentSituation.CurrentSituation currentSituation, Event event, Context context) throws JSONException
     {
-        IOTNode node = event.sender_node;
+        IOTNode node = null;
+        if(event != null)
+        {
+            node = event.sender_node;
+        }
 
         boolean result;
         for(IFTTTFilter iftttFilter : iftttFilters)
@@ -323,7 +334,7 @@ public class IFTTTRule extends Databasable
     @Override
     protected long doSave(Context context, IFTTTDatabase database)
     {
-        long ruleid = database.addRule(this.name);
+        long ruleid = database.addRule(this.name, this.type);
         this.ruleid = ruleid;
 
         for(IFTTTComponent databasable : iftttFilters)
@@ -422,5 +433,10 @@ public class IFTTTRule extends Databasable
     public long getRuleid()
     {
         return ruleid;
+    }
+
+    public int getType()
+    {
+        return type;
     }
 }

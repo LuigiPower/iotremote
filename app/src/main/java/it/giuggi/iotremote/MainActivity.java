@@ -2,16 +2,21 @@ package it.giuggi.iotremote;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +30,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -158,7 +164,8 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED)
         {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -169,7 +176,11 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             // for ActivityCompat#requestPermissions for more details.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 4);
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.RECEIVE_BOOT_COMPLETED
+                }, 4);
             }
         }
 
@@ -226,19 +237,18 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             String tag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG, null);
             String tag_left = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_LEFT, null);
             String tag_right = savedInstanceState.getString(CURRENT_FRAGMENT_TAG_RIGHT, null);
+            //currentFragmentTag = tag;
+            //currentFragmentTagLeft = tag_left;
+            //currentFragmentTagRight = tag_right;
 
             if(tag != null)
             {
                 BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
 
-                if(isMasterDetail)
+                if(toshow == null)
                 {
-                    detachFromContainer(toshow);
-                    changeFragment(toshow, true);
-                }
-                else
-                {
-                    changeFragment(toshow, false);
+                    changeFragment(NodeList.newInstance(), false); //Fallback
+                    return;
                 }
 
                 if(isMasterDetail)
@@ -248,6 +258,16 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
                     {
                         changeFragment(fillin, false);
                     }
+                }
+
+                if(isMasterDetail)
+                {
+                    detachFromContainer(toshow);
+                    changeFragment(toshow, true);
+                }
+                else
+                {
+                    changeFragment(toshow, false);
                 }
                 return;
             }
@@ -270,9 +290,14 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
             if(tag_left != null)
             {
-                if(isMasterDetail)
+                BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag_left);
+                if(!isMasterDetail)
                 {
-                    BaseFragment toshow = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag_left);
+                    detachFromContainer(toshow);
+                    changeFragment(toshow, true);
+                }
+                else
+                {
                     changeFragment(toshow, false);
                 }
 
@@ -296,6 +321,12 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     protected void detachFromContainer(BaseFragment in)
     {
         getSupportFragmentManager().popBackStackImmediate();
+
+        if(in == null)
+        {
+            return;
+        }
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(in)
@@ -328,6 +359,20 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     protected void onResume() {
         super.onResume();
         TaskHandler.getInstance().onResume();
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent nintent = new Intent(this, AlarmReceiver.class);
+        PendingIntent operation = PendingIntent.getBroadcast(this, 0, nintent, PendingIntent.FLAG_NO_CREATE);
+        if(operation == null)
+        {
+            operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
+            manager.setInexactRepeating(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 1000L,
+                    5000L, //TODO interval based on settings
+                    operation);
+        }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String website = preferences.getString("web_server_url", getString(R.string.default_website));
@@ -373,6 +418,13 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     @Override
     public void goBack()
     {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         getSupportFragmentManager().popBackStack();
     }
 
@@ -392,6 +444,26 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
     public void go(BaseFragment in, boolean backstack)
     {
         changeFragment(in, backstack);
+    }
+
+    @Override
+    public void go(BaseFragment in, boolean backstack, boolean clearRight)
+    {
+        if(isMasterDetail && clearRight)
+        {
+            FragmentManager manager = getSupportFragmentManager();
+            Fragment fragment = manager.findFragmentByTag(currentFragmentTagRight);
+            if(fragment != null)
+            {
+                manager.beginTransaction()
+                        .remove(fragment)
+                        .commit();
+            }
+
+            currentFragmentTagRight = null;
+        }
+
+        go(in, backstack);
     }
 
     @Override
