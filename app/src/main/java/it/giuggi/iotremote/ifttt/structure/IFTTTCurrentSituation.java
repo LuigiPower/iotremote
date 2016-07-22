@@ -74,6 +74,8 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
          */
         private IFTTTContext.IFTTTContextType contextType = IFTTTContext.IFTTTContextType.ANY;
 
+        transient private static final long TIMEOUT_INTERVAL = 30000L;
+
         transient private Location location;
         transient private OnSnapshotReadyListener listener;
 
@@ -83,6 +85,10 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
         transient private LinkedList<NetworkInfo> wifi;
         transient private LinkedList<NetworkInfo> bluetooth;
         transient private LinkedList<NetworkInfo> mobile;
+
+        transient private boolean didTimeout;
+        transient private final Runnable timeoutRunnable;
+        transient private Handler timeoutHandler;
 
         private int totalSensors = -1;
         private int initializedSensors = 0;
@@ -100,7 +106,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
 
         public ArrayList<DetectedActivity> currentActivities = null;
 
-        public CurrentSituation(OnSnapshotReadyListener listener)
+        public CurrentSituation(Context context, OnSnapshotReadyListener listener)
         {
             this.wifi = new LinkedList<>();
             this.bluetooth = new LinkedList<>();
@@ -108,6 +114,20 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
 
             this.listener = listener;
             this.location = null;
+
+            this.didTimeout = false;
+            this.timeoutHandler = new Handler(context.getMainLooper());
+
+            this.timeoutRunnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    didTimeout = true;
+                    checkReady();
+                }
+            };
+            this.timeoutHandler.postDelayed(this.timeoutRunnable, TIMEOUT_INTERVAL);
         }
 
         private String floatArrayToString(float[] array)
@@ -171,6 +191,11 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             target.setLatitude(latitude);
             target.setLongitude(longitude);
 
+            if(location == null)
+            {
+                return false;
+            }
+
             float distance = location.distanceTo(target);
             return distance < radius;
         }
@@ -180,6 +205,10 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
             boolean ready = this.location != null           //Wait for the current location
                     && totalSensors == initializedSensors   //Wait until all sensors have been initialized
                     && currentActivities != null;          //Wait for activity detection
+            ready = ready || didTimeout;    //If I'm waiting for too long, fire the listener with the data gathered until now
+
+//            Log.e("CHECKING READY", "CHECKING ready is " + ready);
+//            Log.e("CHECKING READY", "CHECKING " + this.location + " " + totalSensors + "/" + initializedSensors + " " + currentActivities);
 
             if(currentActivities == null && !activityRecognitionApi.isConnected() && !activityRecognitionApi.isConnecting())
             {
@@ -190,6 +219,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
 
             if(ready)
             {
+                this.timeoutHandler.removeCallbacks(this.timeoutRunnable);
                 listener.onSnapshotReady(this);
                 return true;
             }
@@ -232,7 +262,7 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
     private IFTTTCurrentSituation(Context context, OnSnapshotReadyListener listener)
     {
         //Log.d("IFTTTCurrentSituation", "Building IFTTTCurrentSituation");
-        situation = new CurrentSituation(listener);
+        situation = new CurrentSituation(context, listener);
 
         /** ACTIVITY RECOGNITION SETUP ***********************************************************/
         if(activityRecognitionApi == null)
@@ -322,11 +352,21 @@ public class IFTTTCurrentSituation extends BroadcastReceiver implements Location
                 @Override
                 public void run()
                 {
+                    boolean foundProvider = false;
                     List<String> providers = manager.getProviders(true);
                     for (String provider : providers)
                     {
-                        //noinspection ResourceType
-                        manager.requestLocationUpdates(provider, 0, 0, IFTTTCurrentSituation.this);
+                        if(manager.isProviderEnabled(provider))
+                        {
+                            //noinspection ResourceType
+                            manager.requestLocationUpdates(provider, 0, 0, IFTTTCurrentSituation.this);
+                            foundProvider = true;
+                        }
+                    }
+
+                    if(!foundProvider)
+                    {
+                        situation.location = new Location("");
                     }
                 }
             });

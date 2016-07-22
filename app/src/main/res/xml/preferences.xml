@@ -18,6 +18,15 @@
             android:defaultValue="true"
             android:summary="@string/settings_category_rules_passive_enable_summary" />
 
+        <ListPreference
+            android:key="passive_rule_interval"
+            android:title="@string/settings_category_rules_passive_interval"
+            android:summary="@string/settings_category_rules_passive_interval_summary"
+            android:persistent="true"
+            android:entries="@array/intervals_localized"
+            android:entryValues="@array/intervals_values"
+            android:defaultValue="@integer/default_passive_rule_interval"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

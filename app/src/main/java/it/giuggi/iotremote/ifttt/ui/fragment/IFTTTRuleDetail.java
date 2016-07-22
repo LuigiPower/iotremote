@@ -118,25 +118,25 @@ public class IFTTTRuleDetail extends BaseFragment implements View.OnClickListene
         {
             filterImage = rule.getFilterAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException ignored) {}
+        catch(Exception ignored) {}
 
         try
         {
             eventImage = rule.getEventAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException ignored) {}
+        catch(Exception ignored) {}
 
         try
         {
             contextImage = rule.getContextAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException ignored) {}
+        catch(Exception ignored) {}
 
         try
         {
             actionImage = rule.getActionAt(0).getIcon();
         }
-        catch(IndexOutOfBoundsException ignored) {}
+        catch(Exception ignored) {}
 
         ImageView filter = (ImageView) v.findViewById(R.id.filter);
         ImageView event = (ImageView) v.findViewById(R.id.event);

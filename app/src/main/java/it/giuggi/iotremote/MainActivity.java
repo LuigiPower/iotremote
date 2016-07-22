@@ -164,8 +164,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED)
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -178,8 +177,7 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
             {
                 requestPermissions(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.RECEIVE_BOOT_COMPLETED
+                        Manifest.permission.ACCESS_COARSE_LOCATION
                 }, 4);
             }
         }
@@ -372,19 +370,40 @@ public class MainActivity extends AppCompatActivity implements INavigationContro
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        SharedPreferences preferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean enabled = preferences.getBoolean("passive_rules_enabled", true);
+
+        //Log.e(TAG, "Passive rules are enabled: " + enabled);
+
         Intent nintent = new Intent(this, AlarmReceiver.class);
         PendingIntent operation = PendingIntent.getBroadcast(this, 0, nintent, PendingIntent.FLAG_NO_CREATE);
-        if(operation == null)
+
+        if(enabled)
         {
-            operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
-            manager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + 1000L,
-                    5000L, //TODO interval based on settings
-                    operation);
+            //Log.e(TAG, "Operation is: " + operation);
+            if (operation == null)
+            {
+                String strinterval = preferences.getString("passive_rule_interval", null);
+                long interval = strinterval != null ? Long.parseLong(strinterval) : getResources().getInteger(R.integer.default_passive_rule_interval);
+
+                operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
+                manager.setInexactRepeating(
+                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + 1000L,
+                        interval,
+                        operation);
+            }
+        }
+        else
+        {
+            if(operation == null)
+            {
+                operation = PendingIntent.getBroadcast(this, 0, nintent, 0);
+            }
+
+            manager.cancel(operation);
         }
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String website = preferences.getString("web_server_url", getString(R.string.default_website));
 
         // Initializing WebRequest handler

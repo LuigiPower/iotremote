@@ -6,6 +6,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,7 +32,7 @@ public class EventLogList extends BaseFragment implements SwipeRefreshLayout.OnR
 
     public static final String TAG = "EVENT_LOG_LIST";
 
-    ArrayList<Event> nodeList = new ArrayList<>(5);
+    ArrayList<Event> eventList = new ArrayList<>(5);
     private EventLogAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -47,6 +50,7 @@ public class EventLogList extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -64,7 +68,7 @@ public class EventLogList extends BaseFragment implements SwipeRefreshLayout.OnR
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.event_log_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EventLogAdapter(nodeList, recyclerView);
+        adapter = new EventLogAdapter(eventList, recyclerView);
         recyclerView.setAdapter(adapter);
 
         return v;
@@ -86,14 +90,34 @@ public class EventLogList extends BaseFragment implements SwipeRefreshLayout.OnR
         unregisterReceiver(this);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.event_log, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == R.id.clear_event_log)
+        {
+            IFTTTDatabase database = IFTTTDatabase.getHelper(getContext());
+            database.clearEventLog();
+            this.eventList.clear();
+            this.adapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void loadData()
     {
         IFTTTDatabase database = IFTTTDatabase.getHelper(getContext());
 
-        this.nodeList.clear();
+        this.eventList.clear();
         try
         {
-            this.nodeList.addAll(database.getEventLogList(null));
+            this.eventList.addAll(database.getEventLogList(null));
         } catch (ClassNotFoundException e)
         {
             e.printStackTrace();

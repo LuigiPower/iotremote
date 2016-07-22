@@ -3,6 +3,7 @@ package it.giuggi.iotremote.ifttt.implementations.filter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
@@ -96,6 +97,17 @@ public class NameFilter extends IFTTTFilter
                     }
                 })
                 .send();
+
+        nodename.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                AutoCompleteStringEntry entry = (AutoCompleteStringEntry) parent.getItemAtPosition(position);
+                name = entry.getString();
+                nodename.setText(entry.getText());
+            }
+        });
 
         nodename.addTextChangedListener(new TextWatcher()
         {

@@ -29,6 +29,8 @@
     <string name="value_changed_from_event">When a specific parameter changes from a value</string>
     <string name="value_changed_from_to_event">When a specific parameter changes from a value to a value</string>
     <string name="value_changed_to_event">When a specific parameter changes to a value</string>
+    <string name="value_changed_above_event">When a specific parameter goes over a threshold</string>
+    <string name="value_changed_below_event">When a specific parameter goes under a threshold</string>
 
     <string name="wifi_name_context">Wifi name</string>
     <string name="location_context">When you are in this place</string>
@@ -79,6 +81,8 @@
         <item>@string/value_changed_from_event</item>
         <item>@string/value_changed_from_to_event</item>
         <item>@string/value_changed_to_event</item>
+        <item>@string/value_changed_above_event</item>
+        <item>@string/value_changed_below_event</item>
     </string-array>
 
     <string-array name="event_classes">
@@ -89,6 +93,8 @@
         <item>ValueChangedFromEvent</item>
         <item>ValueChangedFromToEvent</item>
         <item>ValueChangedToEvent</item>
+        <item>ValueChangedAboveEvent</item>
+        <item>ValueChangedBelowEvent</item>
     </string-array>
 
     <string-array name="contexts">
@@ -211,12 +217,38 @@
     <string name="settings_category_rules_active_enable_summary">If disabled, events from nodes will be ignored</string>
     <string name="settings_category_rules_passive_enable">Passive rule checking</string>
     <string name="settings_category_rules_passive_enable_summary">Impacts battery life</string>
+    <string name="settings_category_rules_passive_interval">Set passive rules checking interval</string>
+    <string name="settings_category_rules_passive_interval_summary">The shorter the interval, the bigger the impact on battery life</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_general_web_server">Set Web Server URL</string>
     <string name="settings_category_general_web_server_summary">All data will be loaded from the specified URL</string>
     <string name="settings_category_general_web_server_dialog">Enter Web Server URL</string>
 
+    <string-array name="intervals_localized">
+        <item>30 Seconds</item>
+        <item>1 Minute</item>
+        <item>15 Minutes</item>
+        <item>Half hour</item>
+        <item>1 Hour</item>
+        <item>2 Hours</item>
+        <item>12 Hours</item>
+        <item>1 Day </item>
+    </string-array>
+
+    <string-array name="intervals_values">
+        <item>30000</item>
+        <item>60000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>21600000</item>
+        <item>43200000</item>
+    </string-array>
+
     <string name="default_website" translatable="false">http://hotdoglex.westeurope.cloudapp.azure.com</string>
     <string name="no_data_to_display">No data to display</string>
     <string name="add_at_least_one_action">Add at least one action!</string>
+    <string name="greater_than">Threshold:</string>
+    <string name="lesser_than">Threshold:</string>
+    <string name="clear_event_log">Clear event log</string>
 </resources>

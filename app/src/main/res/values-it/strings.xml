@@ -82,4 +82,8 @@
     <string name="wifi_name_context">Nome WiFi</string>
     <string name="yes">Si</string>
     <string name="add_at_least_one_action">Aggiungi almeno un\'azione!</string>
+    <string name="greater_than">Soglia:</string>
+    <string name="lesser_than">Soglia:</string>
+    <string name="value_changed_above_event">Quando un parametro supera una soglia</string>
+    <string name="value_changed_below_event">Quando un parametro scende sotto una soglia</string>
 </resources>

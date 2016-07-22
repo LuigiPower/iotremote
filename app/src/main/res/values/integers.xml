@@ -2,4 +2,5 @@
 <resources>
     <integer name="card_flip_time_full">500</integer>
     <integer name="card_flip_time_half">250</integer>
+    <integer name="default_passive_rule_interval">1800000</integer>
 </resources>

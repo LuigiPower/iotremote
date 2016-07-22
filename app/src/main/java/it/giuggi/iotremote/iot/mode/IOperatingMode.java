@@ -51,7 +51,7 @@ public abstract class IOperatingMode
          * Sensor Modes parameters
          */
         protected static final String ID = "id";
-        protected static final String CURRENT_VALUE = "current_value";
+        public static final String CURRENT_VALUE = "current_value";
         protected static final String VALUE_HISTORY = "value_history";
         protected static final String TIME_MILLIS = "time_millis";
         protected static final String SENSOR_DESCRIPTION = "sensor_description";
