@@ -61,10 +61,10 @@ public class EventLogList extends BaseFragment implements SwipeRefreshLayout.OnR
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.light_blue,
-                R.color.light_green,
-                R.color.light_orange,
-                R.color.light_red);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorFilter,
+                R.color.colorEvent,
+                R.color.colorContext,
+                R.color.colorAction);
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.event_log_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
